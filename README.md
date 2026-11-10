@@ -1,13 +1,22 @@
-# Where the Water Really Goes
+# Follow the Water
 
-A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation): water myths, data centers, the real water problem, and how business is tackling it. By Anders Imbrie.
+A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation): where water really goes, the AI myth, the real water problem, and how business is fixing it. By Anders Imbrie.
+
+- **v2 (current):** https://waffleyumy.github.io/sdg6-water-slides/
+- **v1:** https://waffleyumy.github.io/sdg6-water-slides/v1/
 
 ## Presenting
 
-- **→ / Space**: next slide · **←**: previous slide
-- **N**: show or hide speaker notes
-- **F**: full screen
-- Link to a slide directly with `#3`, `#4`, and so on
-- Slide 2 has a clickable class poll. Click the answer most people picked, and slide 4 will mention it.
+| Key | Action |
+| --- | --- |
+| → / Space | Next slide or next build |
+| ← | Back |
+| N | Speaker notes |
+| P | Presenter view (notes, timer, next slide) in a second window |
+| F | Full screen |
 
-Everything is in one file, `index.html`.
+- **Slide 3 poll:** tap an option for each raised hand (Shift-tap removes one). Slide 5 reports what the class picked.
+- **Slide 6:** the leak counter runs live while the slide is open.
+- **PDF:** print the page (Ctrl+P → Save as PDF). You get one slide per page with every build shown.
+
+Everything is in `index.html`.
