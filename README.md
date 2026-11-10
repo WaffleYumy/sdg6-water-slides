@@ -5,6 +5,9 @@ A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation):
 - **v3 (current):** https://waffleyumy.github.io/sdg6-water-slides/
 - **v2:** https://waffleyumy.github.io/sdg6-water-slides/v2/
 - **v1:** https://waffleyumy.github.io/sdg6-water-slides/v1/
+- **Speaker notes (printable):** https://waffleyumy.github.io/sdg6-water-slides/speaker-notes.html
+
+The talk script lives in `notes/script.py`. Edit it there, then run `python notes/script.py` to update the deck's notes and the printable page together.
 
 ## Presenting
 

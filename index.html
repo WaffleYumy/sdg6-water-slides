@@ -97,7 +97,6 @@ em.hl{font-style:italic;color:var(--aqua)}
 .slide.active [data-step]:not(.shown) .wi{transform:translateY(110%)}
 .rv{--dl:calc(var(--d,0) * 110ms + 300ms);opacity:0;transform:translateY(30px);transition:opacity .8s ease var(--dl),transform .9s var(--ease) var(--dl)}
 .lift{transition:opacity .8s ease var(--dl,0s),transform .9s var(--ease) var(--dl,0s),translate .45s var(--ease),rotate .6s var(--ease),box-shadow .45s ease}
-.slide.active .lift:hover{translate:0 -6px;box-shadow:0 24px 54px rgba(6,26,36,.16)}
 .slide.active .rv{opacity:1;transform:none}
 [data-step]{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .8s var(--ease)}
 [data-step].shown{opacity:1;transform:none}
@@ -306,18 +305,9 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 .wcap .serif{font-size:34px;line-height:1.25;font-weight:600;color:var(--glacier)}
 .ascii{position:absolute;inset:0;width:1920px;height:1080px;z-index:-1;pointer-events:none}
 .lift{position:relative}
-.lift::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(520px circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,.28), transparent 42%);opacity:0;transition:opacity .4s ease;mix-blend-mode:soft-light}
-.lift.tilting::after{opacity:1}
-:has(> .lift){perspective:1400px}
-#cur{position:fixed;inset:0;pointer-events:none;z-index:20;opacity:0;transition:opacity .3s;mix-blend-mode:difference}
-#cur.vis{opacity:1}
-#cur .d,#cur .r{position:fixed;left:0;top:0;border-radius:50%}
-#cur .d{width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff}
-#cur .r{width:40px;height:40px;margin:-20px 0 0 -20px;border:1.5px solid #fff;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background-color .35s}
-#cur.hot .r{width:78px;height:78px;margin:-39px 0 0 -39px;background-color:rgba(255,255,255,.12)}
-#cur.down .r{width:26px;height:26px;margin:-13px 0 0 -13px}
-body.hascur,body.hascur *{cursor:none!important}
-body.presenter #cur{display:none}
+/* like Keynote: the mouse pointer hides itself while you present */
+body.idle-ptr,body.idle-ptr *{cursor:none!important}
+#notestext{white-space:pre-line}
 
 @media (prefers-reduced-motion: reduce){
   .wi,.rv,[data-step],.glass .fill,.clock .wedge,.clock .hand,.donut .seg,.dots i,.mark path{transition:none!important}
@@ -352,7 +342,6 @@ body.presenter #cur{display:none}
     <filter id="liquid" x="-10%" y="-40%" width="120%" height="180%"><feTurbulence id="liqT" type="fractalNoise" baseFrequency="0.008 0.03" numOctaves="2" seed="4"/><feDisplacementMap id="liqD" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
   </defs>
 </svg>
-<div id="cur" aria-hidden="true"><i class="r"></i><i class="d"></i></div>
 
 <div id="chapters" aria-label="Chapters"></div>
 
@@ -386,7 +375,14 @@ body.presenter #cur{display:none}
       </g>
     </svg>
   </div>
-  <template class="notes">(~20 sec) [Pause before you speak.] You’ve probably seen this headline: ChatGPT “drinks” a bottle of water for every 20 to 50 questions. It comes from a real 2023 study at UC Riverside. [Click] It’s real. But is AI THE water problem? Today I’m going to follow the water and show you where it really goes.</template>
+  <template class="notes">(0:20) Point: Hook them with a headline they’ve already seen.
+
+[Wait a beat before you speak. Don’t click yet.]
+Raise your hand if you’ve seen a headline like this: ChatGPT “drinks” a bottle of water for every 20 to 50 questions.
+That comes from a real 2023 study at UC Riverside.
+[Click: the question appears.]
+So it’s real. But is AI actually THE water problem? Today I’m going to follow the water and show you where it really goes.
+[Click: a drop falls into the water and the title appears.]</template>
 </section>
 
 <!-- ============ 2 · TITLE ============ -->
@@ -414,7 +410,14 @@ body.presenter #cur{display:none}
     <div><b>04</b><span>Who’s fixing it</span></div>
     <div><b>05</b><span>What to do</span></div>
   </div>
-  <template class="notes">(~30 sec) I’m Anders, and my goal is SDG 6: Clean Water and Sanitation. [Click] First, some scale, from the US Geological Survey. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide. All the liquid fresh water would be about 170 miles, and most of that is underground. The lakes and rivers we actually draw from: 35 miles. A dot. That’s the water this whole fight is about. Here’s the plan: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
+  <template class="notes">(0:35) Point: Show how little usable water there actually is.
+
+I’m Anders, and my goal is SDG 6: clean water and sanitation for everyone.
+[Click: the water spheres come out of the Earth.]
+First, some scale. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide.
+All the liquid fresh water would be about 170 miles, and most of that is underground.
+The lakes and rivers we actually pull from? 35 miles. That little dot with the ring around it. That’s what everyone is fighting over.
+I’ll cover five things: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
@@ -439,7 +442,16 @@ body.presenter #cur{display:none}
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~40 sec) Four words change this whole story. Withdrawal: water we take out; much of it goes back. Consumption: water that never comes back, because it evaporates or goes into a product. Water stress: it’s always local; the planet isn’t running out, specific places are. Water footprint: all the water behind a product. POLL: “All US data centers running for a whole year. US farms use up that much water in about… A, a month? B, a week? C, 6 hours?” Hands up for each and tap to count. Hold that thought.</template>
+  <template class="notes">(0:45) Point: Give them the four words they need, then get them guessing.
+
+Four words change this whole story.
+Withdrawal: water we take from a river, lake or aquifer. A lot of it goes back.
+Consumption: water that doesn’t come back. It evaporates or ends up inside a product.
+Water stress: when a place is using close to all the water it has. It’s always local.
+Water footprint: all the water behind something you buy, across its whole supply chain.
+Q: All the data centers in the US, running for a whole year. How long does it take US farms to use up that same amount of water? A, a month? B, a week? C, six hours?
+[Count hands. Tap each option once per hand.]
+Hold that thought.</template>
 </section>
 
 <!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
@@ -476,7 +488,13 @@ body.presenter #cur{display:none}
     <div class="legend"><span><i style="background:#F4A08B"></i>Used up</span><span><i style="background:var(--current)"></i>Flows back</span></div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="src" style="letter-spacing:.02em;text-transform:none">USGS 2018 (2015 data) · LBNL 2024 (2023 data) · The Register 2025</span><span class="pg"></span></div>
-  <template class="notes">(~1 min) First, not all water use is equal. Look at the units: farms and power plants are measured per DAY, data centers per YEAR. Then look at what happens to the water. Power plants take the most, but only about 3% is used up; the rest goes back to the river, just warmer. Farms use up about 62%. Data-center cooling towers evaporate 70 to 80% of their water, and it all comes out of one town’s supply. So the question isn’t how much. It’s WHERE and WHEN. A gallon in rainy Seattle is not a gallon in Phoenix during a drought.</template>
+  <template class="notes">(1:00) Point: It’s not how much water. It’s where and when.
+
+Look at the units first. Farms and power plants are per DAY. Data centers are per YEAR.
+Now look at what happens to the water. Power plants take the most, 133 billion gallons a day, but only about 3% is used up. The rest goes back to the river, just warmer.
+Farms use up about 62% of what they take.
+Data-center cooling towers evaporate 70 to 80%, and it all comes out of one town’s supply.
+So the question isn’t how much. It’s where and when. A gallon in rainy Seattle isn’t the same as a gallon in Phoenix during a drought.</template>
 </section>
 
 <!-- ============ 5 · THE AI MYTH ============ -->
@@ -513,7 +531,17 @@ body.presenter #cur{display:none}
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~1 min 15 sec) The answer is C. All US data centers used about 17 billion gallons directly in 2023 (Lawrence Berkeley National Lab). US irrigation consumes about 73 billion gallons in ONE day. So a whole year of data centers is about 5 and a half hours of farming. [Click] Even if you add the water used by the power plants that run them, it’s about 3 days. (If asked: the numbers are from 2015 and 2023, so it’s a rough comparison.) [Click] That doesn’t make data centers harmless. They cluster in a few towns, often dry ones in places like Arizona and Texas. Their power-plant water is about 12 times their direct use, and LBNL says use could double or quadruple by 2028. But new closed-loop designs use almost no cooling water, Amazon says it’s 52% more efficient than in 2021, and host towns get tax revenue. ASK: Did anyone think AI was the biggest water problem?</template>
+  <template class="notes">(1:15) Point: AI’s water use is small nationally but can hurt locally.
+
+The answer is C: about six hours.
+All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.
+[Click: the three rings appear.]
+Even if you add the water used by the power plants that run them, it’s about three days.
+[Click: downsides and upsides appear.]
+That doesn’t mean data centers don’t matter. They cluster in a few towns, often dry ones in places like Arizona and Texas. The water at the power plants behind them is about 12 times their direct use, and their water use could double or quadruple by 2028.
+But there’s good news too: new closed-loop designs use almost no cooling water, efficiency is improving fast, and host towns get tax revenue.
+Q: Did anyone come in thinking AI was the biggest water problem?
+If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.</template>
 </section>
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
@@ -560,7 +588,14 @@ body.presenter #cur{display:none}
     <p class="src" style="color:var(--mist);text-align:right">Global Commission on the<br>Economics of Water, 2023</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~1 min) So where IS the real problem? Three places. Farms: 71% of all the freshwater humans take goes to agriculture. Pipes: 126 billion cubic meters of treated, already-paid-for water leaks out every year. That’s about 4 million liters every second; watch the counter. People: 2.1 billion people, 1 in 4, still don’t have safely managed drinking water, and we’re not on track for 2030. And it’s getting tighter: by 2030, demand is projected to outstrip supply by 40%. ASK: Which of these three would you fix first?</template>
+  <template class="notes">(1:00) Point: The real problem is farms, pipes and people.
+
+So where IS the real problem? Three places.
+Farms: 71% of all the fresh water humans take goes to agriculture.
+Pipes: cities lose 126 billion cubic meters of treated, already-paid-for water every year to leaks. That’s about four million liters every second. That counter has been running since this slide opened.
+People: 2.1 billion people, one in four, still don’t have safe drinking water at home.
+And it’s getting tighter. By 2030, demand is expected to be 40% higher than supply.
+Q: Which of these three would you fix first?</template>
 </section>
 
 <!-- ============ 7 · WHO'S FIXING IT ============ -->
@@ -595,7 +630,15 @@ body.presenter #cur{display:none}
     <p class="serif grow" style="font-size:38px;font-weight:600;line-height:1.2">Tech has the worst headlines but moves fastest. <span style="color:var(--aqua)">Farms need the most help.</span></p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~1 min 20 sec) Business is moving, but on which problem? Left: data centers. Since 2024, every new Microsoft data-center design uses closed-loop cooling at the chip, saving about 125 million liters per site per year. That’s Planet, and Profit, because water and permits cost money. Amazon published its total data-center water use for the first time, 2.5 billion gallons in 2025, and says about two-thirds goes back to communities. That’s a People move: towns deserve to know. Right: the real problem. N-Drip makes gravity-powered drip irrigation for small farms; in a rice trial with the International Rice Research Institute it used 57% less water than flooding the field. (One catch: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough.) Levi’s goes after the water inside our clothes: its Water-Less process cuts finishing water by up to 96%. MY TAKE: tech has the worst headlines but is moving fastest. Farms, the biggest user, need the most help.</template>
+  <template class="notes">(1:15) Point: Tech is moving fastest, but farms need the most help.
+
+Business is moving, but on which problem?
+Left side, data centers. Since 2024, every new Microsoft data-center design cools the chips in a closed loop, saving about 125 million liters per site every year. That’s Planet, and also Profit, because water costs money.
+Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025. It says about two-thirds goes back to local communities. Being open about it is a People move.
+Right side, the real problem. N-Drip makes gravity-powered drip irrigation for small farms. In a rice trial it used 57% less water than flooding the field.
+And Levi’s cut the water used to finish jeans by up to 96%.
+My take: tech has the worst headlines, but it’s moving fastest. Farms, the biggest user, need the most help.
+If asked: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough. It has to come with limits on total use.</template>
 </section>
 
 <!-- ============ 8 · WHAT TO DO ============ -->
@@ -612,7 +655,15 @@ body.presenter #cur{display:none}
     <p style="font-size:30px">Would you build your next data center in Arizona? Why or why not?</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~50 sec) Three moves for any business. People: build where water is plentiful, and when you draw from a town’s supply, invest back into it. Profit: treat water as a business risk. Droughts shut down factories and supply chains, and leaky systems waste about 39 billion dollars a year. Planet: go after the biggest use. That’s farming, so companies should help their farm suppliers switch to efficient irrigation, and reuse water wherever they can. My conclusion: water is a local problem with global supply chains. The headlines are about AI, but the biggest wins are on farms and in pipes. Final question: would you build your next data center in Arizona? Why or why not?</template>
+  <template class="notes">(0:50) Point: My recommendations, using People, Profit and Planet.
+
+So what should any business do? Three moves.
+People: build where water is plentiful, and invest back into the local water systems you draw from.
+Profit: treat water as a business risk. Droughts shut down factories, and leaky pipes waste about 39 billion dollars a year.
+Planet: go after the 71%. Help your farm suppliers switch to efficient irrigation, and reuse water wherever you can.
+My conclusion: water is a local problem with global supply chains. The headlines are about AI, but the biggest wins are on farms and in pipes.
+Q: Last question. Would you build your next data center in Arizona? Why or why not?
+[Let two or three people answer.]</template>
 </section>
 
 <!-- ============ 9 · HOW I USED AI ============ -->
@@ -632,7 +683,12 @@ body.presenter #cur{display:none}
     <p style="font-size:30px;line-height:1.4"><b style="color:var(--aqua)">Lesson:</b> AI turned up conflicting numbers for the same fact, so every figure here was checked against its source.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(~20 sec) As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic, to search news, UN and USGS sources, flag where they disagreed, plan the timing, and design and code this website. I chose the angle and the outline and pushed for a stronger second version. The lesson: AI found different numbers for the same fact, so you still have to check the original source.</template>
+  <template class="notes">(0:20) Point: Required by the assignment: be specific and honest.
+
+As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic.
+It searched news, UN and USGS sources, flagged where sources disagreed, helped plan the timing, and built this website.
+I chose the angle, wrote the outline, and checked the numbers against their sources.
+Biggest lesson: AI gave me different numbers for the same fact, so you still have to check the original source.</template>
 </section>
 
 <!-- ============ 10 · WORKS CITED ============ -->
@@ -655,7 +711,10 @@ body.presenter #cur{display:none}
     <p><b>14</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">Thank you! Questions?</template>
+  <template class="notes">(0:05) Point: Close and take questions.
+
+All my sources are here, and the links work on the website.
+Thank you. Any questions?</template>
 </section>
 
 <div id="wipe" aria-hidden="true">
@@ -885,9 +944,9 @@ void main(){
       const x = c * CELL + 12, y = r * CELL + 12;
       let v = n2(c * .09 + ascT * .35, r * .13 - ascT * .12) * .65 + n2(c * .23 - ascT * .2, r * .21 + ascT * .3) * .35;
       v = Math.pow(v, 1.7);
-      const dx = x - mx, dy = y - my, d = Math.sqrt(dx * dx + dy * dy); if (d < 230) v += (1 - d / 230) * .6;
+      const dx = x - mx, dy = y - my, d = Math.sqrt(dx * dx + dy * dy); if (d < 170) v += (1 - d / 170) * .3;
       const k = Math.min(GLY.length - 1, Math.floor(v * GLY.length)); if (k < 1) continue;
-      ac.fillStyle = 'rgba(127,224,214,' + Math.min(.55, .035 + v * .26).toFixed(3) + ')'; ac.fillText(GLY[k], x, y);
+      ac.fillStyle = 'rgba(127,224,214,' + Math.min(.3, .03 + v * .18).toFixed(3) + ')'; ac.fillText(GLY[k], x, y);
     }
     if (ascOn) ascRaf = requestAnimationFrame(ascFrame);
   };
@@ -1066,35 +1125,12 @@ void main(){
     if (water && water.on) water.drop(x, y, .03, .35);
     next();
   });
-  /* pointer: water wake, ASCII glow, and 3D card tilt with a light glare */
-  let tiltEl = null;
-  const untilt = () => { if (tiltEl) { tiltEl.style.rotate = ''; tiltEl.classList.remove('tilting'); tiltEl = null; } };
+  /* pointer: a gentle water wake and ASCII glow (no hover effects on content) */
   stage.addEventListener('pointermove', e => {
     const p = stagePt(e); mx = p.x; my = p.y;
     if (water && water.on) water.trail(p.x, p.y);
-    if (reduce) return;
-    const el = e.target.closest('.slide.active .lift');
-    if (el !== tiltEl) untilt();
-    if (!el) return;
-    tiltEl = el; el.classList.add('tilting');
-    const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5, m = Math.hypot(px, py);
-    el.style.rotate = m < .02 ? '' : `${(-py).toFixed(3)} ${px.toFixed(3)} 0 ${(m * 13).toFixed(2)}deg`;
-    el.style.setProperty('--gx', ((px + .5) * 100).toFixed(1) + '%'); el.style.setProperty('--gy', ((py + .5) * 100).toFixed(1) + '%');
   });
-  stage.addEventListener('pointerleave', () => { mx = my = -9999; untilt(); });
-
-  /* custom cursor: a dot plus a trailing ring that grows over anything you can touch */
-  if (!isPresenter && !reduce && matchMedia('(pointer: fine)').matches) {
-    const cur = $('#cur'), cr = $('#cur .r'), cd = $('#cur .d');
-    document.body.classList.add('hascur');
-    let cx = -100, cy = -100, rx = -100, ry = -100;
-    addEventListener('pointermove', e => { cx = e.clientX; cy = e.clientY; cur.classList.add('vis');
-      cur.classList.toggle('hot', !!e.target.closest('button, a, .lift, .opt')); }, { passive: true });
-    document.documentElement.addEventListener('pointerleave', () => cur.classList.remove('vis'));
-    addEventListener('pointerdown', () => cur.classList.add('down')); addEventListener('pointerup', () => cur.classList.remove('down'));
-    const cl = () => { rx += (cx - rx) * .2; ry += (cy - ry) * .2; cd.style.transform = `translate(${cx}px,${cy}px)`; cr.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(cl); };
-    requestAnimationFrame(cl);
-  }
+  stage.addEventListener('pointerleave', () => { mx = my = -9999; });
 
   /* ---- controls ---- */
   $('#next').onclick = next; $('#prev').onclick = prev;
@@ -1123,7 +1159,8 @@ void main(){
 
   const ui = $('#ui'), hint = $('#hint'); let idleT;
   setTimeout(() => hint.classList.add('idle'), 6000);
-  const wake = () => { ui.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => ui.classList.add('idle'), 2600); };
+  const wake = () => { ui.classList.remove('idle'); document.body.classList.remove('idle-ptr'); clearTimeout(idleT);
+    idleT = setTimeout(() => { ui.classList.add('idle'); document.body.classList.add('idle-ptr'); }, 2600); };
   ['mousemove', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, wake, { passive: true })); wake();
 
   /* ---- presenter sync ---- */
