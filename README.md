@@ -2,7 +2,8 @@
 
 A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation): where water really goes, the AI myth, the real water problem, and how business is fixing it. By Anders Imbrie.
 
-- **v2 (current):** https://waffleyumy.github.io/sdg6-water-slides/
+- **v3 (current):** https://waffleyumy.github.io/sdg6-water-slides/
+- **v2:** https://waffleyumy.github.io/sdg6-water-slides/v2/
 - **v1:** https://waffleyumy.github.io/sdg6-water-slides/v1/
 
 ## Presenting

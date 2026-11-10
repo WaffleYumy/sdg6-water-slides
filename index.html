@@ -96,7 +96,7 @@ em.hl{font-style:italic;color:var(--aqua)}
 .slide.active .wi{transform:none}
 .slide.active [data-step]:not(.shown) .wi{transform:translateY(110%)}
 .rv{--dl:calc(var(--d,0) * 110ms + 300ms);opacity:0;transform:translateY(30px);transition:opacity .8s ease var(--dl),transform .9s var(--ease) var(--dl)}
-.lift{transition:opacity .8s ease var(--dl,0s),transform .9s var(--ease) var(--dl,0s),translate .45s var(--ease),box-shadow .45s ease}
+.lift{transition:opacity .8s ease var(--dl,0s),transform .9s var(--ease) var(--dl,0s),translate .45s var(--ease),rotate .6s var(--ease),box-shadow .45s ease}
 .slide.active .lift:hover{translate:0 -6px;box-shadow:0 24px 54px rgba(6,26,36,.16)}
 .slide.active .rv{opacity:1;transform:none}
 [data-step]{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .8s var(--ease)}
@@ -122,7 +122,8 @@ em.hl{font-style:italic;color:var(--aqua)}
 .mark path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease) .3s}
 .mark path.wv{transition-delay:1.1s}
 .slide.active .mark path{stroke-dashoffset:0}
-#title h1{font-size:184px;line-height:.92;font-weight:700;letter-spacing:-.035em}
+#title h1{font-size:168px;line-height:.92;font-weight:700;letter-spacing:-.035em}
+#title .mark{width:110px;height:110px}
 #title h1 em{font-style:italic;font-weight:400;color:var(--aqua)}
 .agenda{position:absolute;left:128px;right:128px;bottom:120px;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;border-top:1.5px solid rgba(169,198,204,.3);padding-top:24px}
 .agenda div{display:flex;flex-direction:column;gap:6px}
@@ -283,6 +284,41 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 #pv .btns button:hover{background:#21495E}
 #pv .btns .wide{grid-column:span 2}
 
+/* =========================================================
+   v3: WebGL water, splash, 3D globe, ASCII data-water, cursor, tilt
+   ========================================================= */
+#water{position:absolute;inset:0;width:1920px;height:1080px;opacity:0;transition:opacity 1.2s ease}
+#water.on{opacity:1}
+#open .vignette{background:radial-gradient(ellipse at 35% 50%, rgba(6,26,36,.1) 0%, rgba(6,26,36,.72) 78%)}
+#drop{position:absolute;left:0;top:0;width:60px;height:84px;margin:-80px 0 0 -30px;opacity:0;z-index:46;pointer-events:none;filter:drop-shadow(0 0 22px rgba(127,224,214,.7))}
+.spl{position:absolute;width:12px;height:16px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:var(--aqua);pointer-events:none;z-index:46}
+#globe-wrap{position:absolute;left:940px;top:60px;width:940px;height:800px;pointer-events:none;opacity:0;transition:opacity 1s ease .15s}
+.slide.active #globe-wrap{opacity:1}
+#globe{position:absolute;inset:0;width:940px;height:800px}
+.wlab{position:absolute;left:0;top:0;--r:30px}
+.wlab .t{position:absolute;left:calc(var(--r) + 34px);top:-26px;white-space:nowrap;display:flex;flex-direction:column;gap:4px}
+.wlab .t::before{content:"";position:absolute;left:-24px;top:25px;width:16px;height:1.5px;background:var(--aqua)}
+.wlab b{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:.06em;color:var(--glacier);text-transform:uppercase}
+.wlab span{font-family:var(--mono);font-size:18px;color:var(--aqua)}
+.wlab .pulse{position:absolute;left:-16px;top:-16px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ember);animation:pulse2 1.8s ease-out infinite}
+@keyframes pulse2{0%{transform:scale(.35);opacity:1}100%{transform:scale(1.7);opacity:0}}
+.wcap{position:absolute;left:40px;bottom:0;width:860px;display:flex;flex-direction:column;gap:8px}
+.wcap .serif{font-size:34px;line-height:1.25;font-weight:600;color:var(--glacier)}
+.ascii{position:absolute;inset:0;width:1920px;height:1080px;z-index:-1;pointer-events:none}
+.lift{position:relative}
+.lift::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(520px circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,.28), transparent 42%);opacity:0;transition:opacity .4s ease;mix-blend-mode:soft-light}
+.lift.tilting::after{opacity:1}
+:has(> .lift){perspective:1400px}
+#cur{position:fixed;inset:0;pointer-events:none;z-index:20;opacity:0;transition:opacity .3s;mix-blend-mode:difference}
+#cur.vis{opacity:1}
+#cur .d,#cur .r{position:fixed;left:0;top:0;border-radius:50%}
+#cur .d{width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff}
+#cur .r{width:40px;height:40px;margin:-20px 0 0 -20px;border:1.5px solid #fff;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background-color .35s}
+#cur.hot .r{width:78px;height:78px;margin:-39px 0 0 -39px;background-color:rgba(255,255,255,.12)}
+#cur.down .r{width:26px;height:26px;margin:-13px 0 0 -13px}
+body.hascur,body.hascur *{cursor:none!important}
+body.presenter #cur{display:none}
+
 @media (prefers-reduced-motion: reduce){
   .wi,.rv,[data-step],.glass .fill,.clock .wedge,.clock .hand,.donut .seg,.dots i,.mark path{transition:none!important}
   .bottle .lvl,.bottle .q,.glass .vap i,.pipe .d{animation:none!important}
@@ -303,7 +339,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   .dots i.hit{background:var(--ember)!important}
   .days circle.f{stroke-dasharray:220 220!important}
   .mark path{stroke-dashoffset:0!important}
-  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv{display:none!important}
+  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl{display:none!important}
   *{animation:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
@@ -313,13 +349,17 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="mk" viewBox="0 0 48 48"><path d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <filter id="liquid" x="-10%" y="-40%" width="120%" height="180%"><feTurbulence id="liqT" type="fractalNoise" baseFrequency="0.008 0.03" numOctaves="2" seed="4"/><feDisplacementMap id="liqD" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
   </defs>
 </svg>
+<div id="cur" aria-hidden="true"><i class="r"></i><i class="d"></i></div>
 
 <div id="chapters" aria-label="Chapters"></div>
 
 <div id="stage" role="region" aria-roledescription="slideshow" aria-label="Follow the Water">
 <canvas id="flow" width="1920" height="1080" aria-hidden="true"></canvas>
+<canvas id="water" width="1600" height="900" aria-hidden="true"></canvas>
+<svg id="drop" viewBox="0 0 60 84" aria-hidden="true"><path d="M30 2C30 2 6 38 6 54a24 24 0 0 0 48 0C54 38 30 2 30 2Z" fill="#7FE0D6"/><path d="M19 52a11 11 0 0 0 9 13" stroke="#F8FBFA" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/></svg>
 
 <!-- ============ 1 · COLD OPEN ============ -->
 <section class="slide abyss" id="open" data-title="Cold open" data-chapter="0" data-steps="1">
@@ -350,13 +390,22 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 2 · TITLE ============ -->
-<section class="slide abyss" id="title" data-title="Title" data-chapter="0" data-enter="dive" data-from="#open .bottle">
+<section class="slide abyss" id="title" data-title="Title" data-chapter="0" data-enter="splash" data-steps="1">
   <div class="vignette" style="background:radial-gradient(ellipse at 30% 45%, rgba(6,26,36,.35) 0%, rgba(6,26,36,.9) 75%)"></div>
-  <div class="col" style="gap:40px;position:relative;margin-top:-90px">
+  <div class="col" style="gap:32px;position:relative;margin-top:-70px;width:880px">
     <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="#7FE0D6" stroke-width="2"/><path class="wv" pathLength="1" d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2" stroke-linecap="round"/></svg>
-    <h1 data-split>Follow the <em>water</em></h1>
-    <p class="rv" style="--d:5;font-size:44px;line-height:1.3;color:var(--mist);max-width:1200px">Where it really goes, the AI myth, and who’s fixing the real problem</p>
-    <p class="rv mono" style="--d:6;font-size:24px;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">UN SDG 6 · Clean Water &amp; Sanitation <span style="color:var(--slate-l)">&nbsp;/&nbsp;</span> Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; [Course] · [Date]</span></p>
+    <h1 data-split>Follow the<br><em>water</em></h1>
+    <p class="rv" style="--d:5;font-size:40px;line-height:1.3;color:var(--mist)">Where it really goes, the AI myth, and who’s fixing the real problem</p>
+    <p class="rv mono" style="--d:6;font-size:22px;line-height:1.6;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">UN SDG 6 · Clean Water &amp; Sanitation<br>Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; [Course] · [Date]</span></p>
+  </div>
+  <div id="globe-wrap" aria-hidden="true">
+    <canvas id="globe" width="940" height="800"></canvas>
+    <div data-step="1">
+      <div class="wlab" data-k="0" style="--r:28px;transform:translate(593px,234px)"><div class="t"><b>All of Earth’s water</b><span>860 miles wide</span></div></div>
+      <div class="wlab" data-k="1" style="--r:8px;transform:translate(593px,400px)"><div class="t"><b>Liquid fresh water</b><span>169.5 mi · underground</span></div></div>
+      <div class="wlab" data-k="2" style="--r:6px;transform:translate(593px,566px)"><i class="pulse"></i><div class="t"><b>Lakes + rivers</b><span>34.9 miles. That’s it.</span></div></div>
+      <div class="wcap"><p class="serif">Every drop on Earth, rolled into one ball. The lakes and rivers we draw from are a <span style="color:var(--ember)">dot</span>.</p><p class="src">USGS Water Science School · Earth is 7,918 miles wide</p></div>
+    </div>
   </div>
   <div class="agenda rv" style="--d:8">
     <div><b>01</b><span>The basics</span></div>
@@ -365,7 +414,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     <div><b>04</b><span>Who’s fixing it</span></div>
     <div><b>05</b><span>What to do</span></div>
   </div>
-  <template class="notes">(~10 sec) I’m Anders, and my goal is SDG 6: Clean Water and Sanitation. Here’s the plan: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
+  <template class="notes">(~30 sec) I’m Anders, and my goal is SDG 6: Clean Water and Sanitation. [Click] First, some scale, from the US Geological Survey. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide. All the liquid fresh water would be about 170 miles, and most of that is underground. The lakes and rivers we actually draw from: 35 miles. A dot. That’s the water this whole fight is about. Here’s the plan: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
@@ -432,6 +481,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 
 <!-- ============ 5 · THE AI MYTH ============ -->
 <section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="2" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
+  <canvas class="ascii" id="ascii" width="1920" height="1080" aria-hidden="true"></canvas>
   <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI and water: how bad is it, really?</h2></header>
   <div class="row" style="gap:64px;align-items:center;margin-top:-10px">
     <svg class="clock rv" style="--d:1;width:540px;height:540px" viewBox="0 0 680 680" role="img" aria-label="A 24-hour clock representing one day of US irrigation water. A wedge of about 5.6 hours equals a full year of US data-center water.">
@@ -732,6 +782,149 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   };
   const setFlow = on => { cv.classList.toggle('on', on); if (on && !flowOn && !reduce) { flowOn = true; raf = requestAnimationFrame(flowFrame); } if (!on) { flowOn = false; cancelAnimationFrame(raf); } };
 
+  /* ---- WebGL water: a ripple simulation + caustic light (cold open + title) ---- */
+  const water = (() => {
+    const cw = $('#water');
+    const gl = cw.getContext('webgl2', { antialias: false, alpha: false });
+    if (!gl || !gl.getExtension('EXT_color_buffer_float')) return null;
+    const SW = 384, SH = 216;
+    const VS = '#version 300 es\nin vec2 p; out vec2 uv; void main(){ uv = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }';
+    const shd = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+    const prog = fs => {
+      const pr = gl.createProgram();
+      gl.attachShader(pr, shd(gl.VERTEX_SHADER, VS));
+      gl.attachShader(pr, shd(gl.FRAGMENT_SHADER, '#version 300 es\nprecision highp float;\nin vec2 uv; out vec4 o;\n' + fs));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      const u = {}; for (let k = 0, n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS); k < n; k++) { const nm = gl.getActiveUniform(pr, k).name; u[nm] = gl.getUniformLocation(pr, nm); }
+      return { pr, u };
+    };
+    let P;
+    try {
+      P = {
+        sim: prog(`uniform sampler2D s; uniform vec2 px;
+void main(){ vec4 c = texture(s, uv);
+  float avg = (texture(s, uv + vec2(px.x, 0.)).r + texture(s, uv - vec2(px.x, 0.)).r + texture(s, uv + vec2(0., px.y)).r + texture(s, uv - vec2(0., px.y)).r) * .25;
+  c.g += (avg - c.r) * 2.; c.g *= .993; c.r += c.g; c.r *= .9985; o = c; }`),
+        drop: prog(`uniform sampler2D s; uniform vec2 c; uniform float r; uniform float k;
+void main(){ vec4 v = texture(s, uv); float d = max(0., 1. - length((uv - c) * vec2(16. / 9., 1.)) / r);
+  d = .5 - cos(d * 3.14159) * .5; v.r += d * k; o = v; }`),
+        draw: prog(`uniform sampler2D s; uniform float t; uniform vec2 px;
+float hs(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p), u = f * f * (3. - 2. * f);
+  return mix(mix(hs(i), hs(i + vec2(1., 0.)), u.x), mix(hs(i + vec2(0., 1.)), hs(i + vec2(1., 1.)), u.x), u.y); }
+float caust(vec2 p, float t){ vec2 w = vec2(vn(p * 1.3 + vec2(t * .15, 0.)), vn(p * 1.3 + vec2(5.2, t * .12)));
+  float v = vn(p + w * 1.8 + vec2(t * .05, -t * .04)); return pow(1. - abs(v * 2. - 1.), 12.); }
+void main(){
+  float h = texture(s, uv).r;
+  float hx = texture(s, uv + vec2(px.x, 0.)).r - texture(s, uv - vec2(px.x, 0.)).r;
+  float hy = texture(s, uv + vec2(0., px.y)).r - texture(s, uv - vec2(0., px.y)).r;
+  vec3 n = normalize(vec3(-hx * 9., -hy * 9., 1.));
+  vec2 q = uv * vec2(16. / 9., 1.) + n.xy * .12;
+  float c = caust(q * 2.4, t) * .65 + caust(q * 4.1 + 3.7, t * 1.25) * .45;
+  vec3 col = mix(vec3(.016, .07, .1), vec3(.03, .2, .24), smoothstep(-.1, 1.1, uv.y) * .8);
+  col += vec3(.28, .82, .78) * c * (.16 + .2 * uv.y);
+  vec3 L = normalize(vec3(-.45, .55, .7));
+  float sp = pow(max(dot(reflect(-L, n), vec3(0., 0., 1.)), 0.), 70.);
+  col += vec3(.7, 1., .96) * sp * .9 * smoothstep(.002, .03, length(n.xy));
+  col += vec3(.35, .85, .82) * clamp(h * 1.2, -.05, .3);
+  float vg = length((uv - vec2(.42, .52)) * vec2(1.25, 1.)); col *= 1. - .6 * smoothstep(.25, 1., vg);
+  o = vec4(col, 1.); }`)
+      };
+    } catch (e) { console.warn('Water effect off:', e.message); return null; }
+    const mk = () => {
+      const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, SW, SH, 0, gl.RGBA, gl.HALF_FLOAT, null);
+      [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(([a, b]) => gl.texParameteri(gl.TEXTURE_2D, a, b));
+      const f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+      gl.viewport(0, 0, SW, SH); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+      return { t, f };
+    };
+    let A = mk(), Z = mk();
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) return null;
+    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    const pass = (p, setU, toTex) => {
+      gl.useProgram(p.pr); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.t); gl.uniform1i(p.u.s, 0); setU(p.u);
+      if (toTex) { gl.bindFramebuffer(gl.FRAMEBUFFER, Z.f); gl.viewport(0, 0, SW, SH); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); [A, Z] = [Z, A]; }
+      else { gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, cw.width, cw.height); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
+    };
+    const q = []; let on = false, wr = 0, lastRain = 0, lx = 0, ly = 0; const T0 = performance.now();
+    const frame = now => {
+      if (now - lastRain > 650 + Math.random() * 900) { lastRain = now; q.push([Math.random() * 1920, Math.random() * 1080, .008 + Math.random() * .01, .03 + Math.random() * .05]); }
+      while (q.length) { const [x, y, r, k] = q.shift(); pass(P.drop, u => { gl.uniform2f(u.c, x / 1920, 1 - y / 1080); gl.uniform1f(u.r, r); gl.uniform1f(u.k, k); }, true); }
+      pass(P.sim, u => gl.uniform2f(u.px, 1 / SW, 1 / SH), true);
+      pass(P.sim, u => gl.uniform2f(u.px, 1 / SW, 1 / SH), true);
+      pass(P.draw, u => { gl.uniform1f(u.t, (now - T0) / 1000); gl.uniform2f(u.px, 1 / SW, 1 / SH); }, false);
+      if (on) wr = requestAnimationFrame(frame);
+    };
+    return {
+      get on() { return on; },
+      set(v) {
+        cw.classList.toggle('on', v);
+        if (v && !on) { if (reduce) frame(performance.now()); else { on = true; wr = requestAnimationFrame(frame); } }
+        if (!v) { on = false; cancelAnimationFrame(wr); }
+      },
+      drop(x, y, r, k) { q.push([x, y, r, k]); },
+      trail(x, y) { if (Math.hypot(x - lx, y - ly) < 14) return; lx = x; ly = y; q.push([x, y, .013, .045]); }
+    };
+  })();
+
+  /* ---- ASCII "digital water" behind the AI slide ---- */
+  const asc = $('#ascii'), ac = asc.getContext('2d');
+  const CELL = 24, COLS = 80, ROWS = 45, GLY = ' .·:-=+*01';
+  let ascOn = false, ascRaf = 0, ascT = 0;
+  const h2 = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
+  const n2 = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = h2(xi, yi), b = h2(xi + 1, yi), c = h2(xi, yi + 1), d = h2(xi + 1, yi + 1); return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v; };
+  const ascFrame = () => {
+    ascT += .016;
+    ac.clearRect(0, 0, 1920, 1080); ac.font = '600 17px "JetBrains Mono", monospace'; ac.textAlign = 'center'; ac.textBaseline = 'middle';
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const x = c * CELL + 12, y = r * CELL + 12;
+      let v = n2(c * .09 + ascT * .35, r * .13 - ascT * .12) * .65 + n2(c * .23 - ascT * .2, r * .21 + ascT * .3) * .35;
+      v = Math.pow(v, 1.7);
+      const dx = x - mx, dy = y - my, d = Math.sqrt(dx * dx + dy * dy); if (d < 230) v += (1 - d / 230) * .6;
+      const k = Math.min(GLY.length - 1, Math.floor(v * GLY.length)); if (k < 1) continue;
+      ac.fillStyle = 'rgba(127,224,214,' + Math.min(.55, .035 + v * .26).toFixed(3) + ')'; ac.fillText(GLY[k], x, y);
+    }
+    if (ascOn) ascRaf = requestAnimationFrame(ascFrame);
+  };
+  const setAscii = on => { if (on && !ascOn) { if (reduce) ascFrame(); else { ascOn = true; ascRaf = requestAnimationFrame(ascFrame); } } if (!on) { ascOn = false; cancelAnimationFrame(ascRaf); } };
+
+  /* ---- chapter labels decode like a data readout ---- */
+  const SCR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/';
+  const decode = el => {
+    const node = [...el.childNodes].reverse().find(nd => nd.nodeType === 3 && nd.textContent.trim()); if (!node) return;
+    const fin = node._fin || (node._fin = node.textContent), t0 = performance.now(), dur = 800;
+    const tk = t => { const p = Math.min((t - t0) / dur, 1), cut = Math.floor(p * fin.length);
+      node.textContent = p >= 1 ? fin : fin.slice(0, cut) + fin.slice(cut).replace(/[^\s·]/g, () => SCR[Math.random() * SCR.length | 0]);
+      if (p < 1) requestAnimationFrame(tk); };
+    requestAnimationFrame(tk);
+    setTimeout(() => { node.textContent = fin; }, dur + 120);   // always land on the real text
+  };
+  addEventListener('beforeprint', () => $$('.chap').forEach(el => [...el.childNodes].forEach(nd => { if (nd._fin) nd.textContent = nd._fin; })));
+
+  /* ---- title text ripples into focus, as if seen through water ---- */
+  const liqD = $('#liqD'), liqT = $('#liqT');
+  const liquify = el => {
+    if (!el || reduce) return; el.style.filter = 'url(#liquid)';
+    const t0 = performance.now(), dur = 2000;
+    const tk = t => { const p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      liqD.setAttribute('scale', (120 * (1 - e)).toFixed(1));
+      liqT.setAttribute('baseFrequency', (.008 + .006 * p).toFixed(4) + ' ' + (.03 - .012 * p).toFixed(4));
+      if (p < 1) requestAnimationFrame(tk); else el.style.filter = ''; };
+    requestAnimationFrame(tk);
+  };
+  const splashBurst = (x, y) => { for (let k = 0; k < 11; k++) {
+    const s = document.createElement('span'); s.className = 'spl'; s.style.left = x + 'px'; s.style.top = y + 'px'; stage.appendChild(s);
+    const a = -Math.PI / 2 + (k - 5) * .26 + (Math.random() - .5) * .2, sp = 170 + Math.random() * 190, dx = Math.cos(a) * sp, dy = Math.sin(a) * sp;
+    s.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.9)`, opacity: 1, offset: .45 },
+      { transform: `translate(calc(-50% + ${dx * 1.5}px), calc(-50% + ${dy * .15 + 130}px)) scale(.3)`, opacity: 0 }],
+      { duration: 950 + Math.random() * 350, easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => s.remove(); } };
+
   /* ---- poll ---- */
   const votes = { A: 0, B: 0, C: 0 };
   const drawPoll = () => {
@@ -752,13 +945,21 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 
   /* ---- render ---- */
   const notesText = $('#notestext');
-  const applySteps = () => $$('[data-step]', slides[i]).forEach(el => el.classList.toggle('shown', +el.dataset.step <= step));
+  const applySteps = () => {
+    $$('[data-step]', slides[i]).forEach(el => el.classList.toggle('shown', +el.dataset.step <= step));
+    document.body.dataset.atSlide = slides[i].id; document.body.dataset.atBuild = step;
+    document.dispatchEvent(new CustomEvent('ftw', { detail: { id: slides[i].id, step } }));
+  };
   const render = () => {
     if (document.activeElement && stage.contains(document.activeElement)) document.activeElement.blur();
     stage.scrollLeft = 0; stage.scrollTop = 0;
     slides.forEach((s, k) => { const on = k === i; s.classList.toggle('active', on); s.inert = !on; s.setAttribute('aria-hidden', !on); });
     applySteps();
-    setFlow(i <= 1 || slides[i].classList.contains('dark'));
+    const sid = slides[i].id;
+    if (water) water.set(i <= 1);
+    setFlow((i <= 1 && !water) || sid === 'moves');
+    setAscii(sid === 'ai');
+    if (!reduce) { const cur = slides[i]; setTimeout(() => $$('.chap', cur).forEach(decode), 160); }
     slides[i].id === 'real' ? startTicker() : stopTicker();
     if (slides[i].id === 'ai') $('#guessline').textContent = guessText();
     $('#count').textContent = String(i + 1).padStart(2, '0') + ' / ' + N;
@@ -802,7 +1003,25 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     if (reduce || document.hidden) { commit(); return; }
     const B = busy = { timers: [], anims: [], done: () => {} };
 
-    if (type === 'wave' || type === 'rise') {
+    if (type === 'splash') {
+      // a drop falls into the water; the title (and the Earth) rise out of the splash
+      const X = 1228, Y = 460, dropEl = $('#drop');
+      from.classList.add('leaving');
+      B.anims.push(from.animate([{ opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(8px)' }], { duration: 520, easing: 'ease-in', fill: 'forwards' }));
+      dropEl.style.left = X + 'px'; dropEl.style.top = Y + 'px';
+      const fall = dropEl.animate([{ transform: 'translateY(-620px) scaleY(1.05)', opacity: 0 }, { opacity: 1, offset: .12 }, { transform: 'translateY(0) scaleY(1.3)', opacity: 1 }], { duration: 640, easing: 'cubic-bezier(.55,0,1,.45)', fill: 'forwards' });
+      B.anims.push(fall);
+      B.timers.push(setTimeout(() => {
+        fall.cancel();
+        if (water) { water.drop(X, Y, .075, .7); water.drop(X, Y, .02, -.35); }
+        splashBurst(X, Y - 10);
+        ring.style.left = X + 'px'; ring.style.top = Y + 'px';
+        B.anims.push(ring.animate([{ width: '0px', height: '0px', opacity: 1 }, { width: '1500px', height: '1500px', opacity: 0 }], { duration: 1500, easing: 'cubic-bezier(.2,.8,.2,1)' }));
+        from.classList.remove('leaving'); commit(); liquify($('#title h1'));
+      }, 640));
+      B.done = () => { from.classList.remove('leaving'); if (i !== n) commit(); };
+      B.timers.push(setTimeout(finish, 2200));
+    } else if (type === 'wave' || type === 'rise') {
       const ls = $$(type === 'rise' ? '.v' : '.h', wipe);
       const fr = type === 'rise' ? ['translateY(1080px)', 'translateY(-1400px)'] : ['translateX(1920px)', 'translateX(-2600px)'];
       wipe.style.color = bgOf(to); wipe.classList.add('run');
@@ -834,7 +1053,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     }
   }
   const maxStep = k => +(slides[k].dataset.steps || 0);
-  function next() { finish(); if (step < maxStep(i)) { step++; applySteps(); runCounts(slides[i]); chan && chan.postMessage({ type: 'state', i, step }); } else go(i + 1); }
+  function next() { finish(); if (step < maxStep(i)) { step++; applySteps(); runCounts(slides[i]); if (water && water.on) water.drop(i ? 1228 : 760, i ? 460 : 800, .06, .3); chan && chan.postMessage({ type: 'state', i, step }); } else go(i + 1); }
   function prev() { finish(); if (step > 0) { step--; applySteps(); chan && chan.postMessage({ type: 'state', i, step }); } else if (i > 0) go(i - 1, maxStep(i - 1)); }
 
   /* ---- click anywhere on a slide to advance, with a ripple where you clicked ---- */
@@ -844,10 +1063,38 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     const { x, y } = stagePt(e), r = document.createElement('span');
     r.className = 'ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; stage.appendChild(r);
     r.animate([{ width: '0px', height: '0px', opacity: .9 }, { width: '280px', height: '280px', opacity: 0 }], { duration: 750, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => r.remove();
+    if (water && water.on) water.drop(x, y, .03, .35);
     next();
   });
-  stage.addEventListener('pointermove', e => { const p = stagePt(e); mx = p.x; my = p.y; });
-  stage.addEventListener('pointerleave', () => { mx = my = -9999; });
+  /* pointer: water wake, ASCII glow, and 3D card tilt with a light glare */
+  let tiltEl = null;
+  const untilt = () => { if (tiltEl) { tiltEl.style.rotate = ''; tiltEl.classList.remove('tilting'); tiltEl = null; } };
+  stage.addEventListener('pointermove', e => {
+    const p = stagePt(e); mx = p.x; my = p.y;
+    if (water && water.on) water.trail(p.x, p.y);
+    if (reduce) return;
+    const el = e.target.closest('.slide.active .lift');
+    if (el !== tiltEl) untilt();
+    if (!el) return;
+    tiltEl = el; el.classList.add('tilting');
+    const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5, m = Math.hypot(px, py);
+    el.style.rotate = m < .02 ? '' : `${(-py).toFixed(3)} ${px.toFixed(3)} 0 ${(m * 13).toFixed(2)}deg`;
+    el.style.setProperty('--gx', ((px + .5) * 100).toFixed(1) + '%'); el.style.setProperty('--gy', ((py + .5) * 100).toFixed(1) + '%');
+  });
+  stage.addEventListener('pointerleave', () => { mx = my = -9999; untilt(); });
+
+  /* custom cursor: a dot plus a trailing ring that grows over anything you can touch */
+  if (!isPresenter && !reduce && matchMedia('(pointer: fine)').matches) {
+    const cur = $('#cur'), cr = $('#cur .r'), cd = $('#cur .d');
+    document.body.classList.add('hascur');
+    let cx = -100, cy = -100, rx = -100, ry = -100;
+    addEventListener('pointermove', e => { cx = e.clientX; cy = e.clientY; cur.classList.add('vis');
+      cur.classList.toggle('hot', !!e.target.closest('button, a, .lift, .opt')); }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', () => cur.classList.remove('vis'));
+    addEventListener('pointerdown', () => cur.classList.add('down')); addEventListener('pointerup', () => cur.classList.remove('down'));
+    const cl = () => { rx += (cx - rx) * .2; ry += (cy - ry) * .2; cd.style.transform = `translate(${cx}px,${cy}px)`; cr.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(cl); };
+    requestAnimationFrame(cl);
+  }
 
   /* ---- controls ---- */
   $('#next').onclick = next; $('#prev').onclick = prev;
@@ -914,6 +1161,91 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   addEventListener('beforeprint', () => { slides.forEach(s => $$('[data-step]', s).forEach(el => el.classList.add('shown'))); });
   addEventListener('afterprint', () => applySteps());
   setTimeout(render, 30);
+})();
+</script>
+
+<!-- 3D Earth + all of Earth's water, to scale (USGS). Loads three.js from a CDN; the slide still works without it. -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const wrap = document.getElementById('globe-wrap'), cv = document.getElementById('globe');
+  const W = 940, H = 800, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(30, W / H, .1, 100); cam.position.set(0, 0, 9);
+  const R = 1.55, EX = -1.1, EARTH_MI = 7918;
+  const base = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/';
+  const tl = new THREE.TextureLoader(); tl.setCrossOrigin('anonymous');
+  const ld = (f, srgb) => { const t = tl.load(base + f); t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+
+  const pivot = new THREE.Group(); pivot.position.x = EX; scene.add(pivot);
+  const tilt = new THREE.Group(); tilt.rotation.z = .41; pivot.add(tilt);
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), new THREE.MeshPhongMaterial({
+    map: ld('earth_atmos_2048.jpg', true), specularMap: ld('earth_specular_2048.jpg'), normalMap: ld('earth_normal_2048.jpg'),
+    normalScale: new THREE.Vector2(.85, .85), specular: new THREE.Color('#1d4b51'), shininess: 32, color: '#ffffff' }));
+  earth.rotation.y = -1.9; tilt.add(earth);
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 96), new THREE.MeshLambertMaterial({ map: ld('earth_clouds_1024.png', true), transparent: true, opacity: .5, depthWrite: false }));
+  tilt.add(clouds);
+  const glow = (scale, side, frag) => new THREE.Mesh(new THREE.SphereGeometry(R * scale, 64, 64), new THREE.ShaderMaterial({
+    vertexShader: 'varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+    fragmentShader: 'varying vec3 vN; void main(){ ' + frag + ' }', side, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false }));
+  pivot.add(glow(1.17, THREE.BackSide, 'float f = clamp(-vN.z, 0., 1.); gl_FragColor = vec4(.42, .9, .86, 1.) * pow(f, 1.7) * 1.7;'));
+  pivot.add(glow(1.004, THREE.FrontSide, 'float f = 1. - clamp(vN.z, 0., 1.); gl_FragColor = vec4(.45, .95, .9, 1.) * pow(f, 3.) * .9;'));
+
+  scene.add(new THREE.AmbientLight('#3a6878', 1.1));
+  const sun = new THREE.DirectionalLight('#ffffff', 2.8); sun.position.set(-5, 2.5, 4); scene.add(sun);
+  const rim = new THREE.DirectionalLight('#7fe0d6', 1.1); rim.position.set(5, -1, -3); scene.add(rim);
+
+  // All of Earth's water, as spheres to the same scale as the Earth (USGS)
+  const specs = [860, 169.5, 34.9];
+  const center = new THREE.Vector3(EX, 0, 0);
+  const drops = specs.map((mi, k) => {
+    const r = R * mi / EARTH_MI;
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 48, 48), new THREE.MeshPhysicalMaterial({ color: '#2bb3c4', roughness: .06, clearcoat: 1, clearcoatRoughness: .05, emissive: '#0b5560', emissiveIntensity: .7 }));
+    const to = new THREE.Vector3(.74, 1 - k, 0);
+    const from = center.clone().add(to.clone().sub(center).normalize().multiplyScalar(R * .96));
+    mesh.position.copy(from); mesh.scale.setScalar(.0001); scene.add(mesh);
+    const label = wrap.querySelector(`.wlab[data-k="${k}"]`);
+    label.style.setProperty('--r', Math.max(6, r * 166) + 'px');
+    return { mesh, from, to, label };
+  });
+
+  let active = false, built = 0, bTarget = 0, raf = 0, last = 0, intro = 0, spin = 0;
+  let pmx = 0, pmy = 0;
+  addEventListener('pointermove', e => { pmx = e.clientX / innerWidth - .5; pmy = e.clientY / innerHeight - .5; }, { passive: true });
+  const outBack = x => 1 + 2.4 * Math.pow(x - 1, 3) + 1.4 * Math.pow(x - 1, 2);
+  const v = new THREE.Vector3();
+  const loop = now => {
+    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+    spin += (.1 - spin) * Math.min(1, dt * 1.1);
+    earth.rotation.y += spin * dt; clouds.rotation.y += spin * dt * 1.3;
+    const ip = reduce ? 1 : Math.min(1, (now - intro) / 1800);
+    pivot.scale.setScalar(Math.max(.001, outBack(ip)));
+    cam.position.x += (pmx * .6 - cam.position.x) * .05; cam.position.y += (-pmy * .4 - cam.position.y) * .05; cam.lookAt(0, 0, 0);
+    built += (bTarget - built) * Math.min(1, dt * 2.4);
+    drops.forEach((d, k) => {
+      const b = Math.min(1, Math.max(0, built * 1.6 - k * .28)), e = 1 - Math.pow(1 - b, 3);
+      d.mesh.position.lerpVectors(d.from, d.to, e); d.mesh.scale.setScalar(Math.max(.0001, e));
+      v.copy(d.mesh.position).project(cam);
+      d.label.style.transform = `translate(${((v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v.y) / 2 * H).toFixed(1)}px)`;
+    });
+    renderer.render(scene, cam);
+    if (active && !reduce) raf = requestAnimationFrame(loop);
+  };
+  const sync = () => {
+    const on = document.body.dataset.atSlide === 'title';
+    bTarget = on && +document.body.dataset.atBuild >= 1 ? 1 : 0;
+    if (reduce && on) { built = bTarget; intro = 0; }
+    if (on && !active) { active = true; intro = performance.now(); spin = 2.6; last = performance.now(); raf = requestAnimationFrame(loop); }
+    else if (on && reduce) requestAnimationFrame(loop);
+    if (!on && active) { active = false; cancelAnimationFrame(raf); }
+  };
+  document.addEventListener('ftw', sync); sync();
 })();
 </script>
 </body>
