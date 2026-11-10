@@ -9,7 +9,7 @@ A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation):
 
 | Key | Action |
 | --- | --- |
-| → / Space | Next slide or next build |
+| Click, → or Space | Next slide or next build |
 | ← | Back |
 | N | Speaker notes |
 | P | Presenter view (notes, timer, next slide) in a second window |

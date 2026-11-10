@@ -39,22 +39,22 @@ a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
 
 .slide{position:absolute;inset:0;padding:112px 128px 150px;display:flex;flex-direction:column;gap:40px;visibility:hidden;opacity:0}
 .slide.active{visibility:visible;opacity:1}
-.dark{background:var(--ink);color:var(--glacier)}
+.dark{background:rgba(11,42,60,.9);color:var(--glacier);transition:background-color .6s ease}
+#stage:has(.leaving) .slide.dark{background:var(--ink)}
 .abyss{background:transparent;color:var(--glacier)}
 .light{background:var(--glacier);color:var(--ink)}
 .paper{background:var(--paper);color:var(--ink)}
 .tealbg{background:#0A5B5F;color:var(--glacier)}
 
 /* ---------- liquid wipe ---------- */
-#wipe{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden}
-#wipe svg{position:absolute;top:0;left:0;width:2600px;height:1080px;transform:translateX(1920px)}
-#wipe .w2{opacity:.55}
-#wipe.fwd .w1{animation:wipeF .95s cubic-bezier(.65,0,.35,1) forwards}
-#wipe.fwd .w2{animation:wipeF .95s cubic-bezier(.65,0,.35,1) .05s forwards}
-#wipe.back .w1{animation:wipeB .95s cubic-bezier(.65,0,.35,1) forwards}
-#wipe.back .w2{animation:wipeB .95s cubic-bezier(.65,0,.35,1) .05s forwards}
-@keyframes wipeF{from{transform:translateX(1920px)}to{transform:translateX(-2600px)}}
-@keyframes wipeB{from{transform:translateX(-2600px)}to{transform:translateX(1920px)}}
+#wipe{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;visibility:hidden}
+#wipe.run{visibility:visible}
+#wipe .h{position:absolute;top:0;left:0;width:2600px;height:1080px;transform:translateX(1920px)}
+#wipe .v{position:absolute;top:0;left:0;width:1920px;height:1400px;transform:translateY(1080px)}
+#wipe .l2{opacity:.5}
+.ring{position:absolute;left:0;top:0;width:0;height:0;border-radius:50%;border:2px solid var(--aqua);pointer-events:none;z-index:45;transform:translate(-50%,-50%);opacity:0}
+.slide.leaving{visibility:visible;opacity:1;z-index:1}
+.slide.active{z-index:2}
 
 /* ---------- type ---------- */
 h1,h2,h3,.serif{font-family:var(--serif);font-weight:650;letter-spacing:-.015em;font-variation-settings:'opsz' 144}
@@ -95,7 +95,9 @@ em.hl{font-style:italic;color:var(--aqua)}
 .wi{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease);transition-delay:calc(var(--i,0) * 40ms + 120ms)}
 .slide.active .wi{transform:none}
 .slide.active [data-step]:not(.shown) .wi{transform:translateY(110%)}
-.rv{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .9s var(--ease);transition-delay:calc(var(--d,0) * 110ms + 300ms)}
+.rv{--dl:calc(var(--d,0) * 110ms + 300ms);opacity:0;transform:translateY(30px);transition:opacity .8s ease var(--dl),transform .9s var(--ease) var(--dl)}
+.lift{transition:opacity .8s ease var(--dl,0s),transform .9s var(--ease) var(--dl,0s),translate .45s var(--ease),box-shadow .45s ease}
+.slide.active .lift:hover{translate:0 -6px;box-shadow:0 24px 54px rgba(6,26,36,.16)}
 .slide.active .rv{opacity:1;transform:none}
 [data-step]{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .8s var(--ease)}
 [data-step].shown{opacity:1;transform:none}
@@ -293,7 +295,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   html,body{overflow:visible;height:auto;background:#fff}
   #stage{position:static;transform:none;width:1920px;height:auto;overflow:visible;box-shadow:none;background:none}
   .slide{position:relative;visibility:visible!important;opacity:1!important;width:1920px;height:1080px;page-break-after:always;break-after:page}
-  .abyss{background:var(--ink)!important}
+  .abyss,.dark{background:var(--ink)!important}
   .wi,.rv,[data-step]{transform:none!important;opacity:1!important;transition:none!important}
   .glass .fill{height:88%!important;transition:none!important}
   .clock .wedge{stroke-dasharray:182 785.4!important}.clock .hand{transform:rotate(83.5deg)!important}
@@ -348,7 +350,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 2 · TITLE ============ -->
-<section class="slide abyss" id="title" data-title="Title" data-chapter="0">
+<section class="slide abyss" id="title" data-title="Title" data-chapter="0" data-enter="dive" data-from="#open .bottle">
   <div class="vignette" style="background:radial-gradient(ellipse at 30% 45%, rgba(6,26,36,.35) 0%, rgba(6,26,36,.9) 75%)"></div>
   <div class="col" style="gap:40px;position:relative;margin-top:-90px">
     <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="#7FE0D6" stroke-width="2"/><path class="wv" pathLength="1" d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2" stroke-linecap="round"/></svg>
@@ -367,14 +369,14 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
-<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1">
+<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1" data-enter="wave">
   <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Four words that change the story</h2></header>
   <div class="row" style="gap:36px;align-items:stretch">
     <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-      <div class="term rv" style="--d:1"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 19c2 0 2-1.5 4.5-1.5S10 19 12 19s2.5-1.5 4.5-1.5S19 19 21 19"/><path d="M12 14V4"/><path d="M8 8l4-4 4 4"/></svg></div><h3>Withdrawal</h3><p>Water taken from a river, lake or aquifer. Much of it flows back.</p></div>
-      <div class="term rv" style="--d:2"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 19c2 0 2-1.5 4.5-1.5S10 19 12 19s2.5-1.5 4.5-1.5S19 19 21 19"/><path d="M8 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/><path d="M12 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/><path d="M16 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/></svg></div><h3>Consumption</h3><p>Water that never comes back: it evaporates or goes into a product.</p></div>
-      <div class="term rv" style="--d:3"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4.5-5.5"/><circle cx="12" cy="17" r="1.3"/></svg></div><h3>Water stress</h3><p>Demand close to a region’s renewable supply. Always local.</p></div>
-      <div class="term rv" style="--d:4"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M8 4L3 7l2 4 2-1v10h10V10l2 1 2-4-5-3c-.6 1.5-2 2.5-4 2.5S8.6 5.5 8 4z"/></svg></div><h3>Water footprint</h3><p>All the water behind a product, across its whole supply chain.</p></div>
+      <div class="term rv lift" style="--d:1"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 19c2 0 2-1.5 4.5-1.5S10 19 12 19s2.5-1.5 4.5-1.5S19 19 21 19"/><path d="M12 14V4"/><path d="M8 8l4-4 4 4"/></svg></div><h3>Withdrawal</h3><p>Water taken from a river, lake or aquifer. Much of it flows back.</p></div>
+      <div class="term rv lift" style="--d:2"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 19c2 0 2-1.5 4.5-1.5S10 19 12 19s2.5-1.5 4.5-1.5S19 19 21 19"/><path d="M8 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/><path d="M12 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/><path d="M16 14c-1-1.5 1-2.5 0-4s1-2.5 0-4"/></svg></div><h3>Consumption</h3><p>Water that never comes back: it evaporates or goes into a product.</p></div>
+      <div class="term rv lift" style="--d:3"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4.5-5.5"/><circle cx="12" cy="17" r="1.3"/></svg></div><h3>Water stress</h3><p>Demand close to a region’s renewable supply. Always local.</p></div>
+      <div class="term rv lift" style="--d:4"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M8 4L3 7l2 4 2-1v10h10V10l2 1 2-4-5-3c-.6 1.5-2 2.5-4 2.5S8.6 5.5 8 4z"/></svg></div><h3>Water footprint</h3><p>All the water behind a product, across its whole supply chain.</p></div>
     </div>
     <div class="poll rv" style="--d:5">
       <span class="pill ember">Ask the class</span>
@@ -395,7 +397,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 <section class="slide paper" id="equal" data-title="Not all water use is equal" data-chapter="1">
   <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Not all water use is equal</h2></header>
   <div class="row" style="gap:28px">
-    <div class="use rv" style="--d:1">
+    <div class="use rv lift" style="--d:1">
       <div class="top"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 22V9"/><path d="M12 14c-4.5 0-7-3-7-7 4 0 7 2.5 7 7z"/><path d="M12 11c4.5 0 7-3 7-7-4 0-7 2.5-7 7z"/></svg></div><h3>Farm irrigation</h3></div>
       <div class="mid">
         <div class="glass" style="--p:62%"><div class="vap"><i style="left:20%"></i><i style="left:45%;animation-delay:.6s"></i><i style="left:70%;animation-delay:1.3s"></i><i style="left:32%;animation-delay:1.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
@@ -403,7 +405,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
       </div>
       <p class="fate"><b>62% used up</b> by crops and evaporation</p>
     </div>
-    <div class="use rv" style="--d:2">
+    <div class="use rv lift" style="--d:2">
       <div class="top"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M2 21h20"/><path d="M4 21V11l5 3v-3l5 3V5h4v16"/><path d="M15 8h2"/></svg></div><h3>Power plants</h3></div>
       <div class="mid">
         <div class="glass" style="--p:3%"><div class="vap"><i style="left:48%;animation-delay:.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
@@ -411,7 +413,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
       </div>
       <p class="fate"><b>Only ~3% used up.</b> The rest goes back, warmer</p>
     </div>
-    <div class="use rv" style="--d:3">
+    <div class="use rv lift" style="--d:3">
       <div class="top"><div class="ic e"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg></div><h3>Data centers</h3></div>
       <div class="mid">
         <div class="glass" style="--p:75%"><div class="vap"><i style="left:15%"></i><i style="left:38%;animation-delay:.45s"></i><i style="left:60%;animation-delay:.9s"></i><i style="left:80%;animation-delay:1.4s"></i><i style="left:28%;animation-delay:1.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
@@ -429,7 +431,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 5 · THE AI MYTH ============ -->
-<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="2">
+<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="2" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
   <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI and water: how bad is it, really?</h2></header>
   <div class="row" style="gap:64px;align-items:center;margin-top:-10px">
     <svg class="clock rv" style="--d:1;width:540px;height:540px" viewBox="0 0 680 680" role="img" aria-label="A 24-hour clock representing one day of US irrigation water. A wedge of about 5.6 hours equals a full year of US data-center water.">
@@ -465,7 +467,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
-<section class="slide tealbg" id="real" data-title="The real problem" data-chapter="3">
+<section class="slide tealbg" id="real" data-title="The real problem" data-chapter="3" data-enter="rise">
   <header class="hd"><p class="chap rv"><i></i>03 · The real problem</p><h2 data-split>Farms, pipes and people</h2></header>
   <div class="row" style="gap:56px">
     <div class="panel rv" style="--d:1">
@@ -512,27 +514,27 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 7 · WHO'S FIXING IT ============ -->
-<section class="slide paper" id="business" data-title="Who’s fixing it" data-chapter="4">
+<section class="slide paper" id="business" data-title="Who’s fixing it" data-chapter="4" data-enter="wave">
   <header class="hd"><p class="chap rv"><i></i>04 · Who’s fixing it</p><h2 data-split>Business is moving, but on which problem?</h2></header>
   <div class="row" style="gap:32px">
     <div class="col grow" style="gap:18px">
       <span class="pill rv" style="--d:1">Fixing data centers</span>
-      <div class="biz rv" style="--d:2">
+      <div class="biz rv lift" style="--d:2">
         <div class="h"><span class="mono-tile" style="background:#0B6F6A">M</span><h3>Microsoft</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
         <div class="m"><p class="met"><span class="count" data-to="125" data-suffix="M L">125M L</span><small>saved / site / year</small></p><p>Closed-loop chip cooling in every new design since 2024</p></div>
       </div>
-      <div class="biz rv" style="--d:3">
+      <div class="biz rv lift" style="--d:3">
         <div class="h"><span class="mono-tile" style="background:#1A4559">A</span><h3>Amazon</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span>PLANET</span></span></div>
         <div class="m"><p class="met"><span class="count" data-to="2.5" data-dec="1" data-suffix="B gal">2.5B gal</span><small>first disclosure, 2025</small></p><p>Says about two-thirds goes back to local communities</p></div>
       </div>
     </div>
     <div class="col grow" style="gap:18px">
       <span class="pill ember rv" style="--d:1">Fixing the real problem</span>
-      <div class="biz rv" style="--d:2">
+      <div class="biz rv lift" style="--d:2">
         <div class="h"><span class="mono-tile" style="background:#C2412D">N</span><h3>N-Drip</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span class="on">PLANET</span></span></div>
         <div class="m"><p class="met"><span class="count" data-to="57" data-prefix="−" data-suffix="%">−57%</span><small>water, IRRI rice trial</small></p><p>Gravity-powered drip irrigation built for small farms</p></div>
       </div>
-      <div class="biz rv" style="--d:3">
+      <div class="biz rv lift" style="--d:3">
         <div class="h"><span class="mono-tile" style="background:#8A3A2A">L</span><h3>Levi Strauss &amp; Co.</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
         <div class="m"><p class="met"><span class="count" data-to="96" data-prefix="−" data-suffix="%">−96%</span><small>finishing water</small></p><p>Water&lt;Less process; 3B+ liters saved so far</p></div>
       </div>
@@ -547,12 +549,12 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <!-- ============ 8 · WHAT TO DO ============ -->
-<section class="slide dark" id="moves" data-title="What businesses should do" data-chapter="5">
+<section class="slide dark" id="moves" data-title="What businesses should do" data-chapter="5" data-enter="iris" data-from="#business .strip .pill">
   <header class="hd"><p class="chap rv"><i></i>05 · What to do</p><h2 data-split>Three moves for any business</h2></header>
   <div class="row" style="gap:28px">
-    <div class="move rv" style="--d:1"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21c0-3-2-6-5-7"/></svg></span><p class="no">01</p><h3>People</h3><p>Build where water is plentiful, and invest in the local systems you draw from.</p></div>
-    <div class="move rv" style="--d:2"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><p class="no">02</p><h3>Profit</h3><p>Price water risk in. Droughts shut plants, and leaks waste $39B a year.</p></div>
-    <div class="move rv" style="--d:3"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 4 6 4 9s-1 6-4 9c-3-3-4-6-4-9s1-6 4-9z"/></svg></span><p class="no">03</p><h3>Planet</h3><p>Go after the 71%: fund efficient irrigation with farm suppliers, and reuse water.</p></div>
+    <div class="move rv lift" style="--d:1"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21c0-3-2-6-5-7"/></svg></span><p class="no">01</p><h3>People</h3><p>Build where water is plentiful, and invest in the local systems you draw from.</p></div>
+    <div class="move rv lift" style="--d:2"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><p class="no">02</p><h3>Profit</h3><p>Price water risk in. Droughts shut plants, and leaks waste $39B a year.</p></div>
+    <div class="move rv lift" style="--d:3"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 4 6 4 9s-1 6-4 9c-3-3-4-6-4-9s1-6 4-9z"/></svg></span><p class="no">03</p><h3>Planet</h3><p>Go after the 71%: fund efficient irrigation with farm suppliers, and reuse water.</p></div>
   </div>
   <p class="serif rv" style="--d:4;font-size:58px;font-weight:600;line-height:1.1;letter-spacing:-.02em">Water is a <em class="hl">local</em> problem with <em class="hl">global</em> supply chains.</p>
   <div class="row rv" style="--d:5;align-items:center;gap:24px">
@@ -567,11 +569,11 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 <section class="slide light" id="aiuse" data-title="How I used AI" data-chapter="5">
   <header class="hd"><p class="chap rv"><i></i>Process</p><h2 data-split>How I used AI</h2></header>
   <div class="row" style="gap:32px">
-    <div class="card grow rv" style="--d:1">
+    <div class="card grow rv lift" style="--d:1">
       <div class="row" style="gap:18px;align-items:center"><span class="mono-tile" style="background:var(--teal)"><svg class="icon" style="width:30px;height:30px;stroke:#F8FBFA" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg></span><div><h3>What Claude did</h3><p class="src" style="margin-top:4px">Claude (Anthropic), Claude desktop app</p></div></div>
       <ul><li>Searched news, UN and USGS sources</li><li>Flagged where sources disagreed</li><li>Planned timing for a 7-minute talk</li><li>Designed and coded this website</li></ul>
     </div>
-    <div class="card grow rv" style="--d:2">
+    <div class="card grow rv lift" style="--d:2">
       <div class="row" style="gap:18px;align-items:center"><span class="mono-tile" style="background:var(--ink)"><svg class="icon" style="width:30px;height:30px;stroke:#F8FBFA" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.5-8 8-8s8 3.5 8 8"/></svg></span><div><h3>What I did</h3><p class="src" style="margin-top:4px">Anders Imbrie</p></div></div>
       <ul><li>Chose the angle and the 4-part outline</li><li>Asked for the farm vs. data-center test</li><li>Pushed for a stronger design (v1 → v2)</li><li>[Add anything else you did]</li></ul>
     </div>
@@ -607,14 +609,17 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 </section>
 
 <div id="wipe" aria-hidden="true">
-  <svg class="w2" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="#7FE0D6"/></svg>
-  <svg class="w1" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="currentColor"/></svg>
+  <svg class="h l2" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="#7FE0D6"/></svg>
+  <svg class="h" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="currentColor"/></svg>
+  <svg class="v l2" viewBox="0 0 1920 1400" preserveAspectRatio="none"><path d="M0 120 C 160 40, 320 40, 480 120 S 800 200, 960 120 S 1280 40, 1440 120 S 1760 200, 1920 120 L1920 1400 L0 1400 Z" fill="#7FE0D6"/></svg>
+  <svg class="v" viewBox="0 0 1920 1400" preserveAspectRatio="none"><path d="M0 130 C 200 200, 400 200, 600 130 S 1000 60, 1200 130 S 1600 200, 1920 130 L1920 1400 L0 1400 Z" fill="currentColor"/></svg>
 </div>
+<span class="ring" id="ring"></span>
 <div class="grain"></div>
 </div>
 
 <div id="notes" aria-live="polite"><h4>Speaker notes</h4><p id="notestext"></p></div>
-<p id="hint">← → move · N notes · P presenter view · F full screen</p>
+<p id="hint">Click or → to advance · N notes · P presenter view · F full screen</p>
 <div id="ui">
   <button id="prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
   <span id="count">01 / 10</span>
@@ -706,7 +711,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   /* ---- flow field (cold open + title) ---- */
   const cv = $('#flow'), cx = cv.getContext('2d');
   const P = Array.from({ length: 1100 }, () => ({ x: Math.random() * 1920, y: Math.random() * 1080, a: Math.random() * 200 }));
-  let flowOn = false, raf = 0, ft = 0;
+  let flowOn = false, raf = 0, ft = 0, mx = -9999, my = -9999;
   cx.fillStyle = '#061A24'; cx.fillRect(0, 0, 1920, 1080);
   const flowFrame = () => {
     ft += 1;
@@ -714,7 +719,9 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     cx.lineWidth = 1.4;
     for (const p of P) {
       const ang = Math.sin(p.x * 0.0017 + ft * 0.004) * 1.3 + Math.cos(p.y * 0.0023 - ft * 0.003) * 1.1 + Math.sin((p.x + p.y) * 0.0008) * 0.9 + 0.25;
-      const nx = p.x + Math.cos(ang) * 1.7, ny = p.y + Math.sin(ang) * 1.7;
+      let nx = p.x + Math.cos(ang) * 1.7, ny = p.y + Math.sin(ang) * 1.7;
+      const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+      if (d2 < 57600) { const d = Math.sqrt(d2) || 1, f = (1 - d / 240) * 3.4; nx += (-dy / d) * f + (dx / d) * f * .4; ny += (dx / d) * f + (dy / d) * f * .4; }
       const hue = p.y / 1080;
       cx.strokeStyle = `rgba(${Math.round(70 + 60 * hue)},${Math.round(200 - 30 * hue)},${Math.round(195 - 10 * hue)},0.5)`;
       cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(nx, ny); cx.stroke();
@@ -751,7 +758,7 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     stage.scrollLeft = 0; stage.scrollTop = 0;
     slides.forEach((s, k) => { const on = k === i; s.classList.toggle('active', on); s.inert = !on; s.setAttribute('aria-hidden', !on); });
     applySteps();
-    setFlow(i <= 1);
+    setFlow(i <= 1 || slides[i].classList.contains('dark'));
     slides[i].id === 'real' ? startTicker() : stopTicker();
     if (slides[i].id === 'ai') $('#guessline').textContent = guessText();
     $('#count').textContent = String(i + 1).padStart(2, '0') + ' / ' + N;
@@ -772,22 +779,75 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
     [...cb.children].forEach((b, c) => { const inC = chapIdx.map((x, k) => x === c ? k : -1).filter(k => k >= 0);
       const done = c < cur ? 1 : c > cur ? 0 : (inC.indexOf(i) + 1) / inC.length; b.firstChild.style.width = done * 100 + '%'; }); }
 
-  /* ---- navigation with liquid wipe ---- */
-  const wipe = $('#wipe'); let busy = null;
-  const bgOf = s => { const c = getComputedStyle(s).backgroundColor; return c === 'rgba(0, 0, 0, 0)' ? '#061A24' : c; };
+  /* ---- transitions: each slide picks how it enters (data-enter) ----
+     wave  = liquid wipe across (new chapter)
+     rise  = water rises from below (the real problem)
+     iris  = the next slide grows out of an element on this one (data-from)
+     dive  = iris + the camera plunges into that element (cold open → title)
+     drift = quiet parallax slide (same chapter, and every step backwards) */
+  const wipe = $('#wipe'), ring = $('#ring'); let busy = null;
+  const EZ = 'cubic-bezier(.65,0,.35,1)', IRIS = 'cubic-bezier(.76,0,.18,1)';
+  const bgOf = s => s.classList.contains('dark') ? '#0B2A3C' : s.classList.contains('abyss') ? '#061A24' : getComputedStyle(s).backgroundColor;
+  const toStage = el => { const r = el.getBoundingClientRect(), sr = stage.getBoundingClientRect(), k = sr.width / 1920;
+    return r.width ? { x: (r.left + r.width / 2 - sr.left) / k, y: (r.top + r.height / 2 - sr.top) / k } : { x: 960, y: 540 }; };
+  function finish() { if (!busy) return; const B = busy; busy = null; B.timers.forEach(clearTimeout); B.anims.forEach(a => a.cancel()); B.done(); }
   function go(n, toStep = 0) {
-    n = Math.max(0, Math.min(N - 1, n)); visit++;
+    n = Math.max(0, Math.min(N - 1, n));
+    finish();
     if (n === i) { step = toStep; render(); return; }
-    const dir = n > i ? 'fwd' : 'back';
-    if (busy) { clearTimeout(busy.t1); clearTimeout(busy.t2); wipe.className = ''; busy = null; }
-    if (reduce || document.hidden) { i = n; step = toStep; render(); return; }
-    wipe.style.color = bgOf(slides[n]);
-    wipe.className = ''; void wipe.offsetWidth; wipe.className = dir;
-    busy = { t1: setTimeout(() => { i = n; step = toStep; render(); }, 470), t2: setTimeout(() => { wipe.className = ''; busy = null; }, 1050) };
+    visit++;
+    const from = slides[i], to = slides[n], fwd = n > i;
+    const commit = () => { i = n; step = toStep; render(); };
+    let type = !fwd ? 'drift' : n === i + 1 ? (to.dataset.enter || 'drift') : 'wave';
+    if (reduce || document.hidden) { commit(); return; }
+    const B = busy = { timers: [], anims: [], done: () => {} };
+
+    if (type === 'wave' || type === 'rise') {
+      const ls = $$(type === 'rise' ? '.v' : '.h', wipe);
+      const fr = type === 'rise' ? ['translateY(1080px)', 'translateY(-1400px)'] : ['translateX(1920px)', 'translateX(-2600px)'];
+      wipe.style.color = bgOf(to); wipe.classList.add('run');
+      ls.forEach((l, k) => B.anims.push(l.animate([{ transform: fr[0] }, { transform: fr[1] }], { duration: 1050, delay: k ? 80 : 0, easing: EZ, fill: 'both' })));
+      B.timers.push(setTimeout(commit, 600));
+      B.done = () => { wipe.classList.remove('run'); if (i !== n) commit(); };
+      B.timers.push(setTimeout(finish, 1160));
+    } else if (type === 'iris' || type === 'dive') {
+      const src = to.dataset.from && $(to.dataset.from);
+      const { x, y } = src ? toStage(src) : { x: 960, y: 540 };
+      const dive = type === 'dive', dur = dive ? 1400 : 1100;
+      from.style.transformOrigin = `${x}px ${y}px`;
+      from.classList.add('leaving'); commit();
+      B.anims.push(to.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(2300px at ${x}px ${y}px)` }], { duration: dur, easing: IRIS }));
+      B.anims.push(from.animate([{ transform: 'scale(1)', filter: 'brightness(1) blur(0px)' },
+        { transform: dive ? 'scale(2.2)' : 'scale(1.08)', filter: dive ? 'brightness(.35) blur(10px)' : 'brightness(.55) blur(2px)' }], { duration: dur, easing: IRIS, fill: 'forwards' }));
+      ring.style.left = x + 'px'; ring.style.top = y + 'px';
+      B.anims.push(ring.animate([{ width: '0px', height: '0px', opacity: 1 }, { width: '4600px', height: '4600px', opacity: 0 }], { duration: dur, easing: IRIS }));
+      B.done = () => { from.classList.remove('leaving'); from.style.transformOrigin = ''; };
+      B.timers.push(setTimeout(finish, dur + 40));
+    } else {
+      const sg = fwd ? 1 : -1;
+      if (!to.classList.contains('abyss')) stage.style.background = bgOf(to);
+      from.classList.add('leaving'); commit();
+      B.anims.push(from.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${-90 * sg}px) scale(.98)` }], { duration: 480, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }));
+      B.anims.push(to.animate([{ opacity: 0, transform: `translateX(${130 * sg}px)` }, { opacity: 1, transform: 'none' }], { duration: 820, delay: 90, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+      B.done = () => { from.classList.remove('leaving'); stage.style.background = ''; };
+      B.timers.push(setTimeout(finish, 930));
+    }
   }
   const maxStep = k => +(slides[k].dataset.steps || 0);
-  function next() { if (busy) return; if (step < maxStep(i)) { step++; applySteps(); runCounts(slides[i]); chan && chan.postMessage({ type: 'state', i, step }); } else go(i + 1); }
-  function prev() { if (busy) return; if (step > 0) { step--; applySteps(); chan && chan.postMessage({ type: 'state', i, step }); } else if (i > 0) go(i - 1, maxStep(i - 1)); }
+  function next() { finish(); if (step < maxStep(i)) { step++; applySteps(); runCounts(slides[i]); chan && chan.postMessage({ type: 'state', i, step }); } else go(i + 1); }
+  function prev() { finish(); if (step > 0) { step--; applySteps(); chan && chan.postMessage({ type: 'state', i, step }); } else if (i > 0) go(i - 1, maxStep(i - 1)); }
+
+  /* ---- click anywhere on a slide to advance, with a ripple where you clicked ---- */
+  const stagePt = e => { const sr = stage.getBoundingClientRect(), k = sr.width / 1920; return { x: (e.clientX - sr.left) / k, y: (e.clientY - sr.top) / k }; };
+  stage.addEventListener('click', e => {
+    if (isPresenter || e.target.closest('button, a, .poll')) return;
+    const { x, y } = stagePt(e), r = document.createElement('span');
+    r.className = 'ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; stage.appendChild(r);
+    r.animate([{ width: '0px', height: '0px', opacity: .9 }, { width: '280px', height: '280px', opacity: 0 }], { duration: 750, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => r.remove();
+    next();
+  });
+  stage.addEventListener('pointermove', e => { const p = stagePt(e); mx = p.x; my = p.y; });
+  stage.addEventListener('pointerleave', () => { mx = my = -9999; });
 
   /* ---- controls ---- */
   $('#next').onclick = next; $('#prev').onclick = prev;
@@ -815,7 +875,8 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
   addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) (dx < 0 ? next : prev)(); sx = null; });
 
   const ui = $('#ui'), hint = $('#hint'); let idleT;
-  const wake = () => { ui.classList.remove('idle'); hint.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => { ui.classList.add('idle'); hint.classList.add('idle'); }, 2600); };
+  setTimeout(() => hint.classList.add('idle'), 6000);
+  const wake = () => { ui.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => ui.classList.add('idle'), 2600); };
   ['mousemove', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, wake, { passive: true })); wake();
 
   /* ---- presenter sync ---- */
