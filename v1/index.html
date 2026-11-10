@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the Water Really Goes</title>
+<meta name="description" content="SDG 6 Clean Water & Sanitation: water myths, data centers, the real water problem, and how business is tackling it. By Anders Imbrie.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C12 2 5 10 5 14.5A7 7 0 0 0 19 14.5C19 10 12 2 12 2Z' fill='%230E7C80'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#0B2A3C; --ink2:#123A50; --deep:#061923;
+  --paper:#F2F7F7; --paper2:#FBFCFA; --line:#D5E3E4;
+  --teal:#0E7C80; --teal-d:#0E6E73; --aqua:#6FD3D0;
+  --coral:#C2412D; --body:#3D5566; --muted:#5B6F7C; --soft:#BFD8DE;
+  --serif:'Fraunces', Georgia, serif; --sans:'Inter', Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--deep);overflow:hidden;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+
+/* ---------- stage: designed at 1920x1080, scaled to fit ---------- */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,.5));overflow:hidden;overflow:clip;background:var(--ink)}
+.slide{position:absolute;inset:0;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px;
+  opacity:0;visibility:hidden;transform:translateX(80px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.7,.2,1),visibility 0s .7s}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.2,.7,.2,1),visibility 0s}
+.slide.past{transform:translateX(-80px)}
+.light{background:var(--paper);color:var(--ink)}
+.light2{background:var(--paper2);color:var(--ink)}
+.dark{background:var(--ink);color:var(--paper)}
+.tealbg{background:var(--teal-d);color:var(--paper)}
+
+.reveal{opacity:0;transform:translateY(28px)}
+.slide.active .reveal{animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 140ms + 250ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
+h1{font-size:128px;line-height:1}
+h2{font-size:72px;line-height:1.08}
+h3{font-size:44px;line-height:1.15}
+.body{font-size:32px;line-height:1.4}
+.small{font-size:24px;line-height:1.4}
+.eyebrow{font-size:24px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 20px;border-radius:999px;color:var(--paper2);background:var(--teal);white-space:nowrap}
+.pill.coral{background:var(--coral)}
+.tag{font-size:22px;font-weight:600;padding:6px 16px;border-radius:999px;background:var(--line);color:var(--ink);white-space:nowrap}
+.card{background:var(--paper2);border:1px solid var(--line);border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:14px}
+.light2 .card{background:var(--paper)}
+#business .card{flex:1;padding:28px 36px;gap:10px}
+#business{gap:36px}
+.row{display:flex;gap:40px}
+.col{display:flex;flex-direction:column}
+.grow{flex:1}
+.foot{position:absolute;left:128px;right:128px;bottom:60px;display:flex;justify-content:space-between;font-size:22px;color:var(--muted)}
+.dark .foot,.tealbg .foot{color:#9FC3CA}
+.icon{width:64px;height:64px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconwrap{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;flex:none}
+
+/* ---------- cover ---------- */
+#cover{justify-content:center;padding-bottom:128px}
+#cover .ripples{position:absolute;right:120px;top:150px;width:720px;height:720px}
+#cover .ripples circle{fill:none;stroke:var(--aqua);transform-origin:360px 400px;animation:ripple 4.5s ease-out infinite}
+#cover .ripples circle:nth-child(2){animation-delay:1.5s}
+#cover .ripples circle:nth-child(3){animation-delay:3s}
+@keyframes ripple{0%{transform:scale(.15);opacity:.9;stroke-width:6}100%{transform:scale(1);opacity:0;stroke-width:1}}
+#cover .drop{animation:bob 4.5s ease-in-out infinite;transform-origin:360px 300px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.waves{position:absolute;left:0;right:0;bottom:0;height:220px;pointer-events:none}
+.waves .w{position:absolute;bottom:0;left:0;width:3840px;height:100%;animation:drift 14s linear infinite}
+.waves .w2{animation-duration:22s;animation-direction:reverse;opacity:.6}
+@keyframes drift{to{transform:translateX(-1920px)}}
+
+/* ---------- poll ---------- */
+.opts{display:flex;flex-direction:column;gap:16px}
+.opt{display:flex;align-items:center;gap:20px;font-size:32px;text-align:left;padding:18px 24px;border-radius:16px;border:2px solid #2E5468;color:var(--paper);transition:background .25s,border-color .25s,transform .15s}
+.opt:hover{border-color:var(--aqua);transform:translateX(4px)}
+.opt b{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#1C445A;font-size:26px;flex:none}
+.opt.picked{background:#1C445A;border-color:var(--aqua)}
+.opt.picked b{background:var(--aqua);color:var(--ink)}
+
+/* ---------- use-type cards ---------- */
+.fate{display:block;font-size:24px;line-height:1.35;padding:14px 18px;border-radius:14px;background:var(--line);color:var(--ink)}
+.meter{height:16px;border-radius:999px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:999px;background:var(--teal);transition:width 1.4s cubic-bezier(.2,.7,.2,1) .9s}
+.slide.active .meter i{width:var(--w)}
+.bignum{font-family:var(--serif);font-weight:700;font-size:96px;line-height:1}
+.unit-day{color:var(--teal)} .unit-year{color:var(--coral)}
+
+/* ---------- day bar ---------- */
+.daybar{position:relative;height:120px;border-radius:20px;background:#1C445A;overflow:hidden}
+.daybar .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--coral);border-radius:20px 0 0 20px;transition:width 1.8s cubic-bezier(.2,.7,.2,1) 1.1s}
+.slide.active .daybar .fill{width:23.3%}
+.daybar .ticks{position:absolute;inset:0;display:flex}
+.daybar .ticks span{flex:1;border-right:2px solid rgba(242,247,247,.12)}
+.daybar .ticks span:last-child{border:0}
+.hours{display:flex;justify-content:space-between;font-size:22px;color:var(--soft);margin-top:12px}
+.guess{font-size:26px;color:var(--aqua);min-height:36px}
+
+/* ---------- real problem ---------- */
+.stat{flex:1;display:flex;flex-direction:column;gap:18px}
+.stat .num{font-family:var(--serif);font-weight:700;font-size:120px;line-height:1;color:var(--paper2)}
+.stat .vis{height:120px;display:flex;align-items:center}
+.donut circle{fill:none;stroke-width:18}
+.donut .val{stroke:var(--paper2);stroke-dasharray:0 289;transition:stroke-dasharray 1.6s cubic-bezier(.2,.7,.2,1) .8s;transform:rotate(-90deg);transform-origin:60px 60px;stroke-linecap:round}
+.slide.active .donut .val{stroke-dasharray:202 289}
+.people{display:flex;gap:14px}
+.people svg{width:60px;height:110px;fill:#7FB7BA}
+.people svg.hit{fill:var(--paper2)}
+.slide.active .people svg.hit{animation:pulse 1.8s ease-in-out 1.2s infinite}
+@keyframes pulse{50%{opacity:.45}}
+.pipe .d{animation:drip 1.6s ease-in infinite}
+.pipe .d2{animation-delay:.8s}
+@keyframes drip{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(54px);opacity:0}}
+
+/* ---------- chrome (outside stage) ---------- */
+#progress{position:fixed;left:0;top:0;height:4px;background:var(--aqua);width:0;transition:width .5s ease;z-index:5}
+#ui{position:fixed;right:18px;bottom:16px;display:flex;align-items:center;gap:6px;z-index:6;background:rgba(6,25,35,.72);backdrop-filter:blur(8px);padding:6px;border-radius:14px;color:#DDEBEC;font-size:14px;transition:opacity .4s}
+#ui.idle{opacity:0}
+#ui button{width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+#ui button:hover,#ui button:focus-visible{background:rgba(255,255,255,.12);outline:none}
+#ui svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#count{min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+#notes{position:fixed;left:16px;right:16px;bottom:72px;max-height:38vh;overflow:auto;z-index:6;background:rgba(6,25,35,.94);color:#E6F0F1;border:1px solid #24485A;border-radius:16px;padding:20px 24px;font-size:17px;line-height:1.55;display:none}
+#notes.open{display:block}
+#notes h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--aqua);margin-bottom:8px}
+#help{position:fixed;right:18px;top:14px;color:#8FB2BA;font-size:13px;z-index:6;transition:opacity .4s}
+#help.idle{opacity:0}
+
+@media (prefers-reduced-motion: reduce){
+  .slide,.slide.active{transition:opacity .2s}
+  .slide.past,.slide{transform:none}
+  .reveal{opacity:1;transform:none}
+  .slide.active .reveal{animation:none}
+  #cover .ripples circle,#cover .drop,.waves .w,.pipe .d,.slide.active .people svg.hit{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div id="stage" role="region" aria-roledescription="slideshow" aria-label="Where the water really goes">
+
+<!-- 1 COVER -->
+<section class="slide dark" id="cover" aria-label="Title">
+  <svg class="ripples" viewBox="0 0 720 720" aria-hidden="true">
+    <circle cx="360" cy="400" r="340"/><circle cx="360" cy="400" r="340"/><circle cx="360" cy="400" r="340"/>
+    <path class="drop" d="M360 170C360 170 268 290 268 356A92 92 0 0 0 452 356C452 290 360 170 360 170Z" fill="#0E7C80" stroke="#6FD3D0" stroke-width="4"/>
+  </svg>
+  <div class="col" style="width:1000px;gap:40px;position:relative">
+    <p class="eyebrow reveal" style="color:var(--aqua)">UN SDG 6 · Clean Water &amp; Sanitation</p>
+    <h1 class="reveal" style="--d:1">Where the water <em style="font-style:italic;color:var(--aqua)">really</em> goes</h1>
+    <p class="reveal" style="--d:2;font-size:44px;line-height:1.3;color:var(--soft)">Myths, data centers and the real water problem, and how business is fixing it</p>
+    <p class="reveal" style="--d:3;font-size:32px;font-weight:600">Anders Imbrie <span style="color:#6E95A2;font-weight:400">· [Course] · [Date]</span></p>
+  </div>
+  <div class="waves" aria-hidden="true">
+    <svg class="w w2" viewBox="0 0 3840 220" preserveAspectRatio="none"><path d="M0 120 Q240 60 480 120 T960 120 T1440 120 T1920 120 T2400 120 T2880 120 T3360 120 T3840 120 V220 H0Z" fill="#0E6E73"/></svg>
+    <svg class="w" viewBox="0 0 3840 220" preserveAspectRatio="none"><path d="M0 150 Q320 100 640 150 T1280 150 T1920 150 T2560 150 T3200 150 T3840 150 V220 H0Z" fill="#123A50"/></svg>
+  </div>
+  <template class="notes">(~15 sec) Hi, I’m Anders. My goal is SDG 6, Clean Water and Sanitation. You’ve probably heard that AI is “drinking” our water, or that we should all take shorter showers. Today I want to show you where the water actually goes, why some of those headlines are misleading, and how businesses are working on the real problem.</template>
+</section>
+
+<!-- 2 KEY TERMS + POLL -->
+<section class="slide light" id="terms" aria-label="Key terms">
+  <h2 class="reveal">Key terms</h2>
+  <div class="row" style="align-items:stretch">
+    <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+      <div class="card reveal" style="--d:1"><h3 style="color:var(--teal)">Withdrawal</h3><p class="body" style="color:var(--body)">Water taken from a river, lake or aquifer. Much of it flows back.</p></div>
+      <div class="card reveal" style="--d:2"><h3 style="color:var(--teal)">Consumption</h3><p class="body" style="color:var(--body)">Water that doesn’t come back: it evaporates or ends up in a product.</p></div>
+      <div class="card reveal" style="--d:3"><h3 style="color:var(--teal)">Water stress</h3><p class="body" style="color:var(--body)">When demand nears a region’s renewable supply. It’s always local.</p></div>
+      <div class="card reveal" style="--d:4"><h3 style="color:var(--teal)">Water footprint</h3><p class="body" style="color:var(--body)">All the water used to make a product, across its supply chain.</p></div>
+    </div>
+    <div class="col reveal" style="--d:5;width:560px;gap:24px;background:var(--ink);color:var(--paper);border-radius:24px;padding:44px">
+      <span class="pill coral">Ask the class</span>
+      <p class="body">All US data centers ran for a <b>whole year</b>. US farms use up that much water in about…</p>
+      <div class="opts" role="group" aria-label="Poll options">
+        <button class="opt" data-opt="A"><b>A</b>a month</button>
+        <button class="opt" data-opt="B"><b>B</b>a week</button>
+        <button class="opt" data-opt="C"><b>C</b>6 hours</button>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>2</span></div>
+  <template class="notes">(~45 sec) Quick terms first, because they matter for everything after. Withdrawal is water we take out; a lot of it goes back. Consumption is water that’s gone from that place: it evaporated or went into a product. Water stress is always local: the world as a whole isn’t running out, specific places are. A water footprint counts all the water behind a product. POLL: hands up for A, B or C. (Click the option most people picked; the answer slide will remember it.)</template>
+</section>
+
+<!-- 3 NOT ALL WATER USE IS EQUAL -->
+<section class="slide light2" id="equal" aria-label="Not all water use is equal">
+  <h2 class="reveal">Not all water use is equal</h2>
+  <div class="row" style="gap:32px">
+    <div class="card grow reveal" style="--d:1">
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="iconwrap" style="background:#DCEDEA;color:var(--teal)"><svg class="icon" viewBox="0 0 24 24"><path d="M12 22V9"/><path d="M12 14c-4.5 0-7-3-7-7 4 0 7 2.5 7 7z"/><path d="M12 11c4.5 0 7-3 7-7-4 0-7 2.5-7 7z"/></svg></div>
+        <h3>Farm irrigation</h3>
+      </div>
+      <p class="bignum unit-day">118B</p>
+      <p class="small" style="color:var(--body)">gallons <b class="unit-day">a day</b> withdrawn in the US</p>
+      <p class="fate"><b>62% used up</b> by crops or evaporation</p>
+    </div>
+    <div class="card grow reveal" style="--d:2">
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="iconwrap" style="background:#DCEDEA;color:var(--teal)"><svg class="icon" viewBox="0 0 24 24"><path d="M2 21h20"/><path d="M4 21V11l5 3v-3l5 3V5h4v16"/><path d="M15 8h2"/></svg></div>
+        <h3>Power plants</h3>
+      </div>
+      <p class="bignum unit-day">133B</p>
+      <p class="small" style="color:var(--body)">gallons <b class="unit-day">a day</b> withdrawn in the US</p>
+      <p class="fate"><b>Mostly returned</b> to the river, just warmer</p>
+    </div>
+    <div class="card grow reveal" style="--d:3">
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="iconwrap" style="background:#F5DDD7;color:var(--coral)"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg></div>
+        <h3>Data centers</h3>
+      </div>
+      <p class="bignum unit-year">17B</p>
+      <p class="small" style="color:var(--body)">gallons <b class="unit-year">a year</b> used directly in the US</p>
+      <p class="fate"><b>Mostly evaporates</b>, from one town’s supply</p>
+    </div>
+  </div>
+  <div class="reveal" style="--d:4;background:var(--ink);color:var(--paper);border-radius:24px;padding:30px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+    <p class="serif" style="font-size:42px;font-weight:600;line-height:1.2">Same gallon, different impact: rainy Seattle isn’t drought-hit Phoenix.</p>
+  </div>
+  <div class="foot"><span>Sources: USGS (2018), 2015 data · LBNL (2024), 2023 data</span><span>3</span></div>
+  <template class="notes">(~1 min) Part 1: what water use really means. Look at the units first: farms and power plants are measured per DAY, data centers per YEAR. But the type of use matters too. Power plants pull the most water, but most of it goes back to the river, just warmer. Irrigation is mostly used up: about 62% is taken in by crops or evaporates. Data-center cooling water mostly evaporates too, and it all comes out of one town’s supply. So the real question isn’t “how much” worldwide. It’s WHERE and WHEN. A gallon in rainy Seattle is not a gallon in Phoenix during a drought.</template>
+</section>
+
+<!-- 4 AI AND WATER -->
+<section class="slide dark" id="ai" aria-label="AI and water">
+  <h2 class="reveal">AI and water: how bad is it really?</h2>
+  <div class="row" style="gap:56px">
+    <div class="col grow" style="gap:22px">
+      <span class="pill reveal" style="--d:1">Poll answer: C</span>
+      <p class="guess reveal" style="--d:1" id="guessline"></p>
+      <p class="serif reveal" style="--d:2;font-size:46px;font-weight:600;line-height:1.18">A full year of US data-center water ≈ <span style="color:#F08A73;white-space:nowrap">6 hours</span> of US farm irrigation</p>
+      <div class="reveal" style="--d:3">
+        <div class="daybar" role="img" aria-label="A 24-hour bar of US irrigation water; about 6 hours of it equals a full year of US data-center water">
+          <div class="fill"></div><div class="ticks" id="ticks"></div>
+        </div>
+        <div class="hours"><span>0 h</span><span style="color:#F08A73;font-weight:700">~6 h = all US data centers, 1 year</span><span>24 h = US farms, 1 day</span></div>
+      </div>
+      <p class="small reveal" style="--d:4;color:var(--soft)">17B gal/yr direct use (LBNL, 2023) vs. 73B gal/day consumed by US irrigation (USGS, 2015). Counting power-plant water too: about 3 days.</p>
+    </div>
+    <div class="col" style="width:700px;gap:24px">
+      <div class="col reveal" style="--d:3;gap:16px;background:var(--ink2);border-radius:24px;padding:36px 40px">
+        <span class="pill coral">Real downsides</span>
+        <ul class="body" style="padding-left:34px;color:#E3EEF1">
+          <li>Clustered in a few, often dry, towns</li>
+          <li>Power-plant water ≈ 12× direct use</li>
+          <li>Could grow 2–4× by 2028 (LBNL)</li>
+        </ul>
+      </div>
+      <div class="col reveal" style="--d:4;gap:16px;background:var(--ink2);border-radius:24px;padding:36px 40px">
+        <span class="pill">Real upsides</span>
+        <ul class="body" style="padding-left:34px;color:#E3EEF1">
+          <li>Closed-loop cooling: ~0 water</li>
+          <li>Amazon: 52% more efficient</li>
+          <li>Tax revenue and jobs for host towns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>4</span></div>
+  <template class="notes">(~1 min 15 sec) Part 2: the AI myth. The answer is C. All US data centers used about 17 billion gallons directly in 2023, according to Lawrence Berkeley National Lab. US irrigation consumes about 73 billion gallons in a single day. So a whole year of data centers is roughly 6 hours of farming. Even counting the water used by the power plants that run them, it’s about 3 days. (Caveat if asked: the numbers are from different years, 2015 and 2023, so it’s a rough comparison.) That doesn’t make data centers harmless. They cluster in a few towns, often dry ones in places like Arizona and Texas, so the local impact is real. Their indirect water from electricity is about 12 times their direct use, and LBNL says use could double or quadruple by 2028. But there are upsides: new closed-loop designs use almost no cooling water, efficiency is improving fast, and host towns get tax revenue. ASK: Did anyone think AI was the biggest water problem?</template>
+</section>
+
+<!-- 5 THE REAL PROBLEM -->
+<section class="slide tealbg" id="real" aria-label="The real problem">
+  <h2 class="reveal">The real problem: farms, pipes and people</h2>
+  <div class="row" style="gap:56px">
+    <div class="stat reveal" style="--d:1">
+      <div class="vis"><svg class="donut" width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="46" stroke="#2C8A8E"/><circle class="val" cx="60" cy="60" r="46"/></svg></div>
+      <p class="num"><span class="count" data-to="70" data-prefix="~" data-suffix="%">~70%</span></p>
+      <p class="body" style="color:#E3F1F1">of the world’s freshwater withdrawals go to farming</p>
+      <p class="small" style="color:#BFE0E0">FAO AQUASTAT, 2022: 71%</p>
+    </div>
+    <div class="stat reveal" style="--d:2">
+      <div class="vis"><svg class="pipe" width="200" height="120" viewBox="0 0 200 120" aria-hidden="true"><rect x="0" y="20" width="200" height="34" rx="6" fill="#2C8A8E"/><rect x="88" y="14" width="24" height="46" rx="4" fill="#4FA7AA"/><path class="d" d="M100 62c0 0-7 9-7 13a7 7 0 0 0 14 0c0-4-7-13-7-13z" fill="#FBFCFA"/><path class="d d2" d="M100 62c0 0-7 9-7 13a7 7 0 0 0 14 0c0-4-7-13-7-13z" fill="#FBFCFA"/></svg></div>
+      <p class="num"><span class="count" data-to="126" data-suffix="B">126B</span></p>
+      <p class="body" style="color:#E3F1F1">cubic meters of treated water lost to leaks and unbilled use a year (~$39B)</p>
+      <p class="small" style="color:#BFE0E0">Liemberger &amp; Wyatt, 2019</p>
+    </div>
+    <div class="stat reveal" style="--d:3">
+      <div class="vis people" aria-hidden="true">
+        <svg class="hit" viewBox="0 0 60 110"><circle cx="30" cy="18" r="16"/><path d="M6 110V60c0-14 10-24 24-24s24 10 24 24v50z"/></svg>
+        <svg viewBox="0 0 60 110"><circle cx="30" cy="18" r="16"/><path d="M6 110V60c0-14 10-24 24-24s24 10 24 24v50z"/></svg>
+        <svg viewBox="0 0 60 110"><circle cx="30" cy="18" r="16"/><path d="M6 110V60c0-14 10-24 24-24s24 10 24 24v50z"/></svg>
+        <svg viewBox="0 0 60 110"><circle cx="30" cy="18" r="16"/><path d="M6 110V60c0-14 10-24 24-24s24 10 24 24v50z"/></svg>
+      </div>
+      <p class="num"><span class="count" data-to="2.1" data-dec="1" data-suffix="B">2.1B</span></p>
+      <p class="body" style="color:#E3F1F1">people still lack safely managed drinking water: 1 in 4</p>
+      <p class="small" style="color:#BFE0E0">WHO/UNICEF, 2025</p>
+    </div>
+  </div>
+  <div class="reveal" style="--d:4;background:var(--ink);border-radius:24px;padding:30px 40px;display:flex;align-items:baseline;justify-content:space-between;gap:32px">
+    <p class="serif" style="font-size:42px;font-weight:600;line-height:1.2">By 2030, freshwater demand is projected to outstrip supply by 40%.</p>
+    <p class="small" style="color:var(--soft);white-space:nowrap">Global Commission on the Economics of Water, 2023</p>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>5</span></div>
+  <template class="notes">(~1 min) Part 3: so where IS the real problem? Farms: about 70% of all the freshwater humans take goes to agriculture. Pipes: cities lose about 126 billion cubic meters of treated water every year to leaks and unbilled use, worth about 39 billion dollars. That water was already cleaned and paid for. People: 2.1 billion people, 1 in 4, still don’t have safely managed drinking water, and the UN says we’re not on track for 2030. And it’s getting tighter: by 2030, freshwater demand is projected to be 40% higher than supply. ASK: Which of these three would you fix first?</template>
+</section>
+
+<!-- 6 BUSINESS -->
+<section class="slide light2" id="business" aria-label="How business is tackling it">
+  <h2 class="reveal">How business is tackling it</h2>
+  <div class="row">
+    <div class="col grow" style="gap:22px">
+      <span class="pill reveal" style="--d:1">Fixing data centers</span>
+      <div class="card reveal" style="--d:2">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3>Microsoft</h3><span class="tag">Planet · Profit</span></div>
+        <p class="body" style="color:var(--body)">Closed-loop chip cooling in all new designs since 2024: ~125M liters saved per site each year</p>
+      </div>
+      <div class="card reveal" style="--d:3">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3>Amazon</h3><span class="tag">People</span></div>
+        <p class="body" style="color:var(--body)">First disclosure: 2.5B gallons in 2025; says about ⅔ is returned to local communities</p>
+      </div>
+    </div>
+    <div class="col grow" style="gap:22px">
+      <span class="pill coral reveal" style="--d:1">Fixing the real problem</span>
+      <div class="card reveal" style="--d:2">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3>N-Drip</h3><span class="tag">People · Planet</span></div>
+        <p class="body" style="color:var(--body)">Gravity-powered drip irrigation for small farms: 57% less water in an IRRI rice trial</p>
+      </div>
+      <div class="card reveal" style="--d:3">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3>Levi Strauss &amp; Co.</h3><span class="tag">Profit · Planet</span></div>
+        <p class="body" style="color:var(--body)">Water&lt;Less finishing uses up to 96% less water; 3B+ liters saved so far</p>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="--d:4;background:var(--ink);color:var(--paper);border-radius:24px;padding:30px 40px;display:flex;align-items:center;gap:28px">
+    <span class="pill coral" style="align-self:center">My take</span>
+    <p class="serif" style="font-size:36px;font-weight:600;line-height:1.2">Tech has the worst headlines but moves fastest. Farms need the most help.</p>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>6</span></div>
+  <template class="notes">(~1 min 30 sec) Part 4: how business is tackling it. Left side, data centers. Since 2024, every new Microsoft data-center design uses closed-loop cooling at the chip, saving about 125 million liters per site per year. That’s Planet, and also Profit, since water and permits cost money. Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025, and says about two-thirds goes back to local communities. Disclosure is a People issue: towns deserve to know. Right side, the real problem. N-Drip makes gravity-powered drip irrigation for small farms; in a rice trial with the International Rice Research Institute it used 57% less water than flooding the field. One catch: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough. Levi’s goes after the water inside our clothes: its Water-Less process cuts finishing water by up to 96%. MY ANALYSIS: the industry with the worst headlines, tech, is moving fastest. Agriculture, the biggest user, needs the most help.</template>
+</section>
+
+<!-- 7 CONCLUSION -->
+<section class="slide dark" id="conclusion" aria-label="What businesses should do">
+  <h2 class="reveal">What businesses should do</h2>
+  <div class="row" style="gap:32px">
+    <div class="col grow reveal" style="--d:1;gap:18px;background:var(--ink2);border-radius:24px;padding:40px">
+      <div class="iconwrap" style="background:#1C4A5E;color:var(--aqua)"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21c0-3-2-6-5-7"/></svg></div>
+      <h3 style="color:var(--aqua)">People</h3>
+      <p class="body" style="color:#E3EEF1">Build where water is plentiful, and invest in the local systems you draw from.</p>
+    </div>
+    <div class="col grow reveal" style="--d:2;gap:18px;background:var(--ink2);border-radius:24px;padding:40px">
+      <div class="iconwrap" style="background:#1C4A5E;color:var(--aqua)"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <h3 style="color:var(--aqua)">Profit</h3>
+      <p class="body" style="color:#E3EEF1">Price water risk in. Droughts shut plants, and leaks waste $39B a year.</p>
+    </div>
+    <div class="col grow reveal" style="--d:3;gap:18px;background:var(--ink2);border-radius:24px;padding:40px">
+      <div class="iconwrap" style="background:#1C4A5E;color:var(--aqua)"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 4 6 4 9s-1 6-4 9c-3-3-4-6-4-9s1-6 4-9z"/></svg></div>
+      <h3 style="color:var(--aqua)">Planet</h3>
+      <p class="body" style="color:#E3EEF1">Go after the 70%: fund efficient irrigation with farm suppliers, and reuse water.</p>
+    </div>
+  </div>
+  <p class="serif reveal" style="--d:4;font-size:48px;font-weight:600;line-height:1.2">Water is a <em style="color:var(--aqua)">local</em> problem with <em style="color:var(--aqua)">global</em> supply chains.</p>
+  <div class="reveal" style="--d:5;display:flex;align-items:center;gap:28px">
+    <span class="pill coral" style="align-self:center">Ask the class</span>
+    <p class="body">Would you build your next data center in Arizona? Why or why not?</p>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>7</span></div>
+  <template class="notes">(~1 min) To wrap up, here’s what I’d recommend to any business, using People, Profit and Planet. People: build where water is plentiful, and when you draw from a town’s supply, invest back into it. Profit: treat water as a business risk. Droughts can shut down factories and supply chains, and leaky systems waste about 39 billion dollars a year. Planet: go after the biggest use. That’s agriculture, so companies should help their farm suppliers switch to efficient irrigation, and reuse water wherever they can. My conclusion: water is a local problem with global supply chains. The headlines focus on AI, but the biggest wins are on farms and in pipes. Final question: would you build your next data center in Arizona? Why or why not?</template>
+</section>
+
+<!-- 8 HOW I USED AI -->
+<section class="slide light" id="aiuse" aria-label="How I used AI">
+  <h2 class="reveal">How I used AI</h2>
+  <div class="row">
+    <div class="card grow reveal" style="--d:1;gap:18px">
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="iconwrap" style="background:#DCEDEA;color:var(--teal);width:80px;height:80px"><svg class="icon" style="width:48px;height:48px" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg></div>
+        <div><h3>What Claude did</h3><p class="small" style="color:var(--muted)">Claude (Anthropic), in the Claude desktop app</p></div>
+      </div>
+      <ul class="body" style="padding-left:34px">
+        <li>Searched news and UN sources for data</li>
+        <li>Flagged where sources disagreed</li>
+        <li>Suggested timing for a 7-minute talk</li>
+        <li>Coded this slideshow website</li>
+      </ul>
+    </div>
+    <div class="card grow reveal" style="--d:2;gap:18px">
+      <div style="display:flex;align-items:center;gap:20px">
+        <div class="iconwrap" style="background:#DCEDEA;color:var(--teal);width:80px;height:80px"><svg class="icon" style="width:48px;height:48px" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.5-8 8-8s8 3.5 8 8"/></svg></div>
+        <div><h3>What I did</h3><p class="small" style="color:var(--muted)">Anders Imbrie</p></div>
+      </div>
+      <ul class="body" style="padding-left:34px">
+        <li>Picked the angle and the 4-part outline</li>
+        <li>Asked for the farm vs. data-center test</li>
+        <li>Reviewed every slide and source</li>
+        <li>[Add anything else you did]</li>
+      </ul>
+    </div>
+  </div>
+  <div class="reveal" style="--d:3;background:var(--ink);color:var(--paper);border-radius:24px;padding:30px 40px">
+    <p class="body"><b style="color:var(--aqua)">Lesson:</b> AI found conflicting numbers for the same stat, so every figure here was checked against its source.</p>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>8</span></div>
+  <template class="notes">(~20 sec) As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic, to search news and UN sources, spot where sources disagreed, plan timing, and code this slideshow website. I chose the angle and the outline, and I reviewed the slides and sources. The big lesson: AI turned up different numbers for the same fact, like how much water Google uses, so you still have to check the original source.</template>
+</section>
+
+<!-- 9 WORKS CITED -->
+<section class="slide light2" id="sources" aria-label="Works cited">
+  <h2 class="reveal">Works cited</h2>
+  <div class="row reveal" style="--d:1;gap:56px;font-size:26px;line-height:1.38;color:var(--body)">
+    <div class="col grow" style="gap:16px">
+      <p>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
+      <p>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers to reduce AI climate impact</a>.</p>
+      <p>Latitude Media. (2026, June 11). <a href="https://latitudemedia.com/news/amazon-finally-reports-its-annual-water-use-at-data-centers/">Amazon finally reports its annual water use at data centers</a>.</p>
+      <p>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 United States Data Center Energy Usage Report</i></a>.</p>
+      <p>Levi Strauss &amp; Co. (n.d.). <a href="https://www.levistrauss.com/sustainability/water-stewardship/">Water stewardship</a>.</p>
+      <p>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
+    </div>
+    <div class="col grow" style="gap:16px">
+      <p>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
+      <p>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">Global water under pressure: What AQUASTAT 2025 reveals about agriculture</a>.</p>
+      <p>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
+      <p>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
+      <p>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circular 1441).</p>
+      <p>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
+    </div>
+  </div>
+  <div class="foot"><span>SDG 6 · Clean Water &amp; Sanitation</span><span>9</span></div>
+  <template class="notes">Thank you! Questions?</template>
+</section>
+
+</div>
+
+<div id="notes" aria-live="polite"><h4>Speaker notes</h4><p id="notestext"></p></div>
+<p id="help">← → to move · N notes · F full screen</p>
+<div id="ui">
+  <button id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <span id="count">1 / 9</span>
+  <button id="next" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+  <button id="notesbtn" aria-label="Toggle speaker notes" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></button>
+  <button id="fs" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...document.querySelectorAll('.slide')];
+  const count = document.getElementById('count');
+  const progress = document.getElementById('progress');
+  const notes = document.getElementById('notes');
+  const notesText = document.getElementById('notestext');
+  const notesBtn = document.getElementById('notesbtn');
+  let i = 0, guess = null;
+
+  // scale the 1920x1080 stage to the window
+  const fit = () => stage.style.setProperty('--s', Math.min(innerWidth / 1920, innerHeight / 1080));
+  addEventListener('resize', fit); fit();
+
+  // hour ticks on the day bar
+  const ticks = document.getElementById('ticks');
+  for (let h = 0; h < 24; h++) ticks.appendChild(document.createElement('span'));
+
+  // count-up numbers
+  const runCounts = (slide) => slide.querySelectorAll('.count').forEach(el => {
+    const to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0);
+    const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t0 = performance.now() + 600, dur = 1500;
+    const step = (t) => {
+      const p = Math.min(Math.max((t - t0) / dur, 0), 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (to * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    el.textContent = pre + (0).toFixed(dec) + suf;
+    requestAnimationFrame(step);
+  });
+
+  const go = (n, fromHash) => {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (document.activeElement && stage.contains(document.activeElement)) document.activeElement.blur();
+    stage.scrollLeft = 0; stage.scrollTop = 0;
+    slides.forEach((s, k) => {
+      s.classList.toggle('active', k === n);
+      s.classList.toggle('past', k < n);
+      s.setAttribute('aria-hidden', k === n ? 'false' : 'true');
+      s.inert = k !== n;
+    });
+    i = n;
+    count.textContent = `${n + 1} / ${slides.length}`;
+    progress.style.width = `${((n + 1) / slides.length) * 100}%`;
+    const tpl = slides[n].querySelector('template.notes');
+    notesText.textContent = tpl ? tpl.content.textContent.trim() : '';
+    if (slides[n].id === 'ai') {
+      document.getElementById('guessline').textContent =
+        guess ? (guess === 'C' ? 'The class guessed C. Nice!' : `The class guessed ${guess}. It’s way less than that.`) : '';
+    }
+    runCounts(slides[n]);
+    if (!fromHash) history.replaceState(null, '', `#${n + 1}`);
+  };
+
+  const next = () => go(i + 1), prev = () => go(i - 1);
+  document.getElementById('next').onclick = next;
+  document.getElementById('prev').onclick = prev;
+
+  const toggleNotes = () => {
+    const open = notes.classList.toggle('open');
+    notesBtn.setAttribute('aria-pressed', open);
+  };
+  notesBtn.onclick = toggleNotes;
+
+  const toggleFs = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+  document.getElementById('fs').onclick = toggleFs;
+
+  // poll
+  document.querySelectorAll('.opt').forEach(b => b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.opt').forEach(o => o.classList.toggle('picked', o === b));
+    guess = b.dataset.opt;
+  }));
+
+  addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('.opt') && (e.key === ' ' || e.key === 'Enter')) return;
+    const k = e.key;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 'f' || k === 'F') toggleFs();
+  });
+
+  // swipe
+  let sx = null;
+  addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+    sx = null;
+  });
+
+  // hide controls when idle
+  const ui = document.getElementById('ui'), help = document.getElementById('help');
+  let idleT;
+  const wake = () => {
+    ui.classList.remove('idle'); help.classList.remove('idle');
+    clearTimeout(idleT);
+    idleT = setTimeout(() => { ui.classList.add('idle'); help.classList.add('idle'); }, 2500);
+  };
+  ['mousemove', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, wake, { passive: true }));
+  wake();
+
+  const fromHash = () => { const n = parseInt(location.hash.slice(1), 10); return isNaN(n) ? 0 : n - 1; };
+  addEventListener('hashchange', () => go(fromHash(), true));
+  go(fromHash(), true);
+})();
+</script>
+</body>
+</html>
