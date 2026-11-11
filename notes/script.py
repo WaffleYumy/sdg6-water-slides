@@ -72,6 +72,15 @@ SLIDES = [
         "If asked: the ChatGPT number is OpenAI’s own, 0.000085 gallons per question, and it only counts answering questions, not training or the power plants. Independent researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.",
         "If asked: the almond number is the almond industry’s own estimate, the lowest one out there, and it’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much, so the real gap is probably even bigger.",
     ]),
+    ("live", "Live: right now", "0:25", "Show the gap happening in real time.", [
+        "[The counters started the moment this slide opened. Point at them.]",
+        "These counters started when this slide came up. They run at the same rates as the last slide.",
+        "ChatGPT, the whole world using it: about two and a half gallons a second. That’s the drip on the left.",
+        "California almonds: almost 29 thousand gallons a second. That’s a full Olympic swimming pool every 23 seconds.",
+        "At ChatGPT’s rate, filling one pool would take about three days.",
+        "[Glance at the pools-filled count, then move on.]",
+        "If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.",
+    ]),
     ("real", "The real problem", "1:00", "The real problem is farms, pipes and people.", [
         "[A chapter title card washes across the screen. Let it pass, then start.]",
         "So where IS the real problem? Three places.",
