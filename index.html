@@ -1496,15 +1496,19 @@ void main(){
     $('.arena', vsEl).animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-12px,9px)' }, { transform: 'translate(10px,-6px)' },
       { transform: 'translate(-6px,4px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 520, easing: 'ease-out' });
   };
-  const vsFrame = t => {
-    const s = (t - vsT0) / 1000;
+  const vsFrame = () => {
+    if (vsStep < 0) return;
+    vsRaf = requestAnimationFrame(vsFrame);         // schedule first, so one bad frame can't freeze the scale
+    const s = Math.max(0, (performance.now() - vsT0) / 1000);
     // before the reveal it hovers near level, as if it could go either way
     const target = vsStep >= 1 ? TIP : 3.4 * Math.sin(s * 1.25) + 1.4 * Math.sin(s * 2.7 + 1);
     const k = vsStep >= 1 ? .02 : .05, c = vsStep >= 1 ? .09 : .25;
     vsV += (target - vsA) * k - vsV * c; vsA += vsV;
-    if (!vsHit && vsA > TIP - 1 && vsV > 0) { vsHit = true; vsImpact(); }
-    vsPose(vsA);
-    vsRaf = requestAnimationFrame(vsFrame);
+    if (!Number.isFinite(vsA)) { vsA = vsStep >= 1 ? TIP : 0; vsV = 0; }
+    try {
+      if (!vsHit && vsA > TIP - 1 && vsV > 0) { vsHit = true; vsImpact(); }
+      vsPose(vsA);
+    } catch (e) { console.warn('scale frame', e); }
   };
   const vsSet = (on, st) => {
     vsYrT.forEach(clearTimeout); vsYrT = [];
@@ -1610,7 +1614,7 @@ void main(){
       c.globalAlpha = 1;
     } else {
       // a single drip, every second or so, and the puddle it is slowly making
-      const pw = Math.min(260, 14 + Math.sqrt(gal) * 7);
+      const pw = Math.min(260, 14 + Math.sqrt(Math.max(0, gal)) * 7);
       g = c.createRadialGradient(SX, YF - 1, 0, SX, YF - 1, pw / 2); g.addColorStop(0, 'rgba(127,224,214,.55)'); g.addColorStop(1, 'rgba(127,224,214,0)');
       c.fillStyle = g; c.beginPath(); c.ellipse(SX, YF - 1, pw / 2, 4, 0, 0, 6.283); c.fill();
       if (t > T.nextDrop) { T.drops.push({ y: 48, v: 0 }); T.nextDrop = t + 1.15; }
@@ -1644,6 +1648,7 @@ void main(){
 
   const lvFmt = (v, d) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
   const lvRender = (s, dt) => {
+    s = Math.max(0, s || 0); dt = Math.min(.05, Math.max(0, dt || 0));
     const ga = LV_A * s, gb = LV_B * s, fb = (gb % POOL) / POOL, pools = Math.floor(gb / POOL);
     // when a pool fills, the level drops back quickly instead of snapping
     TB.disp = fb < TB.disp - .5 ? TB.disp : fb;
@@ -1654,15 +1659,17 @@ void main(){
     if (pools !== lvPools) { lvPools = pools; lvEl.pools.textContent = pools; lvEl.pools.classList.remove('lv-pop'); void lvEl.pools.offsetWidth; lvEl.pools.classList.add('lv-pop'); }
     drawTank(TA, ga / POOL, ga, s, dt); drawTank(TB, TB.disp, gb, s, dt);
   };
-  const lvFrame = now => {
-    const dt = Math.min(.05, (now - lvLast) / 1000 || .016); lvLast = now;
-    lvRender((now - lvT0) / 1000, dt);
-    if (lvOn) lvRaf = requestAnimationFrame(lvFrame);
+  const lvFrame = () => {
+    if (!lvOn) return;
+    lvRaf = requestAnimationFrame(lvFrame);           // schedule first, so one bad frame can't freeze the slide
+    const now = performance.now(), dt = (now - lvLast) / 1000; lvLast = now;
+    try { lvRender((now - lvT0) / 1000, dt); } catch (e) { console.warn('live slide frame', e); }
   };
   const setLive = on => {
     if (on && !lvOn) {
       lvOn = true; lvT0 = performance.now(); lvLast = lvT0; lvPools = 0; lvEl.pools.textContent = '0';
       TA.parts = []; TA.drops = []; TA.rips = []; TA.nextDrop = .4; TB.parts = []; TB.disp = 0;
+      cancelAnimationFrame(lvRaf); lvRender(0, 0);      // show a clean zero straight away, not the last visit's numbers
       lvRaf = requestAnimationFrame(lvFrame);
     }
     if (!on && lvOn) { lvOn = false; cancelAnimationFrame(lvRaf); }
@@ -2227,8 +2234,12 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
     }
   });
 
-  const frame = now => {
-    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+  const frame = () => {
+    if (active && !reduce) raf = requestAnimationFrame(frame);   // schedule first, so one bad frame can't freeze it
+    try { draw(); } catch (e) { console.warn('3D scale frame', e); }
+  };
+  const draw = () => {
+    const now = performance.now(), dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
     const t = (now - t0) / 1000;
     const a = slide._a || 0;
     // beam and pans
@@ -2265,7 +2276,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
     key.intensity = 70 - 18 * warmK;
     kick += (kickTo - kick) * Math.min(1, dt * 2);
     // camera: a slow dolly in on entry, a gentle drift, a hit of shake on impact
-    const ip = reduce ? 1 : outCubic(Math.min(1, (now - intro) / 2200));
+    const ip = reduce ? 1 : outCubic(Math.min(1, Math.max(0, (now - intro) / 2200)));
     shake = Math.max(0, shake - dt * 1.9);
     const sk = shake * shake * .09;
     cam.position.set(
@@ -2275,7 +2286,6 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
     cam.lookAt(LOOK.x, LOOK.y + (Math.random() - .5) * sk * .3, LOOK.z);
     renderer.render(scene, cam);
     if (!ready) { ready = true; slide.classList.add('gl'); }
-    if (active && !reduce) raf = requestAnimationFrame(frame);
   };
 
   let lost = false;
@@ -2287,7 +2297,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
     if (on && !active) {
       active = true; intro = performance.now(); last = performance.now();
       if (st >= 1) warmK = 1;
-      raf = requestAnimationFrame(frame);
+      cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
     } else if (on && reduce) requestAnimationFrame(frame);
     if (!on && active) { active = false; cancelAnimationFrame(raf); shake = 0; D.forEach(d => { d.on = false; }); almonds.forEach(a => { a.vy = 0; a.dy = 0; }); }
   };
