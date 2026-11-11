@@ -31,6 +31,7 @@ SLIDES = [
         "I’ll cover five things: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.",
     ]),
     ("terms", "Key terms + poll", "0:45", "Give them the four words they need, then get them guessing.", [
+        "[A chapter title card washes across the screen. Let it pass, then start.]",
         "Four words change this whole story.",
         "Withdrawal: water we take from a river, lake or aquifer. A lot of it goes back.",
         "Consumption: water that doesn’t come back. It evaporates or ends up inside a product.",
@@ -59,6 +60,7 @@ SLIDES = [
         "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.",
     ]),
     ("real", "The real problem", "1:00", "The real problem is farms, pipes and people.", [
+        "[A chapter title card washes across the screen. Let it pass, then start.]",
         "So where IS the real problem? Three places.",
         "Farms: 71% of all the fresh water humans take goes to agriculture.",
         "Pipes: cities lose 126 billion cubic meters of treated, already-paid-for water every year to leaks. That’s about four million liters every second. That counter has been running since this slide opened.",
@@ -67,6 +69,7 @@ SLIDES = [
         "Q: Which of these three would you fix first?",
     ]),
     ("business", "Who’s fixing it", "1:15", "Tech is moving fastest, but farms need the most help.", [
+        "[A chapter title card washes across the screen. Let it pass, then start.]",
         "Business is moving, but on which problem?",
         "Left side, data centers. Since 2024, every new Microsoft data-center design cools the chips in a closed loop, saving about 125 million liters per site every year. That’s Planet, and also Profit, because water costs money.",
         "Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025. It says about two-thirds goes back to local communities. Being open about it is a People move.",

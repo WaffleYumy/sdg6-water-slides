@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the Water · SDG 6</title>
+<meta name="description" content="Follow the Water: where water really goes, the AI myth, the real water problem, and how business is fixing it. SDG 6 Clean Water & Sanitation, by Anders Imbrie.">
+<meta name="theme-color" content="#061A24">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23061A24'/%3E%3Cpath d='M24 7C24 7 12 21 12 29.5a12 12 0 0 0 24 0C36 21 24 7 24 7Z' fill='none' stroke='%237FE0D6' stroke-width='3'/%3E%3Cpath d='M16.5 30c2.5 0 2.5-2.5 5-2.5s2.5 2.5 5 2.5 2.5-2.5 5-2.5' fill='none' stroke='%23FF6B4A' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* =========================================================
+   FOLLOW THE WATER: brand tokens
+   ========================================================= */
+:root{
+  --abyss:#061A24; --ink:#0B2A3C; --ink2:#113447; --ink3:#1A4559;
+  --glacier:#EEF5F3; --paper:#F8FBFA; --rule:#D3E3E2;
+  --current:#17A398; --teal:#0B6F6A; --aqua:#7FE0D6;
+  --ember:#FF6B4A; --ember-d:#C2412D; --ember-l:#F4A08B;
+  --mist:#A9C6CC; --slate:#4A6170; --slate-l:#8FA5AE;
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Inter', system-ui, Arial, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--abyss);overflow:hidden;font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+
+/* ---------- stage ---------- */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,.5));overflow:hidden;overflow:clip;background:var(--abyss);box-shadow:0 30px 120px rgba(0,0,0,.5)}
+#flow{position:absolute;inset:0;width:1920px;height:1080px;opacity:0;transition:opacity 1.2s ease}
+#flow.on{opacity:1}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:40;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.slide{position:absolute;inset:0;padding:112px 128px 150px;display:flex;flex-direction:column;gap:40px;visibility:hidden;opacity:0}
+.slide.active{visibility:visible;opacity:1}
+.dark{background:rgba(11,42,60,.9);color:var(--glacier);transition:background-color .6s ease}
+#stage:has(.leaving) .slide.dark{background:var(--ink)}
+.abyss{background:transparent;color:var(--glacier)}
+.light{background:var(--glacier);color:var(--ink)}
+.paper{background:var(--paper);color:var(--ink)}
+.tealbg{background:#0A5B5F;color:var(--glacier)}
+
+/* ---------- liquid wipe ---------- */
+#wipe{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;visibility:hidden}
+#wipe.run{visibility:visible}
+#wipe .h{position:absolute;top:0;left:0;width:2600px;height:1080px;transform:translateX(1920px)}
+#wipe .v{position:absolute;top:0;left:0;width:1920px;height:1400px;transform:translateY(1080px)}
+#wipe .l2{opacity:.5}
+.ring{position:absolute;left:0;top:0;width:0;height:0;border-radius:50%;border:2px solid var(--aqua);pointer-events:none;z-index:45;transform:translate(-50%,-50%);opacity:0}
+.slide.leaving{visibility:visible;opacity:1;z-index:1}
+.slide.active{z-index:2}
+
+/* ---------- type ---------- */
+h1,h2,h3,.serif{font-family:var(--serif);font-weight:650;letter-spacing:-.015em;font-variation-settings:'opsz' 144}
+h2{font-size:76px;line-height:1.04}
+h3{font-size:40px;line-height:1.15;font-variation-settings:'opsz' 60}
+.body{font-size:30px;line-height:1.42}
+.small{font-size:24px;line-height:1.4}
+.mono{font-family:var(--mono);letter-spacing:.02em}
+.chap{font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:16px}
+.chap i{display:block;width:44px;height:2px;background:currentColor;opacity:.6}
+.light .chap,.paper .chap{color:var(--teal)}
+.dark .chap,.abyss .chap,.tealbg .chap{color:var(--aqua)}
+.hd{display:flex;flex-direction:column;gap:18px}
+.src{font-family:var(--mono);font-size:20px;letter-spacing:.02em}
+.light .src,.paper .src{color:var(--slate)}
+.dark .src,.abyss .src{color:var(--mist)}
+.tealbg .src{color:#BFE3E0}
+.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;border-radius:999px;color:var(--paper);background:var(--teal);white-space:nowrap}
+.pill.ember{background:var(--ember-d)}
+.pill.ghost{background:transparent;border:1.5px solid currentColor}
+.row{display:flex;gap:40px}
+.col{display:flex;flex-direction:column}
+.grow{flex:1;min-width:0}
+.icon{width:40px;height:40px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+em.hl{font-style:italic;color:var(--aqua)}
+.light em.hl,.paper em.hl{color:var(--teal)}
+
+/* footer */
+.foot{position:absolute;left:128px;right:128px;bottom:56px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:20px;letter-spacing:.12em;text-transform:uppercase}
+.foot .brand{display:flex;align-items:center;gap:14px}
+.foot svg{width:30px;height:30px}
+.light .foot,.paper .foot{color:var(--slate)}
+.dark .foot,.abyss .foot{color:var(--mist)}
+.tealbg .foot{color:#BFE3E0}
+
+/* ---------- motion system ---------- */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.wi{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease);transition-delay:calc(var(--i,0) * 40ms + 120ms)}
+.slide.active .wi{transform:none}
+.slide.active [data-step]:not(.shown) .wi{transform:translateY(110%)}
+.rv{--dl:calc(var(--d,0) * 110ms + 300ms);opacity:0;transform:translateY(30px);transition:opacity .8s ease var(--dl),transform .9s var(--ease) var(--dl)}
+.lift{transition:opacity .8s ease var(--dl,0s),transform .9s var(--ease) var(--dl,0s),translate .45s var(--ease),rotate .6s var(--ease),box-shadow .45s ease}
+.slide.active .rv{opacity:1;transform:none}
+[data-step]{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .8s var(--ease)}
+[data-step].shown{opacity:1;transform:none}
+
+/* =========================================================
+   SLIDE-SPECIFIC
+   ========================================================= */
+/* cold open */
+#open{justify-content:center}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 50%, rgba(6,26,36,.2) 0%, rgba(6,26,36,.85) 70%);pointer-events:none}
+#open .quote{font-family:var(--serif);font-style:italic;font-weight:500;font-size:92px;line-height:1.08;letter-spacing:-.02em;font-variation-settings:'opsz' 144}
+#open .quote b{font-style:normal;font-weight:700;color:var(--aqua)}
+.bottle{width:300px;height:620px;flex:none}
+.bottle .lvl{animation:drain 7s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes drain{0%{transform:translateY(0)}70%{transform:translateY(400px)}100%{transform:translateY(400px)}}
+.bottle .q{opacity:0;animation:qpop 7s linear infinite}
+@keyframes qpop{0%,4%{opacity:0;transform:translateY(10px)}8%,60%{opacity:1;transform:none}70%,100%{opacity:0}}
+
+/* title */
+#title{justify-content:center;gap:44px}
+.mark{width:150px;height:150px}
+.mark path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease) .3s}
+.mark path.wv{transition-delay:1.1s}
+.slide.active .mark path{stroke-dashoffset:0}
+#title h1{font-size:168px;line-height:.92;font-weight:700;letter-spacing:-.035em}
+#title .mark{width:110px;height:110px}
+#title h1 em{font-style:italic;font-weight:400;color:var(--aqua)}
+.agenda{position:absolute;left:128px;right:128px;bottom:120px;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;border-top:1.5px solid rgba(169,198,204,.3);padding-top:24px}
+.agenda div{display:flex;flex-direction:column;gap:6px}
+.agenda b{font-family:var(--mono);font-size:20px;color:var(--aqua);letter-spacing:.1em}
+.agenda span{font-size:26px;color:var(--glacier)}
+
+/* terms */
+.term{background:var(--paper);border:1px solid var(--rule);border-radius:26px;padding:34px 36px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.term .ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:#DCEEEB;color:var(--teal)}
+.term .ic svg{width:36px;height:36px}
+.term h3{color:var(--ink)}
+.term p{font-size:27px;line-height:1.4;color:var(--slate)}
+.poll{width:600px;flex:none;background:var(--ink);color:var(--glacier);border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+.poll::after{content:"";position:absolute;right:-120px;top:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle, rgba(23,163,152,.35), transparent 70%)}
+.opt{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:18px;text-align:left;padding:14px 18px;border-radius:18px;border:1.5px solid #2B5468;overflow:hidden;transition:border-color .25s,transform .15s}
+.opt:hover{border-color:var(--aqua)}
+.opt:active{transform:scale(.985)}
+.opt .bar{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(127,224,214,.16);transition:width .6s var(--ease)}
+.opt b{position:relative;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--ink3);font-family:var(--mono);font-size:22px}
+.opt .lab{position:relative;font-size:30px}
+.opt .n{position:relative;font-family:var(--mono);font-size:24px;color:var(--aqua);min-width:44px;text-align:right}
+.opt.lead{border-color:var(--aqua)}
+.opt.lead b{background:var(--aqua);color:var(--ink)}
+.hint{font-family:var(--mono);font-size:18px;color:var(--slate-l);letter-spacing:.04em;display:flex;justify-content:space-between}
+.hint button{color:var(--aqua);text-decoration:underline;text-underline-offset:3px}
+
+/* equal: glasses */
+.use{flex:1;background:var(--paper);border:1px solid var(--rule);border-radius:28px;padding:34px 36px;display:flex;flex-direction:column;gap:20px}
+.use .top{display:flex;align-items:center;gap:16px}
+.use .top .ic{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#DCEEEB;color:var(--teal)}
+.use .top .ic.e{background:#FBE1DA;color:var(--ember-d)}
+.use .mid{display:flex;gap:30px;align-items:flex-end}
+.glass{position:relative;width:160px;height:260px;flex:none}
+.glass .cup{position:absolute;inset:0;border:4px solid #9DB6BD;border-top:none;border-radius:0 0 30px 30px;overflow:hidden;background:rgba(255,255,255,.6)}
+.glass .fill{position:absolute;left:0;right:0;bottom:0;height:0;display:flex;flex-direction:column;transition:height 1.6s var(--ease) .7s}
+.slide.active .glass .fill{height:88%}
+.glass .used{flex:0 0 var(--p);background:repeating-linear-gradient(135deg,#F4A08B 0 10px,#F7B3A2 10px 20px)}
+.glass .ret{flex:1;background:var(--current)}
+.glass .vap{position:absolute;left:0;right:0;top:-10px;height:10px}
+.glass .vap i{position:absolute;bottom:0;width:10px;height:10px;border-radius:50%;background:#F4A08B;opacity:0}
+.slide.active .glass .vap i{animation:vapor 2.6s ease-out infinite}
+@keyframes vapor{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.9}100%{transform:translateY(-110px) scale(1.4);opacity:0}}
+.num-xl{font-family:var(--serif);font-weight:700;font-size:96px;line-height:.95;letter-spacing:-.03em;font-variation-settings:'opsz' 144}
+.unit{display:inline-block;font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:.1em;padding:6px 12px;border-radius:8px;margin-top:10px}
+.unit.day{background:#D6EEEA;color:var(--teal)}
+.unit.yr{background:#FBE1DA;color:var(--ember-d)}
+.fate{font-size:24px;line-height:1.4;color:var(--slate)}
+.fate b{color:var(--ink)}
+.legend{display:flex;gap:28px;font-family:var(--mono);font-size:20px;color:var(--slate)}
+.legend i{display:inline-block;width:16px;height:16px;border-radius:4px;margin-right:10px;vertical-align:-2px}
+
+/* AI clock */
+.clock{width:600px;height:600px;flex:none}
+.clock .wedge{stroke-dasharray:0 785.4;transition:stroke-dasharray 2s var(--ease) .9s}
+.slide.active .clock .wedge{stroke-dasharray:182 785.4}
+.clock .hand{transform-origin:340px 340px;transform:rotate(0deg);transition:transform 2s var(--ease) .9s}
+.slide.active .clock .hand{transform:rotate(83.5deg)}
+.days{display:flex;gap:14px;align-items:center}
+.days svg{width:70px;height:70px}
+.days circle.f{stroke-dasharray:0 220;transition:stroke-dasharray 1s var(--ease)}
+.days.shown circle.f{stroke-dasharray:220 220;transition-delay:.3s}
+.days.shown svg:nth-child(2) circle.f{transition-delay:.55s}
+.days.shown svg:nth-child(3) circle.f{transition-delay:.8s}
+.pc{background:var(--ink2);border-radius:24px;padding:28px 32px;display:flex;flex-direction:column;gap:14px;flex:1}
+.pc ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-size:26px;line-height:1.35;color:#DCEAEC}
+.pc li{display:flex;gap:12px}
+.pc li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;margin-top:13px;background:currentColor;opacity:.6}
+.guess{font-family:var(--mono);font-size:22px;color:var(--aqua);min-height:30px}
+
+/* real problem */
+.panel{flex:1;display:flex;flex-direction:column;gap:14px}
+.panel .vis{height:210px;display:flex;align-items:center}
+.panel .big{font-family:var(--serif);font-weight:700;font-size:80px;line-height:1;letter-spacing:-.03em}
+.panel p.cap{font-size:26px;line-height:1.36;color:#DDF0EE}
+#real{gap:30px}
+#real .panel{gap:10px}
+#real .strip{padding:22px 36px}
+.donut .seg{stroke-dasharray:0 100;transition:stroke-dasharray 1.4s var(--ease)}
+.slide.active .donut .s1{stroke-dasharray:70 30;transition-delay:.7s}
+.slide.active .donut .s2{stroke-dasharray:14 86;transition-delay:1.3s}
+.slide.active .donut .s3{stroke-dasharray:12 88;transition-delay:1.6s}
+.dleg{display:flex;flex-direction:column;gap:10px;font-family:var(--mono);font-size:20px;color:#DDF0EE}
+.dleg i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:10px}
+.ticker{font-family:var(--mono);font-weight:600;font-size:46px;letter-spacing:-.01em;color:var(--paper);font-variant-numeric:tabular-nums}
+.pipe{width:420px;height:200px}
+.pipe .d{animation:drip 1.1s ease-in infinite}
+.pipe .d2{animation-delay:.37s}.pipe .d3{animation-delay:.74s}
+@keyframes drip{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(4px) scale(1)}100%{transform:translateY(96px);opacity:0}}
+.dots{display:grid;grid-template-columns:repeat(10,15px);gap:6px}
+.dots i{width:15px;height:15px;border-radius:50%;background:#2F7B7E;transition:background .4s ease,transform .4s var(--ease)}
+.slide.active .dots i.hit{background:var(--ember);transform:scale(1.15);transition-delay:calc(var(--k) * 45ms + 800ms)}
+.strip{border-radius:24px;padding:26px 36px;display:flex;align-items:center;justify-content:space-between;gap:30px}
+
+/* business */
+.biz{background:var(--glacier);border:1px solid var(--rule);border-radius:24px;padding:26px 30px;display:flex;flex-direction:column;gap:12px}
+.biz .h{display:flex;align-items:center;gap:18px}
+.mono-tile{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:32px;color:var(--paper);flex:none}
+.biz h3{font-size:36px;flex:1}
+.ppp{display:flex;gap:6px}
+.ppp span{font-family:var(--mono);font-size:16px;font-weight:600;letter-spacing:.06em;padding:5px 10px;border-radius:999px;border:1.5px solid #B9CCCD;color:#8AA0A7}
+.ppp span.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.biz .m{display:flex;gap:24px;align-items:center}
+.biz .met{font-family:var(--serif);font-weight:700;font-size:58px;line-height:1;letter-spacing:-.02em;white-space:nowrap;flex:0 0 290px}
+.biz .met small{display:block;font-family:var(--mono);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--slate);margin-top:8px;text-transform:uppercase;white-space:normal}
+.biz .m p:last-child{flex:1}
+.biz p{font-size:25px;line-height:1.38;color:var(--slate)}
+
+/* recommendations */
+.move{flex:1;background:var(--ink2);border-radius:28px;padding:36px 38px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.move .no{font-family:var(--serif);font-weight:800;font-size:120px;line-height:.85;color:transparent;-webkit-text-stroke:2px var(--aqua);opacity:.9}
+.move h3{color:var(--aqua)}
+.move p{font-size:28px;line-height:1.4;color:#DCEAEC}
+.move .ic{position:absolute;right:30px;top:34px;color:var(--aqua);opacity:.85}
+.move .ic svg{width:56px;height:56px}
+
+/* ai use + sources */
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:26px;padding:36px 40px;display:flex;flex-direction:column;gap:16px}
+.card ul{padding-left:30px;font-size:28px;line-height:1.5}
+.cites{columns:2;column-gap:64px;font-size:23px;line-height:1.4;color:var(--slate)}
+.cites p{padding-left:44px;position:relative;break-inside:avoid;margin-bottom:18px}
+.cites p b{position:absolute;left:0;top:2px;font-family:var(--mono);font-size:17px;color:var(--teal)}
+
+/* =========================================================
+   CHROME (outside the stage)
+   ========================================================= */
+#chapters{position:fixed;left:0;right:0;top:0;height:5px;display:flex;gap:3px;z-index:5}
+#chapters button{flex:1;position:relative;background:rgba(255,255,255,.1);height:5px;padding:0}
+#chapters button i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--aqua);transition:width .5s ease}
+#chapters button:hover{background:rgba(255,255,255,.25)}
+#ui{position:fixed;right:16px;bottom:14px;display:flex;align-items:center;gap:4px;z-index:6;background:rgba(6,26,36,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:5px;border-radius:14px;border:1px solid rgba(127,224,214,.15);color:#DDEBEC;font:13px var(--mono);transition:opacity .45s}
+#ui.idle,#hint.idle{opacity:0}
+#ui button{width:36px;height:36px;border-radius:10px;display:grid;place-items:center}
+#ui button:hover,#ui button:focus-visible{background:rgba(255,255,255,.12);outline:none}
+#ui svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#count{min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+#hint{position:fixed;left:16px;bottom:18px;z-index:6;font:12px var(--mono);color:#7FA3AB;letter-spacing:.04em;transition:opacity .45s}
+#notes{position:fixed;left:16px;right:16px;bottom:66px;max-height:40vh;overflow:auto;z-index:6;background:rgba(6,26,36,.95);color:#E6F0F1;border:1px solid #24485A;border-radius:16px;padding:20px 24px;font-size:17px;line-height:1.6;display:none}
+#notes.open{display:block}
+#notes h4,#pv h4{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--aqua);margin-bottom:8px}
+
+/* presenter view */
+#pv{display:none}
+body.presenter #stage,body.presenter #ui,body.presenter #hint,body.presenter #chapters,body.presenter #notes{display:none}
+body.presenter{overflow:auto;background:#081E29;color:#E6F0F1}
+body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding:24px;min-height:100%}
+#pv .main,#pv .side{background:#0C2836;border:1px solid #1E4456;border-radius:18px;padding:24px}
+#pv .now{font-family:var(--serif);font-size:34px;font-weight:650;margin-bottom:6px}
+#pv .stepinfo{font:13px var(--mono);color:#8FB2BA;margin-bottom:18px}
+#pv .pnotes{font-size:22px;line-height:1.6;white-space:pre-wrap}
+#pv .timer{font:600 64px var(--mono);font-variant-numeric:tabular-nums}
+#pv .timer.over{color:var(--ember)}
+#pv .target{font:13px var(--mono);color:#8FB2BA;margin-bottom:16px}
+#pv .bar{height:6px;border-radius:6px;background:#1E4456;overflow:hidden;margin-bottom:20px}
+#pv .bar i{display:block;height:100%;width:0;background:var(--aqua)}
+#pv .next{font-size:18px;color:#BFD8DE;margin:14px 0 22px}
+#pv .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#pv .btns button{background:#17384A;border-radius:12px;padding:14px;font:600 15px var(--sans)}
+#pv .btns button:hover{background:#21495E}
+#pv .btns .wide{grid-column:span 2}
+
+/* =========================================================
+   v3: WebGL water, splash, 3D globe, ASCII data-water, cursor, tilt
+   ========================================================= */
+#water{position:absolute;inset:0;width:1920px;height:1080px;opacity:0;transition:opacity 1.2s ease}
+#water.on{opacity:1}
+#open .vignette{background:radial-gradient(ellipse at 35% 50%, rgba(6,26,36,.1) 0%, rgba(6,26,36,.72) 78%)}
+#drop{position:absolute;left:0;top:0;width:60px;height:84px;margin:-80px 0 0 -30px;opacity:0;z-index:46;pointer-events:none;filter:drop-shadow(0 0 22px rgba(127,224,214,.7))}
+.spl{position:absolute;width:12px;height:16px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:var(--aqua);pointer-events:none;z-index:46}
+#globe-wrap{position:absolute;left:940px;top:60px;width:940px;height:800px;pointer-events:none;opacity:0;transition:opacity 1s ease .15s}
+.slide.active #globe-wrap{opacity:1}
+#globe{position:absolute;inset:0;width:940px;height:800px}
+.wlab{position:absolute;left:0;top:0;--r:30px}
+.wlab .t{position:absolute;left:calc(var(--r) + 34px);top:-26px;white-space:nowrap;display:flex;flex-direction:column;gap:4px}
+.wlab .t::before{content:"";position:absolute;left:-24px;top:25px;width:16px;height:1.5px;background:var(--aqua)}
+.wlab b{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:.06em;color:var(--glacier);text-transform:uppercase}
+.wlab span{font-family:var(--mono);font-size:18px;color:var(--aqua)}
+.wlab .pulse{position:absolute;left:-16px;top:-16px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ember);animation:pulse2 1.8s ease-out infinite}
+@keyframes pulse2{0%{transform:scale(.35);opacity:1}100%{transform:scale(1.7);opacity:0}}
+.wcap{position:absolute;left:40px;bottom:0;width:860px;display:flex;flex-direction:column;gap:8px}
+.wcap .serif{font-size:34px;line-height:1.25;font-weight:600;color:var(--glacier)}
+.ascii{position:absolute;inset:0;width:1920px;height:1080px;z-index:-1;pointer-events:none}
+.lift{position:relative}
+/* like Keynote: the mouse pointer hides itself while you present */
+body.idle-ptr,body.idle-ptr *{cursor:none!important}
+#notestext{white-space:pre-line}
+
+/* =========================================================
+   v4: a hero moment on every slide
+   ========================================================= */
+/* slide 3: each term acts itself out */
+.viz{width:200px;height:72px;overflow:hidden;flex:none}
+.viz .wv{animation:wvx 2.2s linear infinite}
+@keyframes wvx{to{transform:translateX(-50px)}}
+.viz .flowdots{animation:flowd .7s linear infinite}
+@keyframes flowd{to{stroke-dashoffset:-13.1}}
+.viz .back{opacity:0;animation:backd 1.5s ease-in infinite}
+.viz .b2{animation-delay:.5s}.viz .b3{animation-delay:1s}
+@keyframes backd{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(20px);opacity:0}}
+.viz .wisp{opacity:0;animation:wisp 2.6s ease-out infinite}
+.viz .w2{animation-delay:.85s}.viz .w3{animation-delay:1.7s}
+@keyframes wisp{0%{transform:translateY(8px);opacity:0}30%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+.viz .needle{transform-box:view-box;transform-origin:100px 66px;transform:rotate(-75deg)}
+.slide.active .viz .needle{animation:swing 2.2s cubic-bezier(.3,1.4,.5,1) .6s both, jit 1.1s ease-in-out 2.8s infinite alternate}
+@keyframes swing{from{transform:rotate(-75deg)}to{transform:rotate(56deg)}}
+@keyframes jit{from{transform:rotate(52deg)}to{transform:rotate(61deg)}}
+.viz .tfill{transform:translateY(62px)}
+.slide.active .viz .tfill{animation:tfill 2.8s cubic-bezier(.3,.7,.3,1) .8s both}
+@keyframes tfill{from{transform:translateY(62px)}to{transform:translateY(0)}}
+.slide:not(.active) .viz *,.slide:not(.active) .emb *{animation-play-state:paused!important}
+/* slide 4: living glasses: a moving surface, a highlight, rising bubbles */
+.glass .surf{position:absolute;left:0;top:-7px;width:300%;height:14px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='14'%3E%3Cpath d='M0 7 Q15 0 30 7 T60 7 V14 H0Z' fill='%23F4A08B'/%3E%3C/svg%3E") repeat-x;background-size:60px 14px;animation:surf 1.6s linear infinite}
+@keyframes surf{to{transform:translateX(-60px)}}
+.glass .cup::after{content:"";position:absolute;left:14px;top:12px;bottom:16px;width:10px;border-radius:8px;background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,0));pointer-events:none;z-index:2}
+.glass .bub{position:absolute;bottom:8px;width:9px;height:9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);opacity:0;z-index:1}
+.slide.active .glass .bub{animation:bub 3.2s ease-in infinite}
+@keyframes bub{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-150px);opacity:0}}
+/* slide 7: each company's emblem shows what it does */
+.emb{width:56px;height:56px;flex:none;border-radius:15px}
+.emb .orb{transform-box:view-box;transform-origin:30px 30px;animation:orb 3.2s linear infinite}
+@keyframes orb{to{transform:rotate(360deg)}}
+.emb .arc{stroke-dasharray:0 100;transition:stroke-dasharray 1.8s var(--ease) .9s}
+.slide.active .emb .arc{stroke-dasharray:66.7 100}
+.emb .drip{opacity:0;animation:drip2 1.4s ease-in infinite}.emb .d2{animation-delay:.7s}
+@keyframes drip2{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(16px);opacity:0}}
+.emb .jw{transition:transform 2.6s cubic-bezier(.5,0,.3,1) 1s}
+.slide.active .emb .jw{transform:translateY(36.5px)}
+/* slide 8: Earthrise behind the closing line */
+#earthrise{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.4s ease .2s}
+.slide.active #earthrise{opacity:1}
+#earthrise canvas{position:absolute;inset:0;width:1920px!important;height:1080px!important}
+#moves .concl .wi{transition-delay:calc(var(--i,0) * 70ms + 900ms)}
+
+@media (prefers-reduced-motion: reduce){
+  .viz *,.emb *,.glass .surf,.glass .bub{animation:none!important}
+  .slide.active .viz .needle{transform:rotate(56deg)}
+  .slide.active .viz .tfill{transform:none}
+}
+@media (prefers-reduced-motion: reduce){
+  .wi,.rv,[data-step],.glass .fill,.clock .wedge,.clock .hand,.donut .seg,.dots i,.mark path{transition:none!important}
+  .bottle .lvl,.bottle .q,.glass .vap i,.pipe .d{animation:none!important}
+  #wipe{display:none}
+}
+
+/* print: one slide per page (Ctrl+P → Save as PDF) */
+@page{size:1920px 1080px;margin:0}
+@media print{
+  html,body{overflow:visible;height:auto;background:#fff}
+  #stage{position:static;transform:none;width:1920px;height:auto;overflow:visible;box-shadow:none;background:none}
+  .slide{position:relative;visibility:visible!important;opacity:1!important;width:1920px;height:1080px;page-break-after:always;break-after:page}
+  .abyss,.dark{background:var(--ink)!important}
+  .wi,.rv,[data-step]{transform:none!important;opacity:1!important;transition:none!important}
+  .glass .fill{height:88%!important;transition:none!important}
+  .clock .wedge{stroke-dasharray:182 785.4!important}.clock .hand{transform:rotate(83.5deg)!important}
+  .donut .s1{stroke-dasharray:70 30!important}.donut .s2{stroke-dasharray:14 86!important}.donut .s3{stroke-dasharray:12 88!important}
+  .dots i.hit{background:var(--ember)!important}
+  .days circle.f{stroke-dasharray:220 220!important}
+  .mark path{stroke-dashoffset:0!important}
+  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise{display:none!important}
+  #dots{display:grid!important}
+  .viz .needle{transform:rotate(56deg)!important}.viz .tfill{transform:none!important}
+  .emb .arc{stroke-dasharray:66.7 100!important}.emb .jw{transform:translateY(36.5px)!important}
+  *{animation:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mk" viewBox="0 0 48 48"><path d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <filter id="liquid" x="-10%" y="-40%" width="120%" height="180%"><feTurbulence id="liqT" type="fractalNoise" baseFrequency="0.008 0.03" numOctaves="2" seed="4"/><feDisplacementMap id="liqD" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </defs>
+</svg>
+
+<div id="chapters" aria-label="Chapters"></div>
+
+<div id="stage" role="region" aria-roledescription="slideshow" aria-label="Follow the Water">
+<canvas id="flow" width="1920" height="1080" aria-hidden="true"></canvas>
+<canvas id="water" width="1600" height="900" aria-hidden="true"></canvas>
+<svg id="drop" viewBox="0 0 60 84" aria-hidden="true"><path d="M30 2C30 2 6 38 6 54a24 24 0 0 0 48 0C54 38 30 2 30 2Z" fill="#7FE0D6"/><path d="M19 52a11 11 0 0 0 9 13" stroke="#F8FBFA" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/></svg>
+
+<!-- ============ 1 · COLD OPEN ============ -->
+<section class="slide abyss" id="open" data-title="Cold open" data-chapter="0" data-steps="1">
+  <div class="vignette"></div>
+  <div class="row" style="align-items:center;gap:96px;position:relative">
+    <div class="col grow" style="gap:40px">
+      <p class="chap rv"><i></i>A headline you’ve probably seen</p>
+      <p class="quote" data-split>“ChatGPT drinks a <b>500&nbsp;ml</b> bottle of water for every 20–50&nbsp;questions.”</p>
+      <p class="src rv" style="--d:6">Euronews, 2023 · from a UC Riverside study (Ren et al.)</p>
+      <p data-step="1" class="serif" style="font-size:58px;font-weight:600;line-height:1.15;color:var(--glacier)">That’s real. But is AI <span style="color:var(--ember);font-style:italic">the</span> water problem?</p>
+    </div>
+    <svg class="bottle rv" style="--d:3" viewBox="0 0 300 620" aria-label="A water bottle slowly draining">
+      <defs><clipPath id="bclip"><path d="M115 20h70v58c0 18 45 40 45 92v390c0 22-16 40-40 40H110c-24 0-40-18-40-40V170c0-52 45-74 45-92z"/></clipPath></defs>
+      <g clip-path="url(#bclip)">
+        <g class="lvl"><rect x="0" y="150" width="300" height="520" fill="#17A398" opacity=".85"/><path d="M0 150 Q37 138 75 150 T150 150 T225 150 T300 150 V170 H0Z" fill="#7FE0D6" opacity=".7"/></g>
+      </g>
+      <path d="M115 20h70v58c0 18 45 40 45 92v390c0 22-16 40-40 40H110c-24 0-40-18-40-40V170c0-52 45-74 45-92z" fill="none" stroke="#A9C6CC" stroke-width="5"/>
+      <rect x="105" y="4" width="90" height="28" rx="8" fill="#A9C6CC"/>
+      <g font-family="JetBrains Mono, monospace" font-size="20" fill="#EEF5F3">
+        <text class="q" x="226" y="250" style="animation-delay:.2s">Q1</text>
+        <text class="q" x="226" y="330" style="animation-delay:1.1s">Q12</text>
+        <text class="q" x="226" y="410" style="animation-delay:2s">Q27</text>
+        <text class="q" x="226" y="490" style="animation-delay:2.9s">Q41</text>
+      </g>
+    </svg>
+  </div>
+  <template class="notes">(0:20) Point: Hook them with a headline they’ve already seen.
+
+[Wait a beat before you speak. Don’t click yet.]
+Raise your hand if you’ve seen a headline like this: ChatGPT “drinks” a bottle of water for every 20 to 50 questions.
+That comes from a real 2023 study at UC Riverside.
+[Click: the question appears.]
+So it’s real. But is AI actually THE water problem? Today I’m going to follow the water and show you where it really goes.
+[Click: a drop falls into the water and the title appears.]</template>
+</section>
+
+<!-- ============ 2 · TITLE ============ -->
+<section class="slide abyss" id="title" data-title="Title" data-chapter="0" data-enter="splash" data-steps="1">
+  <div class="vignette" style="background:radial-gradient(ellipse at 30% 45%, rgba(6,26,36,.35) 0%, rgba(6,26,36,.9) 75%)"></div>
+  <div class="col" style="gap:32px;position:relative;margin-top:-70px;width:880px">
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="#7FE0D6" stroke-width="2"/><path class="wv" pathLength="1" d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2" stroke-linecap="round"/></svg>
+    <h1 data-split>Follow the<br><em>water</em></h1>
+    <p class="rv" style="--d:5;font-size:40px;line-height:1.3;color:var(--mist)">Where it really goes, the AI myth, and who’s fixing the real problem</p>
+    <p class="rv mono" style="--d:6;font-size:22px;line-height:1.6;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">UN SDG 6 · Clean Water &amp; Sanitation<br>Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; [Course] · [Date]</span></p>
+  </div>
+  <div id="globe-wrap" aria-hidden="true">
+    <canvas id="globe" width="940" height="800"></canvas>
+    <div data-step="1">
+      <div class="wlab" data-k="0" style="--r:28px;transform:translate(593px,234px)"><div class="t"><b>All of Earth’s water</b><span>860 miles wide</span></div></div>
+      <div class="wlab" data-k="1" style="--r:8px;transform:translate(593px,400px)"><div class="t"><b>Liquid fresh water</b><span>169.5 mi · underground</span></div></div>
+      <div class="wlab" data-k="2" style="--r:6px;transform:translate(593px,566px)"><i class="pulse"></i><div class="t"><b>Lakes + rivers</b><span>34.9 miles. That’s it.</span></div></div>
+      <div class="wcap"><p class="serif">Every drop on Earth, rolled into one ball. The lakes and rivers we draw from are a <span style="color:var(--ember)">dot</span>.</p><p class="src">USGS Water Science School · Earth is 7,918 miles wide</p></div>
+    </div>
+  </div>
+  <div class="agenda rv" style="--d:8">
+    <div><b>01</b><span>The basics</span></div>
+    <div><b>02</b><span>The AI myth</span></div>
+    <div><b>03</b><span>The real problem</span></div>
+    <div><b>04</b><span>Who’s fixing it</span></div>
+    <div><b>05</b><span>What to do</span></div>
+  </div>
+  <template class="notes">(0:35) Point: Show how little usable water there actually is.
+
+I’m Anders, and my goal is SDG 6: clean water and sanitation for everyone.
+[Click: the water spheres come out of the Earth.]
+First, some scale. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide.
+All the liquid fresh water would be about 170 miles, and most of that is underground.
+The lakes and rivers we actually pull from? 35 miles. That little dot with the ring around it. That’s what everyone is fighting over.
+I’ll cover five things: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
+</section>
+
+<!-- ============ 3 · KEY TERMS + POLL ============ -->
+<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1" data-enter="wave">
+  <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Four words that change the story</h2></header>
+  <div class="row" style="gap:36px;align-items:stretch">
+    <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="term rv lift" style="--d:1"><svg class="viz" viewBox="0 0 200 72" aria-hidden="true"><path class="wv" d="M0 56 Q12.5 51 25 56 T50 56 T75 56 T100 56 T125 56 T150 56 T175 56 T200 56 T225 56 T250 56 V72 H0Z" fill="#17A398"/>
+<path d="M62 60 V16 Q62 8 70 8 H148 Q156 8 156 16 V32" fill="none" stroke="#C9DADD" stroke-width="11" stroke-linecap="round"/>
+<path class="flowdots" d="M62 60 V16 Q62 8 70 8 H148 Q156 8 156 16 V32" fill="none" stroke="#0B6F6A" stroke-width="5" stroke-linecap="round" stroke-dasharray="0.1 13"/>
+<g fill="#0B6F6A"><circle class="back" cx="156" cy="38" r="3"/><circle class="back b2" cx="156" cy="38" r="3"/><circle class="back b3" cx="156" cy="38" r="3"/></g></svg><h3>Withdrawal</h3><p>Water taken from a river, lake or aquifer. Much of it flows back.</p></div>
+      <div class="term rv lift" style="--d:2"><svg class="viz" viewBox="0 0 200 72" aria-hidden="true"><path class="wv" d="M0 56 Q12.5 51 25 56 T50 56 T75 56 T100 56 T125 56 T150 56 T175 56 T200 56 T225 56 T250 56 V72 H0Z" fill="#17A398"/>
+<g fill="none" stroke="#5FA7A6" stroke-width="3" stroke-linecap="round"><path class="wisp" d="M64 48c-6-6 6-10 0-16s6-10 0-16"/><path class="wisp w2" d="M100 48c-6-6 6-10 0-16s6-10 0-16"/><path class="wisp w3" d="M136 48c-6-6 6-10 0-16s6-10 0-16"/></g></svg><h3>Consumption</h3><p>Water that never comes back: it evaporates or goes into a product.</p></div>
+      <div class="term rv lift" style="--d:3"><svg class="viz" viewBox="0 0 200 72" aria-hidden="true"><defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#17A398"/><stop offset=".55" stop-color="#E8B04A"/><stop offset="1" stop-color="#C2412D"/></linearGradient></defs>
+<path d="M48 66 A52 52 0 0 1 152 66" fill="none" stroke="url(#gg)" stroke-width="11" stroke-linecap="round"/>
+<g class="needle"><line x1="100" y1="66" x2="100" y2="24" stroke="#0B2A3C" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="66" r="6.5" fill="#0B2A3C"/></g>
+<text x="0" y="70" font-family="JetBrains Mono, monospace" font-size="11" fill="#4A6170">SUPPLY</text><text x="158" y="70" font-family="JetBrains Mono, monospace" font-size="11" fill="#C2412D">DEMAND</text></svg><h3>Water stress</h3><p>Demand close to a region’s renewable supply. Always local.</p></div>
+      <div class="term rv lift" style="--d:4"><svg class="viz" viewBox="0 0 250 72" style="width:250px" aria-hidden="true"><defs><clipPath id="tsc"><path d="M72 8 L52 18 L44 34 L58 40 L62 34 V68 H118 V34 L122 40 L136 34 L128 18 L108 8 Q102 16 90 16 Q78 16 72 8 Z"/></clipPath></defs>
+<g clip-path="url(#tsc)"><rect x="40" y="0" width="100" height="72" fill="#E6F1EF"/><g class="tfill"><rect x="40" y="10" width="100" height="70" fill="#17A398"/><path d="M40 10 Q52 5 64 10 T88 10 T112 10 T136 10 T160 10 V14 H40Z" fill="#7FE0D6"/></g></g>
+<path d="M72 8 L52 18 L44 34 L58 40 L62 34 V68 H118 V34 L122 40 L136 34 L128 18 L108 8 Q102 16 90 16 Q78 16 72 8 Z" fill="none" stroke="#0B6F6A" stroke-width="3" stroke-linejoin="round"/>
+<text x="146" y="40" font-family="JetBrains Mono, monospace" font-size="17" font-weight="600" fill="#0B6F6A">2,700 L</text><text x="146" y="58" font-family="JetBrains Mono, monospace" font-size="11" fill="#4A6170">ONE T-SHIRT</text></svg><h3>Water footprint</h3><p>All the water behind a product, across its whole supply chain.</p></div>
+    </div>
+    <div class="poll rv" style="--d:5">
+      <span class="pill ember">Ask the class</span>
+      <p style="font-size:30px;line-height:1.4;position:relative">All US data centers, running for a <b style="color:var(--aqua)">whole year</b>. US farms use up that much water in about…</p>
+      <div class="col" style="gap:12px;position:relative" role="group" aria-label="Poll: tap an option to add a vote">
+        <button class="opt" data-opt="A"><span class="bar"></span><b>A</b><span class="lab">a month</span><span class="n">0</span></button>
+        <button class="opt" data-opt="B"><span class="bar"></span><b>B</b><span class="lab">a week</span><span class="n">0</span></button>
+        <button class="opt" data-opt="C"><span class="bar"></span><b>C</b><span class="lab">6 hours</span><span class="n">0</span></button>
+      </div>
+      <p class="hint" style="position:relative"><span>Tap = +1 vote · Shift-tap = −1</span><button id="pollreset">reset</button></p>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:45) Point: Give them the four words they need, then get them guessing.
+
+Four words change this whole story.
+Withdrawal: water we take from a river, lake or aquifer. A lot of it goes back.
+Consumption: water that doesn’t come back. It evaporates or ends up inside a product.
+Water stress: when a place is using close to all the water it has. It’s always local.
+Water footprint: all the water behind something you buy, across its whole supply chain. One cotton T-shirt takes about 2,700 liters.
+Q: All the data centers in the US, running for a whole year. How long does it take US farms to use up that same amount of water? A, a month? B, a week? C, six hours?
+[Count hands. Tap each option once per hand.]
+Hold that thought.</template>
+</section>
+
+<!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
+<section class="slide paper" id="equal" data-title="Not all water use is equal" data-chapter="1">
+  <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Not all water use is equal</h2></header>
+  <div class="row" style="gap:28px">
+    <div class="use rv lift" style="--d:1">
+      <div class="top"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 22V9"/><path d="M12 14c-4.5 0-7-3-7-7 4 0 7 2.5 7 7z"/><path d="M12 11c4.5 0 7-3 7-7-4 0-7 2.5-7 7z"/></svg></div><h3>Farm irrigation</h3></div>
+      <div class="mid">
+        <div class="glass" style="--p:62%"><div class="vap"><i style="left:20%"></i><i style="left:45%;animation-delay:.6s"></i><i style="left:70%;animation-delay:1.3s"></i><i style="left:32%;animation-delay:1.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
+        <div class="col"><p class="num-xl" style="color:var(--teal)"><span class="count" data-to="118" data-suffix="B">118B</span></p><span class="unit day">GALLONS / DAY</span></div>
+      </div>
+      <p class="fate"><b>62% used up</b> by crops and evaporation</p>
+    </div>
+    <div class="use rv lift" style="--d:2">
+      <div class="top"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M2 21h20"/><path d="M4 21V11l5 3v-3l5 3V5h4v16"/><path d="M15 8h2"/></svg></div><h3>Power plants</h3></div>
+      <div class="mid">
+        <div class="glass" style="--p:3%"><div class="vap"><i style="left:48%;animation-delay:.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
+        <div class="col"><p class="num-xl" style="color:var(--teal)"><span class="count" data-to="133" data-suffix="B">133B</span></p><span class="unit day">GALLONS / DAY</span></div>
+      </div>
+      <p class="fate"><b>Only ~3% used up.</b> The rest goes back, warmer</p>
+    </div>
+    <div class="use rv lift" style="--d:3">
+      <div class="top"><div class="ic e"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg></div><h3>Data centers</h3></div>
+      <div class="mid">
+        <div class="glass" style="--p:75%"><div class="vap"><i style="left:15%"></i><i style="left:38%;animation-delay:.45s"></i><i style="left:60%;animation-delay:.9s"></i><i style="left:80%;animation-delay:1.4s"></i><i style="left:28%;animation-delay:1.9s"></i></div><div class="cup"><div class="fill"><div class="used"></div><div class="ret"></div></div></div></div>
+        <div class="col"><p class="num-xl" style="color:var(--ember-d)"><span class="count" data-to="17" data-suffix="B">17B</span></p><span class="unit yr">GALLONS / YEAR</span></div>
+      </div>
+      <p class="fate"><b>70–80% evaporates</b> in cooling towers, from one town’s supply</p>
+    </div>
+  </div>
+  <div class="row rv" style="--d:4;align-items:center;justify-content:space-between;gap:30px">
+    <p class="serif" style="font-size:46px;font-weight:600;line-height:1.15">It’s not <em class="hl">how much</em>. It’s <em class="hl">where</em> and <em class="hl">when</em>.</p>
+    <div class="legend"><span><i style="background:#F4A08B"></i>Used up</span><span><i style="background:var(--current)"></i>Flows back</span></div>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="src" style="letter-spacing:.02em;text-transform:none">USGS 2018 (2015 data) · LBNL 2024 (2023 data) · The Register 2025</span><span class="pg"></span></div>
+  <template class="notes">(1:00) Point: It’s not how much water. It’s where and when.
+
+Look at the units first. Farms and power plants are per DAY. Data centers are per YEAR.
+Now look at what happens to the water. Power plants take the most, 133 billion gallons a day, but only about 3% is used up. The rest goes back to the river, just warmer.
+Farms use up about 62% of what they take.
+Data-center cooling towers evaporate 70 to 80%, and it all comes out of one town’s supply.
+So the question isn’t how much. It’s where and when. A gallon in rainy Seattle isn’t the same as a gallon in Phoenix during a drought.</template>
+</section>
+
+<!-- ============ 5 · THE AI MYTH ============ -->
+<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="2" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
+  <canvas class="ascii" id="ascii" width="1920" height="1080" aria-hidden="true"></canvas>
+  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI and water: how bad is it, really?</h2></header>
+  <div class="row" style="gap:64px;align-items:center;margin-top:-10px">
+    <svg class="clock rv" style="--d:1;width:540px;height:540px" viewBox="0 0 680 680" role="img" aria-label="A 24-hour clock representing one day of US irrigation water. A wedge of about 5.6 hours equals a full year of US data-center water.">
+      <circle cx="340" cy="340" r="250" fill="#113447"/>
+      <circle class="wedge" cx="340" cy="340" r="125" fill="none" stroke="#FF6B4A" stroke-width="250" transform="rotate(-90 340 340)"/>
+      <g id="ticks" stroke="#A9C6CC"></g>
+      <g font-family="JetBrains Mono, monospace" font-size="22" fill="#A9C6CC" text-anchor="middle">
+        <text x="340" y="42">0h</text><text x="648" y="347">6h</text><text x="340" y="654">12h</text><text x="32" y="347">18h</text>
+      </g>
+      <line class="hand" x1="340" y1="340" x2="340" y2="92" stroke="#EEF5F3" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="340" cy="340" r="92" fill="#0B2A3C"/>
+      <text x="340" y="345" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="64" fill="#EEF5F3">5.6h</text>
+      <text x="340" y="384" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="20" fill="#A9C6CC">OF 24</text>
+    </svg>
+    <div class="col grow" style="gap:24px">
+      <div class="row rv" style="--d:2;gap:20px;align-items:center"><span class="pill">Poll answer: C</span><p class="guess" id="guessline"></p></div>
+      <p class="serif rv" style="--d:3;font-size:48px;font-weight:600;line-height:1.14">A full year of US data-center water ≈ <span style="color:var(--ember);white-space:nowrap">5.6 hours</span> of US farm irrigation.</p>
+      <p class="src rv" style="--d:4">17B gal/yr direct (LBNL, 2023) ÷ 73B gal/day consumed by irrigation (USGS, 2015)</p>
+      <div data-step="1" class="days">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
+        <p style="font-size:28px;line-height:1.3;margin-left:10px">Add the power plants that run them<br><b style="color:var(--aqua)">≈ 3 days.</b> Still small, nationally.</p>
+      </div>
+      <div data-step="2" class="row" style="gap:20px">
+        <div class="pc"><span class="pill ember">Real downsides</span><ul><li>Clustered in dry towns</li><li>Power-plant water ≈ 12×</li><li>Could grow 2–4× by 2028</li></ul></div>
+        <div class="pc"><span class="pill">Real upsides</span><ul><li>Closed-loop cooling: ~0 water</li><li>Efficiency rising fast</li><li>Tax revenue for towns</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(1:15) Point: AI’s water use is small nationally but can hurt locally.
+
+The answer is C: about six hours.
+All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.
+[Click: the three rings appear.]
+Even if you add the water used by the power plants that run them, it’s about three days.
+[Click: downsides and upsides appear.]
+That doesn’t mean data centers don’t matter. They cluster in a few towns, often dry ones in places like Arizona and Texas. The water at the power plants behind them is about 12 times their direct use, and their water use could double or quadruple by 2028.
+But there’s good news too: new closed-loop designs use almost no cooling water, efficiency is improving fast, and host towns get tax revenue.
+Q: Did anyone come in thinking AI was the biggest water problem?
+If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.</template>
+</section>
+
+<!-- ============ 6 · THE REAL PROBLEM ============ -->
+<section class="slide tealbg" id="real" data-title="The real problem" data-chapter="3" data-enter="rise">
+  <header class="hd"><p class="chap rv"><i></i>03 · The real problem</p><h2 data-split>Farms, pipes and people</h2></header>
+  <div class="row" style="gap:56px">
+    <div class="panel rv" style="--d:1">
+      <div class="vis" style="gap:28px">
+        <svg class="donut" width="200" height="200" viewBox="0 0 220 220" aria-hidden="true">
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#0F6E72" stroke-width="34"/>
+          <circle class="seg s1" pathLength="100" cx="110" cy="110" r="80" fill="none" stroke="#F8FBFA" stroke-width="34" transform="rotate(-90 110 110)"/>
+          <circle class="seg s2" pathLength="100" cx="110" cy="110" r="80" fill="none" stroke="#7FE0D6" stroke-width="34" stroke-dashoffset="-71" transform="rotate(-90 110 110)"/>
+          <circle class="seg s3" pathLength="100" cx="110" cy="110" r="80" fill="none" stroke="#FF6B4A" stroke-width="34" stroke-dashoffset="-86" transform="rotate(-90 110 110)"/>
+        </svg>
+        <div class="dleg"><span><i style="background:#F8FBFA"></i>Farms 71%</span><span><i style="background:#7FE0D6"></i>Industry 15%</span><span><i style="background:#FF6B4A"></i>Cities 13%</span></div>
+      </div>
+      <p class="big"><span class="count" data-to="71" data-suffix="%">71%</span></p>
+      <p class="cap">of the world’s freshwater withdrawals go to farming</p>
+      <p class="src">FAO AQUASTAT, 2022 data</p>
+    </div>
+    <div class="panel rv" style="--d:2">
+      <div class="vis">
+        <canvas id="leak" width="420" height="210" style="width:420px;height:210px" aria-hidden="true"></canvas>
+      </div>
+      <p class="big"><span class="count" data-to="126" data-suffix="B m³">126B m³</span></p>
+      <p class="cap">of treated water lost to leaks every year. Since this slide opened:</p>
+      <p class="ticker"><span id="tick">0</span> L</p>
+      <p class="src">Liemberger &amp; Wyatt, 2019 · ≈ 4M liters per second, ~$39B a year</p>
+    </div>
+    <div class="panel rv" style="--d:3">
+      <div class="vis" role="img" aria-label="100 people, 25 highlighted: 1 in 4"><canvas id="crowd" width="520" height="210" style="display:none;width:520px;height:210px"></canvas><div class="dots" id="dots"></div></div>
+      <p class="big"><span class="count" data-to="2.1" data-dec="1" data-suffix="B">2.1B</span></p>
+      <p class="cap">people still lack safely managed drinking water: <b>1 in 4</b></p>
+      <p class="src">WHO/UNICEF JMP, 2025</p>
+    </div>
+  </div>
+  <div class="strip rv" style="--d:5;background:var(--ink)">
+    <p class="serif" style="font-size:42px;font-weight:600;line-height:1.15">By 2030, demand is projected to outstrip supply by <span style="color:var(--ember)">40%</span>.</p>
+    <p class="src" style="color:var(--mist);text-align:right">Global Commission on the<br>Economics of Water, 2023</p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(1:00) Point: The real problem is farms, pipes and people.
+
+So where IS the real problem? Three places.
+Farms: 71% of all the fresh water humans take goes to agriculture.
+Pipes: cities lose 126 billion cubic meters of treated, already-paid-for water every year to leaks. That’s about four million liters every second. That counter has been running since this slide opened.
+People: 2.1 billion people, one in four, still don’t have safe drinking water at home. Look at the crowd: every orange person is one of them.
+And it’s getting tighter. By 2030, demand is expected to be 40% higher than supply.
+Q: Which of these three would you fix first?</template>
+</section>
+
+<!-- ============ 7 · WHO'S FIXING IT ============ -->
+<section class="slide paper" id="business" data-title="Who’s fixing it" data-chapter="4" data-enter="wave">
+  <header class="hd"><p class="chap rv"><i></i>04 · Who’s fixing it</p><h2 data-split>Business is moving, but on which problem?</h2></header>
+  <div class="row" style="gap:32px">
+    <div class="col grow" style="gap:18px">
+      <span class="pill rv" style="--d:1">Fixing data centers</span>
+      <div class="biz rv lift" style="--d:2">
+        <div class="h"><svg class="emb" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="15" fill="#0B6F6A"/><circle cx="30" cy="30" r="17" fill="none" stroke="#7FE0D6" stroke-width="1.6" stroke-dasharray="3 4" opacity=".55"/><rect x="23" y="23" width="14" height="14" rx="3" fill="none" stroke="#F8FBFA" stroke-width="2.4"/><g class="orb"><circle cx="30" cy="13" r="3.4" fill="#7FE0D6"/><circle cx="44.7" cy="38.5" r="3.4" fill="#7FE0D6"/><circle cx="15.3" cy="38.5" r="3.4" fill="#7FE0D6"/></g></svg><h3>Microsoft</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
+        <div class="m"><p class="met"><span class="count" data-to="125" data-suffix="M L">125M L</span><small>saved / site / year</small></p><p>Closed-loop chip cooling in every new design since 2024</p></div>
+      </div>
+      <div class="biz rv lift" style="--d:3">
+        <div class="h"><svg class="emb" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="15" fill="#1A4559"/><circle cx="30" cy="30" r="16" fill="none" stroke="#2F6278" stroke-width="6"/><circle class="arc" pathLength="100" cx="30" cy="30" r="16" fill="none" stroke="#7FE0D6" stroke-width="6" stroke-linecap="round" transform="rotate(-90 30 30)"/><text x="30" y="35" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600" fill="#F8FBFA">2/3</text></svg><h3>Amazon</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span>PLANET</span></span></div>
+        <div class="m"><p class="met"><span class="count" data-to="2.5" data-dec="1" data-suffix="B gal">2.5B gal</span><small>first disclosure, 2025</small></p><p>Says about two-thirds goes back to local communities</p></div>
+      </div>
+    </div>
+    <div class="col grow" style="gap:18px">
+      <span class="pill ember rv" style="--d:1">Fixing the real problem</span>
+      <div class="biz rv lift" style="--d:2">
+        <div class="h"><svg class="emb" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="15" fill="#C2412D"/><line x1="10" y1="15" x2="50" y2="15" stroke="#F8FBFA" stroke-width="3" stroke-linecap="round"/><g fill="#BFF2EC"><path class="drip" d="M21 18c0 0-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6z"/><path class="drip d2" d="M39 18c0 0-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6z"/></g><path d="M30 50V39M30 43c-5 0-8-3-8-7 5 0 8 3 8 7M30 41c5 0 8-3 8-7-5 0-8 3-8 7" stroke="#F8FBFA" stroke-width="2.3" fill="none" stroke-linecap="round"/></svg><h3>N-Drip</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span class="on">PLANET</span></span></div>
+        <div class="m"><p class="met"><span class="count" data-to="57" data-prefix="−" data-suffix="%">−57%</span><small>water, IRRI rice trial</small></p><p>Gravity-powered drip irrigation built for small farms</p></div>
+      </div>
+      <div class="biz rv lift" style="--d:3">
+        <div class="h"><svg class="emb" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="15" fill="#8A3A2A"/><defs><clipPath id="jc"><path d="M19 11h22l3 38h-9l-5-23-5 23h-9z"/></clipPath></defs><g clip-path="url(#jc)"><rect width="60" height="60" fill="#5E2619"/><rect class="jw" x="0" y="11" width="60" height="40" fill="#7FE0D6"/></g><path d="M19 11h22l3 38h-9l-5-23-5 23h-9z" fill="none" stroke="#F8FBFA" stroke-width="2.2" stroke-linejoin="round"/></svg><h3>Levi Strauss &amp; Co.</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
+        <div class="m"><p class="met"><span class="count" data-to="96" data-prefix="−" data-suffix="%">−96%</span><small>finishing water</small></p><p>Water&lt;Less process; 3B+ liters saved so far</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="strip rv" style="--d:5;background:var(--ink);color:var(--glacier)">
+    <span class="pill ember">My take</span>
+    <p class="serif grow" style="font-size:38px;font-weight:600;line-height:1.2">Tech has the worst headlines but moves fastest. <span style="color:var(--aqua)">Farms need the most help.</span></p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(1:15) Point: Tech is moving fastest, but farms need the most help.
+
+Business is moving, but on which problem?
+Left side, data centers. Since 2024, every new Microsoft data-center design cools the chips in a closed loop, saving about 125 million liters per site every year. That’s Planet, and also Profit, because water costs money.
+Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025. It says about two-thirds goes back to local communities. Being open about it is a People move.
+Right side, the real problem. N-Drip makes gravity-powered drip irrigation for small farms. In a rice trial it used 57% less water than flooding the field.
+And Levi’s cut the water used to finish jeans by up to 96%.
+My take: tech has the worst headlines, but it’s moving fastest. Farms, the biggest user, need the most help.
+If asked: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough. It has to come with limits on total use.</template>
+</section>
+
+<!-- ============ 8 · WHAT TO DO ============ -->
+<section class="slide dark" id="moves" data-title="What businesses should do" data-chapter="5" data-enter="iris" data-from="#business .strip .pill">
+  <div id="earthrise" aria-hidden="true"></div>
+  <header class="hd"><p class="chap rv"><i></i>05 · What to do</p><h2 data-split>Three moves for any business</h2></header>
+  <div class="row" style="gap:28px">
+    <div class="move rv lift" style="--d:1"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21c0-3-2-6-5-7"/></svg></span><p class="no">01</p><h3>People</h3><p>Build where water is plentiful, and invest in the local systems you draw from.</p></div>
+    <div class="move rv lift" style="--d:2"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><p class="no">02</p><h3>Profit</h3><p>Price water risk in. Droughts shut plants, and leaks waste $39B a year.</p></div>
+    <div class="move rv lift" style="--d:3"><span class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 4 6 4 9s-1 6-4 9c-3-3-4-6-4-9s1-6 4-9z"/></svg></span><p class="no">03</p><h3>Planet</h3><p>Go after the 71%: fund efficient irrigation with farm suppliers, and reuse water.</p></div>
+  </div>
+  <p class="serif concl" data-split style="font-size:58px;font-weight:600;line-height:1.1;letter-spacing:-.02em">Water is a <em class="hl">local</em> problem with <em class="hl">global</em> supply chains.</p>
+  <div class="row rv" style="--d:5;align-items:center;gap:24px">
+    <span class="pill ember">Ask the class</span>
+    <p style="font-size:30px">Would you build your next data center in Arizona? Why or why not?</p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:50) Point: My recommendations, using People, Profit and Planet.
+
+[The Earth rises along the bottom of the slide. Let it land before you start.]
+So what should any business do? Three moves.
+People: build where water is plentiful, and invest back into the local water systems you draw from.
+Profit: treat water as a business risk. Droughts shut down factories, and leaky pipes waste about 39 billion dollars a year.
+Planet: go after the 71%. Help your farm suppliers switch to efficient irrigation, and reuse water wherever you can.
+My conclusion: water is a local problem with global supply chains. The headlines are about AI, but the biggest wins are on farms and in pipes.
+Q: Last question. Would you build your next data center in Arizona? Why or why not?
+[Let two or three people answer.]</template>
+</section>
+
+<!-- ============ 9 · HOW I USED AI ============ -->
+<section class="slide light" id="aiuse" data-title="How I used AI" data-chapter="5">
+  <header class="hd"><p class="chap rv"><i></i>Process</p><h2 data-split>How I used AI</h2></header>
+  <div class="row" style="gap:32px">
+    <div class="card grow rv lift" style="--d:1">
+      <div class="row" style="gap:18px;align-items:center"><span class="mono-tile" style="background:var(--teal)"><svg class="icon" style="width:30px;height:30px;stroke:#F8FBFA" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg></span><div><h3>What Claude did</h3><p class="src" style="margin-top:4px">Claude (Anthropic), Claude desktop app</p></div></div>
+      <ul><li>Searched news, UN and USGS sources</li><li>Flagged where sources disagreed</li><li>Planned timing for a 7-minute talk</li><li>Designed and coded this website</li></ul>
+    </div>
+    <div class="card grow rv lift" style="--d:2">
+      <div class="row" style="gap:18px;align-items:center"><span class="mono-tile" style="background:var(--ink)"><svg class="icon" style="width:30px;height:30px;stroke:#F8FBFA" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.5-8 8-8s8 3.5 8 8"/></svg></span><div><h3>What I did</h3><p class="src" style="margin-top:4px">Anders Imbrie</p></div></div>
+      <ul><li>Chose the angle and the 4-part outline</li><li>Asked for the farm vs. data-center test</li><li>Pushed for a stronger design (v1 → v2)</li><li>[Add anything else you did]</li></ul>
+    </div>
+  </div>
+  <div class="strip rv" style="--d:3;background:var(--ink);color:var(--glacier)">
+    <p style="font-size:30px;line-height:1.4"><b style="color:var(--aqua)">Lesson:</b> AI turned up conflicting numbers for the same fact, so every figure here was checked against its source.</p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:20) Point: Required by the assignment: be specific and honest.
+
+As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic.
+It searched news, UN and USGS sources, flagged where sources disagreed, helped plan the timing, and built this website.
+I chose the angle, wrote the outline, and checked the numbers against their sources.
+Biggest lesson: AI gave me different numbers for the same fact, so you still have to check the original source.</template>
+</section>
+
+<!-- ============ 10 · WORKS CITED ============ -->
+<section class="slide paper" id="sources" data-title="Works cited" data-chapter="5">
+  <header class="hd"><p class="chap rv"><i></i>Sources</p><h2 data-split>Works cited</h2></header>
+  <div class="cites rv" style="--d:1">
+    <p><b>01</b>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
+    <p><b>02</b>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers</a>.</p>
+    <p><b>03</b>Euronews. (2023, Apr. 20). <a href="https://www.euronews.com/green/2023/04/20/chatgpt-drinks-a-bottle-of-fresh-water-for-every-20-to-50-questions-we-ask-study-warns">ChatGPT ‘drinks’ a bottle of fresh water for every 20 to 50 questions</a>.</p>
+    <p><b>04</b>Latitude Media. (2026, June 11). <a href="https://latitudemedia.com/news/amazon-finally-reports-its-annual-water-use-at-data-centers/">Amazon finally reports its annual water use at data centers</a>.</p>
+    <p><b>05</b>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 US Data Center Energy Usage Report</i></a>.</p>
+    <p><b>06</b>Levi Strauss &amp; Co. (n.d.). <a href="https://www.levistrauss.com/sustainability/water-stewardship/">Water stewardship</a>.</p>
+    <p><b>07</b>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
+    <p><b>08</b>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
+    <p><b>09</b>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">What AQUASTAT 2025 reveals about agriculture</a>.</p>
+    <p><b>10</b>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
+    <p><b>11</b>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
+    <p><b>12</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
+    <p><b>13</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
+    <p><b>14</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
+    <p><b>15</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:05) Point: Close and take questions.
+
+All my sources are here, and the links work on the website.
+Thank you. Any questions?</template>
+</section>
+
+<div id="wipe" aria-hidden="true">
+  <svg class="h l2" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="#7FE0D6"/></svg>
+  <svg class="h" viewBox="0 0 2600 1080" preserveAspectRatio="none"><path d="M160 0 C 60 135, 260 270, 160 405 S 60 675, 160 810 S 260 945, 160 1080 L2440 1080 C 2340 945, 2540 810, 2440 675 S 2340 405, 2440 270 S 2540 135, 2440 0 Z" fill="currentColor"/></svg>
+  <svg class="v l2" viewBox="0 0 1920 1400" preserveAspectRatio="none"><path d="M0 120 C 160 40, 320 40, 480 120 S 800 200, 960 120 S 1280 40, 1440 120 S 1760 200, 1920 120 L1920 1400 L0 1400 Z" fill="#7FE0D6"/></svg>
+  <svg class="v" viewBox="0 0 1920 1400" preserveAspectRatio="none"><path d="M0 130 C 200 200, 400 200, 600 130 S 1000 60, 1200 130 S 1600 200, 1920 130 L1920 1400 L0 1400 Z" fill="currentColor"/></svg>
+</div>
+<span class="ring" id="ring"></span>
+<div class="grain"></div>
+</div>
+
+<div id="notes" aria-live="polite"><h4>Speaker notes</h4><p id="notestext"></p></div>
+<p id="hint">Click or → to advance · N notes · P presenter view · F full screen</p>
+<div id="ui">
+  <button id="prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <span id="count">01 / 10</span>
+  <button id="next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+  <button id="notesbtn" aria-label="Speaker notes" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></button>
+  <button id="pvbtn" aria-label="Open presenter view"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button>
+  <button id="fs" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+
+<!-- presenter view (open with P) -->
+<div id="pv">
+  <div class="main"><h4>Now</h4><p class="now" id="pvNow"></p><p class="stepinfo" id="pvStep"></p><h4>Notes</h4><p class="pnotes" id="pvNotes"></p></div>
+  <div class="side">
+    <h4>Time</h4><p class="timer" id="pvTimer">0:00</p><p class="target">Target 7:00</p><div class="bar"><i id="pvBar"></i></div>
+    <h4>Next</h4><p class="next" id="pvNext"></p>
+    <div class="btns"><button id="pvPrev">← Back</button><button id="pvFwd">Next →</button><button class="wide" id="pvReset">Restart timer</button></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stage = $('#stage'), slides = $$('.slide'), N = slides.length;
+  const chan = 'BroadcastChannel' in window ? new BroadcastChannel('follow-the-water') : null;
+  const isPresenter = new URLSearchParams(location.search).has('presenter');
+  let i = 0, step = 0, visit = 0;
+
+  /* ---- fit stage ---- */
+  const fit = () => stage.style.setProperty('--s', Math.min(innerWidth / 1920, innerHeight / 1080));
+  addEventListener('resize', fit); fit();
+
+  /* ---- page numbers ---- */
+  slides.forEach((s, k) => { const p = $('.pg', s); if (p) p.textContent = String(k + 1).padStart(2, '0') + ' / ' + N; });
+
+  /* ---- split headings into words ---- */
+  $$('[data-split]').forEach(el => {
+    let n = 0;
+    const walk = node => [...node.childNodes].forEach(c => {
+      if (c.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        c.textContent.split(/(\s+)/).forEach(tok => {
+          if (!tok) return;
+          if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(tok)); return; }
+          const w = document.createElement('span'); w.className = 'w';
+          const wi = document.createElement('span'); wi.className = 'wi'; wi.style.setProperty('--i', n++); wi.textContent = tok;
+          w.appendChild(wi); frag.appendChild(w);
+        });
+        c.replaceWith(frag);
+      } else if (c.nodeType === 1) walk(c);
+    });
+    walk(el);
+  });
+
+  /* ---- clock ticks ---- */
+  const tk = $('#ticks');
+  for (let h = 0; h < 24; h++) {
+    const a = (h / 24) * Math.PI * 2, r1 = h % 6 ? 262 : 258, r2 = h % 6 ? 274 : 284;
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 340 + Math.sin(a) * r1); l.setAttribute('y1', 340 - Math.cos(a) * r1);
+    l.setAttribute('x2', 340 + Math.sin(a) * r2); l.setAttribute('y2', 340 - Math.cos(a) * r2);
+    l.setAttribute('stroke-width', h % 6 ? 2 : 4); tk.appendChild(l);
+  }
+
+  /* ---- 1-in-4 dots ---- */
+  const dots = $('#dots'), hits = new Set([2,7,11,15,19,23,28,31,36,40,44,49,53,57,60,66,69,72,77,81,84,88,93,96,99]);
+  for (let k = 0; k < 100; k++) { const d = document.createElement('i'); if (hits.has(k)) { d.className = 'hit'; d.style.setProperty('--k', [...hits].indexOf(k)); } dots.appendChild(d); }
+
+  /* ---- count-ups ---- */
+  const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
+  const runCounts = root => $$('.count', root).forEach(el => {
+    const st = el.closest('[data-step]'); if (st && !st.classList.contains('shown')) return;
+    if (el._v === visit) return; el._v = visit;
+    const to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0), pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+    const final = pre + fmt(to, dec) + suf;
+    if (reduce) { el.textContent = final; return; }
+    const t0 = performance.now() + 450, dur = 1600;
+    const tickf = t => { const p = Math.min(Math.max((t - t0) / dur, 0), 1), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = p >= 1 ? final : pre + fmt(to * e, dec) + suf; if (p < 1) requestAnimationFrame(tickf); };
+    el.textContent = pre + fmt(0, dec) + suf; requestAnimationFrame(tickf);
+  });
+
+  /* ---- leak ticker (126B m³/yr ≈ 3.99M L/s) ---- */
+  let tickT = null;
+  const startTicker = () => { const t0 = performance.now(), el = $('#tick'); clearInterval(tickT);
+    tickT = setInterval(() => { el.textContent = Math.floor((performance.now() - t0) / 1000 * 3.993e6).toLocaleString('en-US'); }, 60); };
+  const stopTicker = () => { clearInterval(tickT); tickT = null; };
+
+  /* ---- flow field (cold open + title) ---- */
+  const cv = $('#flow'), cx = cv.getContext('2d');
+  const P = Array.from({ length: 1100 }, () => ({ x: Math.random() * 1920, y: Math.random() * 1080, a: Math.random() * 200 }));
+  let flowOn = false, raf = 0, ft = 0, mx = -9999, my = -9999;
+  cx.fillStyle = '#061A24'; cx.fillRect(0, 0, 1920, 1080);
+  const flowFrame = () => {
+    ft += 1;
+    cx.fillStyle = 'rgba(6,26,36,0.075)'; cx.fillRect(0, 0, 1920, 1080);
+    cx.lineWidth = 1.4;
+    for (const p of P) {
+      const ang = Math.sin(p.x * 0.0017 + ft * 0.004) * 1.3 + Math.cos(p.y * 0.0023 - ft * 0.003) * 1.1 + Math.sin((p.x + p.y) * 0.0008) * 0.9 + 0.25;
+      let nx = p.x + Math.cos(ang) * 1.7, ny = p.y + Math.sin(ang) * 1.7;
+      const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+      if (d2 < 57600) { const d = Math.sqrt(d2) || 1, f = (1 - d / 240) * 3.4; nx += (-dy / d) * f + (dx / d) * f * .4; ny += (dx / d) * f + (dy / d) * f * .4; }
+      const hue = p.y / 1080;
+      cx.strokeStyle = `rgba(${Math.round(70 + 60 * hue)},${Math.round(200 - 30 * hue)},${Math.round(195 - 10 * hue)},0.5)`;
+      cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(nx, ny); cx.stroke();
+      p.x = nx; p.y = ny; p.a++;
+      if (p.x < -5 || p.x > 1925 || p.y < -5 || p.y > 1085 || p.a > 420) { p.x = Math.random() * 1920; p.y = Math.random() * 1080; p.a = 0; }
+    }
+    if (flowOn) raf = requestAnimationFrame(flowFrame);
+  };
+  const setFlow = on => { cv.classList.toggle('on', on); if (on && !flowOn && !reduce) { flowOn = true; raf = requestAnimationFrame(flowFrame); } if (!on) { flowOn = false; cancelAnimationFrame(raf); } };
+
+  /* ---- WebGL water: a ripple simulation + caustic light (cold open + title) ---- */
+  const water = (() => {
+    const cw = $('#water');
+    const gl = cw.getContext('webgl2', { antialias: false, alpha: false });
+    if (!gl || !gl.getExtension('EXT_color_buffer_float')) return null;
+    const SW = 384, SH = 216;
+    const VS = '#version 300 es\nin vec2 p; out vec2 uv; void main(){ uv = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }';
+    const shd = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+    const prog = fs => {
+      const pr = gl.createProgram();
+      gl.attachShader(pr, shd(gl.VERTEX_SHADER, VS));
+      gl.attachShader(pr, shd(gl.FRAGMENT_SHADER, '#version 300 es\nprecision highp float;\nin vec2 uv; out vec4 o;\n' + fs));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      const u = {}; for (let k = 0, n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS); k < n; k++) { const nm = gl.getActiveUniform(pr, k).name; u[nm] = gl.getUniformLocation(pr, nm); }
+      return { pr, u };
+    };
+    let P;
+    try {
+      P = {
+        sim: prog(`uniform sampler2D s; uniform vec2 px;
+void main(){ vec4 c = texture(s, uv);
+  float avg = (texture(s, uv + vec2(px.x, 0.)).r + texture(s, uv - vec2(px.x, 0.)).r + texture(s, uv + vec2(0., px.y)).r + texture(s, uv - vec2(0., px.y)).r) * .25;
+  c.g += (avg - c.r) * 2.; c.g *= .993; c.r += c.g; c.r *= .9985; o = c; }`),
+        drop: prog(`uniform sampler2D s; uniform vec2 c; uniform float r; uniform float k;
+void main(){ vec4 v = texture(s, uv); float d = max(0., 1. - length((uv - c) * vec2(16. / 9., 1.)) / r);
+  d = .5 - cos(d * 3.14159) * .5; v.r += d * k; o = v; }`),
+        draw: prog(`uniform sampler2D s; uniform float t; uniform vec2 px;
+float hs(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p), u = f * f * (3. - 2. * f);
+  return mix(mix(hs(i), hs(i + vec2(1., 0.)), u.x), mix(hs(i + vec2(0., 1.)), hs(i + vec2(1., 1.)), u.x), u.y); }
+float caust(vec2 p, float t){ vec2 w = vec2(vn(p * 1.3 + vec2(t * .15, 0.)), vn(p * 1.3 + vec2(5.2, t * .12)));
+  float v = vn(p + w * 1.8 + vec2(t * .05, -t * .04)); return pow(1. - abs(v * 2. - 1.), 12.); }
+void main(){
+  float h = texture(s, uv).r;
+  float hx = texture(s, uv + vec2(px.x, 0.)).r - texture(s, uv - vec2(px.x, 0.)).r;
+  float hy = texture(s, uv + vec2(0., px.y)).r - texture(s, uv - vec2(0., px.y)).r;
+  vec3 n = normalize(vec3(-hx * 9., -hy * 9., 1.));
+  vec2 q = uv * vec2(16. / 9., 1.) + n.xy * .12;
+  float c = caust(q * 2.4, t) * .65 + caust(q * 4.1 + 3.7, t * 1.25) * .45;
+  vec3 col = mix(vec3(.016, .07, .1), vec3(.03, .2, .24), smoothstep(-.1, 1.1, uv.y) * .8);
+  col += vec3(.28, .82, .78) * c * (.16 + .2 * uv.y);
+  vec3 L = normalize(vec3(-.45, .55, .7));
+  float sp = pow(max(dot(reflect(-L, n), vec3(0., 0., 1.)), 0.), 70.);
+  col += vec3(.7, 1., .96) * sp * .9 * smoothstep(.002, .03, length(n.xy));
+  col += vec3(.35, .85, .82) * clamp(h * 1.2, -.05, .3);
+  float vg = length((uv - vec2(.42, .52)) * vec2(1.25, 1.)); col *= 1. - .6 * smoothstep(.25, 1., vg);
+  o = vec4(col, 1.); }`)
+      };
+    } catch (e) { console.warn('Water effect off:', e.message); return null; }
+    const mk = () => {
+      const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, SW, SH, 0, gl.RGBA, gl.HALF_FLOAT, null);
+      [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(([a, b]) => gl.texParameteri(gl.TEXTURE_2D, a, b));
+      const f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+      gl.viewport(0, 0, SW, SH); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+      return { t, f };
+    };
+    let A = mk(), Z = mk();
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) return null;
+    const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    const pass = (p, setU, toTex) => {
+      gl.useProgram(p.pr); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.t); gl.uniform1i(p.u.s, 0); setU(p.u);
+      if (toTex) { gl.bindFramebuffer(gl.FRAMEBUFFER, Z.f); gl.viewport(0, 0, SW, SH); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); [A, Z] = [Z, A]; }
+      else { gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, cw.width, cw.height); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
+    };
+    const q = []; let on = false, wr = 0, lastRain = 0, lx = 0, ly = 0; const T0 = performance.now();
+    const frame = now => {
+      if (now - lastRain > 650 + Math.random() * 900) { lastRain = now; q.push([Math.random() * 1920, Math.random() * 1080, .008 + Math.random() * .01, .03 + Math.random() * .05]); }
+      while (q.length) { const [x, y, r, k] = q.shift(); pass(P.drop, u => { gl.uniform2f(u.c, x / 1920, 1 - y / 1080); gl.uniform1f(u.r, r); gl.uniform1f(u.k, k); }, true); }
+      pass(P.sim, u => gl.uniform2f(u.px, 1 / SW, 1 / SH), true);
+      pass(P.sim, u => gl.uniform2f(u.px, 1 / SW, 1 / SH), true);
+      pass(P.draw, u => { gl.uniform1f(u.t, (now - T0) / 1000); gl.uniform2f(u.px, 1 / SW, 1 / SH); }, false);
+      if (on) wr = requestAnimationFrame(frame);
+    };
+    return {
+      get on() { return on; },
+      set(v) {
+        cw.classList.toggle('on', v);
+        if (v && !on) { if (reduce) frame(performance.now()); else { on = true; wr = requestAnimationFrame(frame); } }
+        if (!v) { on = false; cancelAnimationFrame(wr); }
+      },
+      drop(x, y, r, k) { q.push([x, y, r, k]); },
+      trail(x, y) { if (Math.hypot(x - lx, y - ly) < 14) return; lx = x; ly = y; q.push([x, y, .013, .045]); }
+    };
+  })();
+
+  /* ---- ASCII "digital water" behind the AI slide ---- */
+  const asc = $('#ascii'), ac = asc.getContext('2d');
+  const CELL = 24, COLS = 80, ROWS = 45, GLY = ' .·:-=+*01';
+  let ascOn = false, ascRaf = 0, ascT = 0;
+  const h2 = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
+  const n2 = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = h2(xi, yi), b = h2(xi + 1, yi), c = h2(xi, yi + 1), d = h2(xi + 1, yi + 1); return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v; };
+  const ascFrame = () => {
+    ascT += .016;
+    ac.clearRect(0, 0, 1920, 1080); ac.font = '600 17px "JetBrains Mono", monospace'; ac.textAlign = 'center'; ac.textBaseline = 'middle';
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const x = c * CELL + 12, y = r * CELL + 12;
+      let v = n2(c * .09 + ascT * .35, r * .13 - ascT * .12) * .65 + n2(c * .23 - ascT * .2, r * .21 + ascT * .3) * .35;
+      v = Math.pow(v, 1.7);
+      const dx = x - mx, dy = y - my, d = Math.sqrt(dx * dx + dy * dy); if (d < 170) v += (1 - d / 170) * .3;
+      const k = Math.min(GLY.length - 1, Math.floor(v * GLY.length)); if (k < 1) continue;
+      ac.fillStyle = 'rgba(127,224,214,' + Math.min(.3, .03 + v * .18).toFixed(3) + ')'; ac.fillText(GLY[k], x, y);
+    }
+    if (ascOn) ascRaf = requestAnimationFrame(ascFrame);
+  };
+  const setAscii = on => { if (on && !ascOn) { if (reduce) ascFrame(); else { ascOn = true; ascRaf = requestAnimationFrame(ascFrame); } } if (!on) { ascOn = false; cancelAnimationFrame(ascRaf); } };
+
+  /* ---- chapter labels decode like a data readout ---- */
+  const SCR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/';
+  const decode = el => {
+    const node = [...el.childNodes].reverse().find(nd => nd.nodeType === 3 && nd.textContent.trim()); if (!node) return;
+    const fin = node._fin || (node._fin = node.textContent), t0 = performance.now(), dur = 800;
+    const tk = t => { const p = Math.min((t - t0) / dur, 1), cut = Math.floor(p * fin.length);
+      node.textContent = p >= 1 ? fin : fin.slice(0, cut) + fin.slice(cut).replace(/[^\s·]/g, () => SCR[Math.random() * SCR.length | 0]);
+      if (p < 1) requestAnimationFrame(tk); };
+    requestAnimationFrame(tk);
+    setTimeout(() => { node.textContent = fin; }, dur + 120);   // always land on the real text
+  };
+  addEventListener('beforeprint', () => $$('.chap').forEach(el => [...el.childNodes].forEach(nd => { if (nd._fin) nd.textContent = nd._fin; })));
+
+  /* ---- title text ripples into focus, as if seen through water ---- */
+  const liqD = $('#liqD'), liqT = $('#liqT');
+  const liquify = el => {
+    if (!el || reduce) return; el.style.filter = 'url(#liquid)';
+    const t0 = performance.now(), dur = 2000;
+    const tk = t => { const p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      liqD.setAttribute('scale', (120 * (1 - e)).toFixed(1));
+      liqT.setAttribute('baseFrequency', (.008 + .006 * p).toFixed(4) + ' ' + (.03 - .012 * p).toFixed(4));
+      if (p < 1) requestAnimationFrame(tk); else el.style.filter = ''; };
+    requestAnimationFrame(tk);
+  };
+  const splashBurst = (x, y) => { for (let k = 0; k < 11; k++) {
+    const s = document.createElement('span'); s.className = 'spl'; s.style.left = x + 'px'; s.style.top = y + 'px'; stage.appendChild(s);
+    const a = -Math.PI / 2 + (k - 5) * .26 + (Math.random() - .5) * .2, sp = 170 + Math.random() * 190, dx = Math.cos(a) * sp, dy = Math.sin(a) * sp;
+    s.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.9)`, opacity: 1, offset: .45 },
+      { transform: `translate(calc(-50% + ${dx * 1.5}px), calc(-50% + ${dy * .15 + 130}px)) scale(.3)`, opacity: 0 }],
+      { duration: 950 + Math.random() * 350, easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => s.remove(); } };
+
+  /* ---- poll ---- */
+  const votes = { A: 0, B: 0, C: 0 };
+  const drawPoll = () => {
+    const tot = votes.A + votes.B + votes.C, max = Math.max(votes.A, votes.B, votes.C);
+    $$('.opt').forEach(b => { const v = votes[b.dataset.opt];
+      $('.n', b).textContent = v; $('.bar', b).style.width = tot ? (v / tot * 100) + '%' : '0';
+      b.classList.toggle('lead', tot > 0 && v === max); });
+  };
+  $$('.opt').forEach(b => b.addEventListener('click', e => { e.stopPropagation();
+    const k = b.dataset.opt; votes[k] = Math.max(0, votes[k] + (e.shiftKey ? -1 : 1)); drawPoll(); b.blur(); }));
+  $('#pollreset').addEventListener('click', e => { e.stopPropagation(); votes.A = votes.B = votes.C = 0; drawPoll(); });
+  const guessText = () => {
+    const tot = votes.A + votes.B + votes.C; if (!tot) return '';
+    const max = Math.max(votes.A, votes.B, votes.C), top = Object.keys(votes).filter(k => votes[k] === max);
+    if (top.length > 1) return `The class was split: ${top.join(' / ')}.`;
+    return top[0] === 'C' ? `Most of you said C. Spot on.` : `Most of you said ${top[0]}. The real answer is far smaller.`;
+  };
+
+  /* ---- slide 4: each glass gets a moving surface and bubbles ---- */
+  $$('#equal .glass').forEach(g => {
+    const fill = $('.fill', g), cup = $('.cup', g), surf = document.createElement('i');
+    surf.className = 'surf'; fill.appendChild(surf);
+    [[22, 0], [52, 1.1], [74, 2.2]].forEach(([l, d]) => { const b = document.createElement('i'); b.className = 'bub'; b.style.left = l + '%'; b.style.animationDelay = d + 's'; cup.appendChild(b); });
+  });
+
+  /* ---- slide 6: a cracked pipe that really leaks ---- */
+  const lk = $('#leak'), lc = lk.getContext('2d'), LP = [];
+  let leakOn = false, leakRaf = 0, puddle = 0;
+  const leakFrame = () => {
+    lc.clearRect(0, 0, 420, 210);
+    // puddle grows as the slide stays up
+    puddle = Math.min(1, puddle + .004);
+    const pr = 30 + 130 * puddle;
+    lc.fillStyle = 'rgba(248,251,250,.16)'; lc.beginPath(); lc.ellipse(216, 196, pr, 9 + 3 * puddle, 0, 0, Math.PI * 2); lc.fill();
+    // pipe body with a highlight
+    const g = lc.createLinearGradient(0, 28, 0, 76); g.addColorStop(0, '#3AA3A6'); g.addColorStop(.45, '#1E8488'); g.addColorStop(1, '#0D5F63');
+    lc.fillStyle = g; lc.beginPath(); lc.roundRect ? lc.roundRect(0, 30, 420, 44, 10) : lc.rect(0, 30, 420, 44); lc.fill();
+    lc.fillStyle = 'rgba(255,255,255,.22)'; lc.fillRect(0, 36, 420, 5);
+    // coupling and the crack
+    lc.fillStyle = '#2C9195'; lc.beginPath(); lc.roundRect ? lc.roundRect(180, 22, 64, 60, 7) : lc.rect(180, 22, 64, 60); lc.fill();
+    lc.strokeStyle = '#06393C'; lc.lineWidth = 3; lc.beginPath(); lc.moveTo(198, 82); lc.lineTo(206, 72); lc.lineTo(212, 84); lc.lineTo(218, 74); lc.lineTo(226, 82); lc.stroke();
+    // new droplets spray out of the crack
+    for (let n = 0; n < 4; n++) LP.push({ x: 208 + Math.random() * 12, y: 82, vx: (Math.random() - .45) * 2.4, vy: .6 + Math.random() * 1.8, r: 1.6 + Math.random() * 1.8 });
+    lc.fillStyle = 'rgba(248,251,250,.92)';
+    for (let k = LP.length - 1; k >= 0; k--) {
+      const p = LP[k]; p.vy += .16; p.x += p.vx; p.y += p.vy;
+      if (p.y > 192) { LP.splice(k, 1); continue; }
+      lc.beginPath(); lc.ellipse(p.x, p.y, p.r * .8, p.r * (1 + p.vy * .12), 0, 0, Math.PI * 2); lc.fill();
+    }
+    if (LP.length > 420) LP.splice(0, LP.length - 420);
+    if (leakOn) leakRaf = requestAnimationFrame(leakFrame);
+  };
+  const setLeak = on => {
+    if (on && !leakOn) { puddle = 0; LP.length = 0; if (reduce) { for (let k = 0; k < 40; k++) leakFrame(); } else { leakOn = true; leakRaf = requestAnimationFrame(leakFrame); } }
+    if (!on) { leakOn = false; cancelAnimationFrame(leakRaf); }
+  };
+  leakFrame();
+
+  /* ---- render ---- */
+  const notesText = $('#notestext');
+  const applySteps = () => {
+    $$('[data-step]', slides[i]).forEach(el => el.classList.toggle('shown', +el.dataset.step <= step));
+    document.body.dataset.atSlide = slides[i].id; document.body.dataset.atBuild = step;
+    document.dispatchEvent(new CustomEvent('ftw', { detail: { id: slides[i].id, step } }));
+  };
+  const render = () => {
+    if (document.activeElement && stage.contains(document.activeElement)) document.activeElement.blur();
+    stage.scrollLeft = 0; stage.scrollTop = 0;
+    slides.forEach((s, k) => { const on = k === i; s.classList.toggle('active', on); s.inert = !on; s.setAttribute('aria-hidden', !on); });
+    applySteps();
+    const sid = slides[i].id;
+    if (water) water.set(i <= 1);
+    setFlow((i <= 1 && !water) || sid === 'moves');
+    setAscii(sid === 'ai');
+    setLeak(sid === 'real');
+    if (!reduce) { const cur = slides[i]; setTimeout(() => $$('.chap', cur).forEach(decode), 160); }
+    slides[i].id === 'real' ? startTicker() : stopTicker();
+    if (slides[i].id === 'ai') $('#guessline').textContent = guessText();
+    $('#count').textContent = String(i + 1).padStart(2, '0') + ' / ' + N;
+    const tpl = $('template.notes', slides[i]); notesText.textContent = tpl ? tpl.content.textContent.trim() : '';
+    drawChapters();
+    runCounts(slides[i]);
+    history.replaceState(null, '', location.pathname + location.search + '#' + (i + 1));
+    chan && !isPresenter && chan.postMessage({ type: 'state', i, step });
+  };
+
+  /* ---- chapter bar ---- */
+  const chapIdx = slides.map(s => +s.dataset.chapter);
+  const chapCount = Math.max(...chapIdx) + 1;
+  const cb = $('#chapters');
+  for (let c = 0; c < chapCount; c++) { const b = document.createElement('button'); b.setAttribute('aria-label', 'Chapter ' + c); b.appendChild(document.createElement('i'));
+    b.onclick = () => go(chapIdx.indexOf(c)); cb.appendChild(b); }
+  function drawChapters() { const cur = chapIdx[i];
+    [...cb.children].forEach((b, c) => { const inC = chapIdx.map((x, k) => x === c ? k : -1).filter(k => k >= 0);
+      const done = c < cur ? 1 : c > cur ? 0 : (inC.indexOf(i) + 1) / inC.length; b.firstChild.style.width = done * 100 + '%'; }); }
+
+  /* ---- transitions: each slide picks how it enters (data-enter) ----
+     wave  = liquid wipe across (new chapter)
+     rise  = water rises from below (the real problem)
+     iris  = the next slide grows out of an element on this one (data-from)
+     dive  = iris + the camera plunges into that element (cold open → title)
+     drift = quiet parallax slide (same chapter, and every step backwards) */
+  const wipe = $('#wipe'), ring = $('#ring'); let busy = null;
+  const EZ = 'cubic-bezier(.65,0,.35,1)', IRIS = 'cubic-bezier(.76,0,.18,1)';
+  const bgOf = s => s.classList.contains('dark') ? '#0B2A3C' : s.classList.contains('abyss') ? '#061A24' : getComputedStyle(s).backgroundColor;
+  const toStage = el => { const r = el.getBoundingClientRect(), sr = stage.getBoundingClientRect(), k = sr.width / 1920;
+    return r.width ? { x: (r.left + r.width / 2 - sr.left) / k, y: (r.top + r.height / 2 - sr.top) / k } : { x: 960, y: 540 }; };
+  function finish() { if (!busy) return; const B = busy; busy = null; B.timers.forEach(clearTimeout); B.anims.forEach(a => a.cancel()); B.done(); }
+  function go(n, toStep = 0) {
+    n = Math.max(0, Math.min(N - 1, n));
+    finish();
+    if (n === i) { step = toStep; render(); return; }
+    visit++;
+    const from = slides[i], to = slides[n], fwd = n > i;
+    const commit = () => { i = n; step = toStep; render(); };
+    let type = !fwd ? 'drift' : n === i + 1 ? (to.dataset.enter || 'drift') : 'wave';
+    if (reduce || document.hidden) { commit(); return; }
+    const B = busy = { timers: [], anims: [], done: () => {} };
+
+    if (type === 'splash') {
+      // a drop falls into the water; the title (and the Earth) rise out of the splash
+      const X = 1228, Y = 460, dropEl = $('#drop');
+      from.classList.add('leaving');
+      B.anims.push(from.animate([{ opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(8px)' }], { duration: 520, easing: 'ease-in', fill: 'forwards' }));
+      dropEl.style.left = X + 'px'; dropEl.style.top = Y + 'px';
+      const fall = dropEl.animate([{ transform: 'translateY(-620px) scaleY(1.05)', opacity: 0 }, { opacity: 1, offset: .12 }, { transform: 'translateY(0) scaleY(1.3)', opacity: 1 }], { duration: 640, easing: 'cubic-bezier(.55,0,1,.45)', fill: 'forwards' });
+      B.anims.push(fall);
+      B.timers.push(setTimeout(() => {
+        fall.cancel();
+        if (water) { water.drop(X, Y, .075, .7); water.drop(X, Y, .02, -.35); }
+        splashBurst(X, Y - 10);
+        ring.style.left = X + 'px'; ring.style.top = Y + 'px';
+        B.anims.push(ring.animate([{ width: '0px', height: '0px', opacity: 1 }, { width: '1500px', height: '1500px', opacity: 0 }], { duration: 1500, easing: 'cubic-bezier(.2,.8,.2,1)' }));
+        from.classList.remove('leaving'); commit(); liquify($('#title h1'));
+      }, 640));
+      B.done = () => { from.classList.remove('leaving'); if (i !== n) commit(); };
+      B.timers.push(setTimeout(finish, 2200));
+    } else if (type === 'wave' || type === 'rise') {
+      const ls = $$(type === 'rise' ? '.v' : '.h', wipe);
+      const fr = type === 'rise' ? ['translateY(1080px)', 'translateY(-1400px)'] : ['translateX(1920px)', 'translateX(-2600px)'];
+      wipe.style.color = bgOf(to); wipe.classList.add('run');
+      ls.forEach((l, k) => B.anims.push(l.animate([{ transform: fr[0] }, { transform: fr[1] }], { duration: 1050, delay: k ? 80 : 0, easing: EZ, fill: 'both' })));
+      B.timers.push(setTimeout(commit, 600));
+      B.done = () => { wipe.classList.remove('run'); if (i !== n) commit(); };
+      B.timers.push(setTimeout(finish, 1160));
+    } else if (type === 'iris' || type === 'dive') {
+      const src = to.dataset.from && $(to.dataset.from);
+      const { x, y } = src ? toStage(src) : { x: 960, y: 540 };
+      const dive = type === 'dive', dur = dive ? 1400 : 1100;
+      from.style.transformOrigin = `${x}px ${y}px`;
+      from.classList.add('leaving'); commit();
+      B.anims.push(to.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(2300px at ${x}px ${y}px)` }], { duration: dur, easing: IRIS }));
+      B.anims.push(from.animate([{ transform: 'scale(1)', filter: 'brightness(1) blur(0px)' },
+        { transform: dive ? 'scale(2.2)' : 'scale(1.08)', filter: dive ? 'brightness(.35) blur(10px)' : 'brightness(.55) blur(2px)' }], { duration: dur, easing: IRIS, fill: 'forwards' }));
+      ring.style.left = x + 'px'; ring.style.top = y + 'px';
+      B.anims.push(ring.animate([{ width: '0px', height: '0px', opacity: 1 }, { width: '4600px', height: '4600px', opacity: 0 }], { duration: dur, easing: IRIS }));
+      B.done = () => { from.classList.remove('leaving'); from.style.transformOrigin = ''; };
+      B.timers.push(setTimeout(finish, dur + 40));
+    } else {
+      const sg = fwd ? 1 : -1;
+      if (!to.classList.contains('abyss')) stage.style.background = bgOf(to);
+      from.classList.add('leaving'); commit();
+      B.anims.push(from.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${-90 * sg}px) scale(.98)` }], { duration: 480, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }));
+      B.anims.push(to.animate([{ opacity: 0, transform: `translateX(${130 * sg}px)` }, { opacity: 1, transform: 'none' }], { duration: 820, delay: 90, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+      B.done = () => { from.classList.remove('leaving'); stage.style.background = ''; };
+      B.timers.push(setTimeout(finish, 930));
+    }
+  }
+  const maxStep = k => +(slides[k].dataset.steps || 0);
+  function next() { finish(); if (step < maxStep(i)) { step++; applySteps(); runCounts(slides[i]); if (water && water.on) water.drop(i ? 1228 : 760, i ? 460 : 800, .06, .3); chan && chan.postMessage({ type: 'state', i, step }); } else go(i + 1); }
+  function prev() { finish(); if (step > 0) { step--; applySteps(); chan && chan.postMessage({ type: 'state', i, step }); } else if (i > 0) go(i - 1, maxStep(i - 1)); }
+
+  /* ---- click anywhere on a slide to advance, with a ripple where you clicked ---- */
+  const stagePt = e => { const sr = stage.getBoundingClientRect(), k = sr.width / 1920; return { x: (e.clientX - sr.left) / k, y: (e.clientY - sr.top) / k }; };
+  stage.addEventListener('click', e => {
+    if (isPresenter || e.target.closest('button, a, .poll')) return;
+    const { x, y } = stagePt(e), r = document.createElement('span');
+    r.className = 'ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; stage.appendChild(r);
+    r.animate([{ width: '0px', height: '0px', opacity: .9 }, { width: '280px', height: '280px', opacity: 0 }], { duration: 750, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => r.remove();
+    if (water && water.on) water.drop(x, y, .03, .35);
+    next();
+  });
+  /* pointer: a gentle water wake and ASCII glow (no hover effects on content) */
+  stage.addEventListener('pointermove', e => {
+    const p = stagePt(e); mx = p.x; my = p.y;
+    if (water && water.on) water.trail(p.x, p.y);
+  });
+  stage.addEventListener('pointerleave', () => { mx = my = -9999; });
+
+  /* ---- controls ---- */
+  $('#next').onclick = next; $('#prev').onclick = prev;
+  const notes = $('#notes'), nb = $('#notesbtn');
+  const toggleNotes = () => nb.setAttribute('aria-pressed', notes.classList.toggle('open'));
+  nb.onclick = toggleNotes;
+  const toggleFs = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+  $('#fs').onclick = toggleFs;
+  const openPresenter = () => window.open(location.pathname + '?presenter#' + (i + 1), 'ftw-presenter', 'width=1100,height=720');
+  $('#pvbtn').onclick = openPresenter;
+
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (isPresenter) { if (['ArrowRight', ' ', 'PageDown'].includes(k)) { e.preventDefault(); chan.postMessage({ type: 'cmd', cmd: 'next' }); } if (['ArrowLeft', 'PageUp'].includes(k)) { e.preventDefault(); chan.postMessage({ type: 'cmd', cmd: 'prev' }); } return; }
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') go(0); else if (k === 'End') go(N - 1);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 'f' || k === 'F') toggleFs();
+    else if (k === 'p' || k === 'P') openPresenter();
+  });
+  let sx = null;
+  addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) (dx < 0 ? next : prev)(); sx = null; });
+
+  const ui = $('#ui'), hint = $('#hint'); let idleT;
+  setTimeout(() => hint.classList.add('idle'), 6000);
+  const wake = () => { ui.classList.remove('idle'); document.body.classList.remove('idle-ptr'); clearTimeout(idleT);
+    idleT = setTimeout(() => { ui.classList.add('idle'); document.body.classList.add('idle-ptr'); }, 2600); };
+  ['mousemove', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, wake, { passive: true })); wake();
+
+  /* ---- presenter sync ---- */
+  if (chan && !isPresenter) chan.onmessage = ({ data }) => {
+    if (data.type === 'cmd') { if (data.cmd === 'next') next(); else if (data.cmd === 'prev') prev(); else if (data.cmd === 'hello') chan.postMessage({ type: 'state', i, step }); }
+  };
+
+  if (isPresenter) {
+    document.body.classList.add('presenter'); document.title = 'Presenter · Follow the Water';
+    let t0 = Date.now();
+    const show = (si, st) => {
+      const s = slides[si], nx = slides[si + 1];
+      $('#pvNow').textContent = `${si + 1}. ${s.dataset.title}`;
+      $('#pvStep').textContent = maxStep(si) ? `Build ${st} of ${maxStep(si)}` + (st < maxStep(si) ? ' · next click reveals more' : '') : '';
+      $('#pvNotes').textContent = $('template.notes', s).content.textContent.trim();
+      $('#pvNext').textContent = st < maxStep(si) ? 'Next build on this slide' : nx ? `${si + 2}. ${nx.dataset.title}` : 'End';
+    };
+    show(0, 0);
+    chan && (chan.onmessage = ({ data }) => { if (data.type === 'state') show(data.i, data.step); });
+    chan && chan.postMessage({ type: 'cmd', cmd: 'hello' });
+    $('#pvFwd').onclick = () => chan.postMessage({ type: 'cmd', cmd: 'next' });
+    $('#pvPrev').onclick = () => chan.postMessage({ type: 'cmd', cmd: 'prev' });
+    $('#pvReset').onclick = () => { t0 = Date.now(); };
+    setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000), el = $('#pvTimer');
+      el.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); el.classList.toggle('over', s > 420);
+      $('#pvBar').style.width = Math.min(100, s / 420 * 100) + '%'; }, 250);
+    return;
+  }
+
+  /* ---- start ---- */
+  const fromHash = () => { const n = parseInt(location.hash.slice(1), 10); return isNaN(n) ? 0 : n - 1; };
+  addEventListener('hashchange', () => { const n = fromHash(); if (n !== i) go(n); });
+  i = fromHash(); i = Math.max(0, Math.min(N - 1, i));
+  if (new URLSearchParams(location.search).has('allbuilds')) step = maxStep(i);
+  addEventListener('beforeprint', () => { slides.forEach(s => $$('[data-step]', s).forEach(el => el.classList.add('shown'))); });
+  addEventListener('afterprint', () => applySteps());
+  setTimeout(render, 30);
+})();
+</script>
+
+<!-- 3D Earth + all of Earth's water, to scale (USGS). Loads three.js from a CDN; the slide still works without it. -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const wrap = document.getElementById('globe-wrap'), cv = document.getElementById('globe');
+  const W = 940, H = 800, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(W, H, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(30, W / H, .1, 100); cam.position.set(0, 0, 9);
+  const R = 1.55, EX = -1.1, EARTH_MI = 7918;
+  const base = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/';
+  const tl = new THREE.TextureLoader(); tl.setCrossOrigin('anonymous');
+  const ld = (f, srgb) => { const t = tl.load(base + f); t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+
+  const pivot = new THREE.Group(); pivot.position.x = EX; scene.add(pivot);
+  const tilt = new THREE.Group(); tilt.rotation.z = .41; pivot.add(tilt);
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 96), new THREE.MeshPhongMaterial({
+    map: ld('earth_atmos_2048.jpg', true), specularMap: ld('earth_specular_2048.jpg'), normalMap: ld('earth_normal_2048.jpg'),
+    normalScale: new THREE.Vector2(.85, .85), specular: new THREE.Color('#1d4b51'), shininess: 32, color: '#ffffff' }));
+  earth.rotation.y = -1.9; tilt.add(earth);
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 96), new THREE.MeshLambertMaterial({ map: ld('earth_clouds_1024.png', true), transparent: true, opacity: .5, depthWrite: false }));
+  tilt.add(clouds);
+  const glow = (scale, side, frag) => new THREE.Mesh(new THREE.SphereGeometry(R * scale, 64, 64), new THREE.ShaderMaterial({
+    vertexShader: 'varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+    fragmentShader: 'varying vec3 vN; void main(){ ' + frag + ' }', side, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false }));
+  pivot.add(glow(1.17, THREE.BackSide, 'float f = clamp(-vN.z, 0., 1.); gl_FragColor = vec4(.42, .9, .86, 1.) * pow(f, 1.7) * 1.7;'));
+  pivot.add(glow(1.004, THREE.FrontSide, 'float f = 1. - clamp(vN.z, 0., 1.); gl_FragColor = vec4(.45, .95, .9, 1.) * pow(f, 3.) * .9;'));
+
+  scene.add(new THREE.AmbientLight('#3a6878', 1.1));
+  const sun = new THREE.DirectionalLight('#ffffff', 2.8); sun.position.set(-5, 2.5, 4); scene.add(sun);
+  const rim = new THREE.DirectionalLight('#7fe0d6', 1.1); rim.position.set(5, -1, -3); scene.add(rim);
+
+  // All of Earth's water, as spheres to the same scale as the Earth (USGS)
+  const specs = [860, 169.5, 34.9];
+  const center = new THREE.Vector3(EX, 0, 0);
+  const drops = specs.map((mi, k) => {
+    const r = R * mi / EARTH_MI;
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 48, 48), new THREE.MeshPhysicalMaterial({ color: '#2bb3c4', roughness: .06, clearcoat: 1, clearcoatRoughness: .05, emissive: '#0b5560', emissiveIntensity: .7 }));
+    const to = new THREE.Vector3(.74, 1 - k, 0);
+    const from = center.clone().add(to.clone().sub(center).normalize().multiplyScalar(R * .96));
+    mesh.position.copy(from); mesh.scale.setScalar(.0001); scene.add(mesh);
+    const label = wrap.querySelector(`.wlab[data-k="${k}"]`);
+    label.style.setProperty('--r', Math.max(6, r * 166) + 'px');
+    return { mesh, from, to, label };
+  });
+
+  let active = false, built = 0, bTarget = 0, raf = 0, last = 0, intro = 0, spin = 0;
+  let pmx = 0, pmy = 0;
+  addEventListener('pointermove', e => { pmx = e.clientX / innerWidth - .5; pmy = e.clientY / innerHeight - .5; }, { passive: true });
+  const outBack = x => 1 + 2.4 * Math.pow(x - 1, 3) + 1.4 * Math.pow(x - 1, 2);
+  const outCubic = x => 1 - Math.pow(1 - x, 3);
+  const v = new THREE.Vector3();
+
+  // The same Earth plays two roles: the title globe, and the Earthrise behind the closing slide.
+  // The canvas (and its WebGL context) moves between the two slides.
+  const horizonHost = document.getElementById('earthrise');
+  const HZ = { scale: 10.65, from: -27.5, to: -20.05 };
+  let mode = 'title';
+  const setMode = m => {
+    if (m === mode) return; mode = m;
+    if (m === 'horizon') {
+      horizonHost.prepend(cv); renderer.setSize(1920, 1080, false);
+      cam.fov = 10; cam.aspect = 16 / 9; cam.position.set(0, 0, 60);
+      pivot.position.set(0, HZ.from, 0); pivot.scale.setScalar(HZ.scale);
+      drops.forEach(d => { d.mesh.visible = false; });
+    } else {
+      wrap.prepend(cv); renderer.setSize(W, H, false);
+      cam.fov = 30; cam.aspect = W / H; cam.position.set(0, 0, 9);
+      pivot.position.set(EX, 0, 0);
+      drops.forEach(d => { d.mesh.visible = true; });
+    }
+    cam.updateProjectionMatrix();
+  };
+
+  const loop = now => {
+    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+    const ip = reduce ? 1 : Math.min(1, (now - intro) / (mode === 'horizon' ? 2600 : 1800));
+    if (mode === 'title') {
+      spin += (.1 - spin) * Math.min(1, dt * 1.1);
+      earth.rotation.y += spin * dt; clouds.rotation.y += spin * dt * 1.3;
+      pivot.scale.setScalar(Math.max(.001, outBack(ip)));
+      cam.position.x += (pmx * .6 - cam.position.x) * .05; cam.position.y += (-pmy * .4 - cam.position.y) * .05; cam.lookAt(0, 0, 0);
+      built += (bTarget - built) * Math.min(1, dt * 2.4);
+      drops.forEach((d, k) => {
+        const b = Math.min(1, Math.max(0, built * 1.6 - k * .28)), e = 1 - Math.pow(1 - b, 3);
+        d.mesh.position.lerpVectors(d.from, d.to, e); d.mesh.scale.setScalar(Math.max(.0001, e));
+        v.copy(d.mesh.position).project(cam);
+        d.label.style.transform = `translate(${((v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v.y) / 2 * H).toFixed(1)}px)`;
+      });
+    } else {
+      earth.rotation.y += .035 * dt; clouds.rotation.y += .05 * dt;
+      pivot.position.y = HZ.from + (HZ.to - HZ.from) * outCubic(ip);
+      cam.position.x += (pmx * 2 - cam.position.x) * .04; cam.position.y += (-pmy * 1 - cam.position.y) * .04; cam.lookAt(0, 0, 0);
+    }
+    renderer.render(scene, cam);
+    if (active && !reduce) raf = requestAnimationFrame(loop);
+  };
+  const sync = () => {
+    const sid = document.body.dataset.atSlide, on = sid === 'title' || sid === 'moves';
+    if (on) setMode(sid === 'moves' ? 'horizon' : 'title');
+    bTarget = sid === 'title' && +document.body.dataset.atBuild >= 1 ? 1 : 0;
+    if (reduce && on) { built = bTarget; intro = 0; }
+    if (on && (!active || sync.last !== sid)) {
+      cancelAnimationFrame(raf); active = true; intro = performance.now(); spin = 2.6; last = performance.now(); raf = requestAnimationFrame(loop);
+    } else if (on && reduce) requestAnimationFrame(loop);
+    if (!on && active) { active = false; cancelAnimationFrame(raf); }
+    sync.last = sid;
+  };
+  document.addEventListener('ftw', sync); sync();
+})();
+
+/* ---- slide 6: one in four people, as a 3D crowd of 100 ---- */
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const cv = document.getElementById('crowd'), dots = document.getElementById('dots');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CW = 520, CH = 210;
+  let r;
+  try { r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return; }
+  r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); r.setSize(CW, CH, false); r.outputColorSpace = THREE.SRGBColorSpace;
+  cv.style.display = 'block'; dots.style.display = 'none';
+  const sc = new THREE.Scene(), cam = new THREE.PerspectiveCamera(26, CW / CH, .1, 100);
+  sc.add(new THREE.HemisphereLight('#f2fffd', '#0a3a3d', 1.7));
+  const dl = new THREE.DirectionalLight('#ffffff', 1.6); dl.position.set(-3, 6, 4); sc.add(dl);
+  const N = 100, HIT = new Set([2, 7, 11, 15, 19, 23, 28, 31, 36, 40, 44, 49, 53, 57, 60, 66, 69, 72, 77, 81, 84, 88, 93, 96, 99]);
+  const bodyG = new THREE.CapsuleGeometry(.15, .32, 4, 12); bodyG.translate(0, .31, 0);
+  const headG = new THREE.SphereGeometry(.12, 16, 12); headG.translate(0, .74, 0);
+  const mat = new THREE.MeshStandardMaterial({ roughness: .55, metalness: 0 });
+  const bodies = new THREE.InstancedMesh(bodyG, mat, N), heads = new THREE.InstancedMesh(headG, mat, N);
+  const cOff = new THREE.Color('#a9dcd8'), cOn = new THREE.Color('#ff6b4a');
+  const pos = [], order = [];
+  for (let k = 0; k < N; k++) {
+    const row = Math.floor(k / 10), col = k % 10;
+    pos.push(new THREE.Vector3((col - 4.5) * .6 + (row % 2) * .12, 0, (row - 4.5) * .55));
+    bodies.setColorAt(k, HIT.has(k) ? cOn : cOff); heads.setColorAt(k, HIT.has(k) ? cOn : cOff);
+  }
+  [...HIT].forEach((k, j) => order[k] = j);
+  sc.add(bodies, heads);
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), sv = new THREE.Vector3(), pv = new THREE.Vector3();
+  let on = false, raf = 0, t0 = 0;
+  const frame = now => {
+    const t = reduce ? 9 : (now - t0) / 1000;
+    for (let k = 0; k < N; k++) {
+      const appear = Math.min(1, Math.max(0, (t - .2 - (k % 10) * .03 - Math.floor(k / 10) * .05) / .45));
+      const s = appear < 1 ? 1 + 1.6 * Math.pow(appear - 1, 3) + .6 * Math.pow(appear - 1, 2) : 1;
+      let y = 0;
+      if (HIT.has(k)) { const lift = Math.min(1, Math.max(0, (t - 1.1 - order[k] * .05) / .5)); y = .22 * (1 - Math.pow(1 - lift, 3)) + (lift >= 1 ? Math.sin(t * 2.2 + k) * .03 : 0); }
+      pv.copy(pos[k]); pv.y = y; sv.setScalar(Math.max(.001, s)); m4.compose(pv, q, sv);
+      bodies.setMatrixAt(k, m4); heads.setMatrixAt(k, m4);
+    }
+    bodies.instanceMatrix.needsUpdate = true; heads.instanceMatrix.needsUpdate = true;
+    const a = Math.sin(t * .22) * .35;
+    cam.position.set(Math.sin(a) * 7.4, 4.1, Math.cos(a) * 7.4); cam.lookAt(0, .15, .2);
+    r.render(sc, cam);
+    if (on && !reduce) raf = requestAnimationFrame(frame);
+  };
+  const sync = () => {
+    const now = document.body.dataset.atSlide === 'real';
+    if (now && !on) { on = true; t0 = performance.now(); raf = requestAnimationFrame(frame); }
+    if (!now && on) { on = false; cancelAnimationFrame(raf); }
+  };
+  document.addEventListener('ftw', sync); sync();
+})();
+</script>
+</body>
+</html>
