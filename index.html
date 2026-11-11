@@ -198,6 +198,55 @@ em.hl{font-style:italic;color:var(--aqua)}
 .pc li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;margin-top:13px;background:currentColor;opacity:.6}
 .guess{font-family:var(--mono);font-size:22px;color:var(--aqua);min-height:30px}
 
+/* ChatGPT vs almonds */
+#versus{gap:30px}
+#versus .hd,#versus .arena,#versus .vs-ask{transition:filter .9s ease,opacity .9s ease}
+.arena{display:flex;align-items:center;gap:40px}
+.scale{width:560px;height:490px;flex:none;overflow:visible}
+.vs-card{flex:1;min-width:0;align-self:stretch;margin:40px 0 20px;background:var(--ink2);border:2px solid transparent;border-radius:28px;padding:34px 38px;display:flex;flex-direction:column;gap:14px;transition:border-color .6s ease,box-shadow .8s ease,opacity .8s ease}
+.vs-top{display:flex;align-items:center;gap:18px}
+.vs-l{width:60px;height:60px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:26px;background:var(--ink3);color:var(--glacier)}
+.vs-card.a .vs-l{background:var(--aqua);color:var(--ink)}
+.vs-card.b .vs-l{background:var(--ember);color:var(--ink)}
+.vs-card h3{font-size:44px}
+.vs-what{font-size:30px;line-height:1.36;color:#DCEAEC}
+.vs-what em.hl{font-style:normal;font-weight:600}
+.vs-card.b .vs-what em.hl{color:var(--ember-l)}
+.vs-fact{font-family:var(--mono);font-size:21px;color:var(--mist)}
+.vs-res{margin-top:auto;padding-top:20px;border-top:1.5px solid rgba(169,198,204,.22);display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.vs-n{font-family:var(--serif);font-weight:700;font-size:68px;line-height:1;letter-spacing:-.03em;font-variation-settings:'opsz' 144;white-space:nowrap}
+.vs-card.a .vs-n{color:var(--aqua)}
+.vs-card.b .vs-n{color:var(--ember)}
+.vs-u{font-family:var(--mono);font-size:22px;color:var(--mist);letter-spacing:.06em}
+.vs-x{margin-top:6px}
+#versus:has(.vs-res.shown) .vs-card.b{border-color:var(--ember);box-shadow:0 24px 90px rgba(255,107,74,.22)}
+#versus:has(.vs-res.shown) .vs-card.a{opacity:.82}
+.vs-ask{font-family:var(--mono);font-size:26px;letter-spacing:.08em;color:var(--aqua);text-align:center;text-transform:uppercase}
+#versus:has(.vs-res.shown) .vs-ask{opacity:0!important}
+/* the punchline takes over the slide */
+.vs-kick{position:absolute;inset:0;padding:120px 150px 150px;display:flex;flex-direction:column;justify-content:center;gap:34px;z-index:3;background:radial-gradient(ellipse at 50% 50%,rgba(6,26,36,.9) 0%,rgba(6,26,36,.78) 75%);pointer-events:none}
+.vs-kick.shown{transform:none}
+.vs-kick .chap{color:var(--ember)}
+.vs-line{font-family:var(--serif);font-weight:650;font-size:88px;line-height:1.06;letter-spacing:-.02em;font-variation-settings:'opsz' 144;max-width:1560px;color:var(--glacier)}
+#versus:has(.vs-kick.shown) .hd,#versus:has(.vs-kick.shown) .arena{filter:blur(10px);opacity:.3}
+.vs-bars{display:flex;flex-direction:column;gap:18px;margin-top:10px}
+.vs-row{display:grid;grid-template-columns:300px 1fr 150px;align-items:center;gap:24px}
+.vs-lab{font-family:var(--mono);font-size:22px;letter-spacing:.04em;color:var(--mist)}
+.vs-lab b{color:var(--aqua);font-variant-numeric:tabular-nums;display:inline-block;min-width:2ch;text-align:right}
+.vs-val{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--aqua)}
+.vs-val.e{color:var(--ember)}
+.vs-val{opacity:0;transition:opacity .5s ease}
+.vs-kick.shown .vs-row:first-child .vs-val{opacity:1;transition-delay:2.4s}
+.vs-kick.shown .vs-row:last-child .vs-val{opacity:1;transition-delay:3.5s}
+.vs-src{opacity:0;transition:opacity .6s ease}
+.vs-kick.shown .vs-src{opacity:1;transition-delay:3.9s}
+.vs-yrs{display:flex;gap:3px;height:54px;width:93.6%}
+.vs-yrs i{flex:1;border-radius:4px;background:var(--aqua);opacity:0;transform:scaleY(.2);transform-origin:bottom;transition:opacity .25s ease,transform .45s var(--ease)}
+.vs-kick.shown .vs-yrs i{opacity:1;transform:none;transition-delay:calc(var(--k) * 55ms + 700ms)}
+.vs-day{height:54px;border-radius:6px;background:rgba(255,107,74,.14);overflow:hidden}
+.vs-day i{display:block;height:100%;width:0;background:var(--ember);border-radius:6px;transition:width 1.1s cubic-bezier(.7,0,.2,1)}
+.vs-kick.shown .vs-day i{width:100%;transition-delay:2.55s}
+
 /* real problem */
 .panel{flex:1;display:flex;flex-direction:column;gap:14px}
 .panel .vis{height:210px;display:flex;align-items:center}
@@ -247,8 +296,8 @@ em.hl{font-style:italic;color:var(--aqua)}
 /* ai use + sources */
 .card{background:var(--paper);border:1px solid var(--rule);border-radius:26px;padding:36px 40px;display:flex;flex-direction:column;gap:16px}
 .card ul{padding-left:30px;font-size:28px;line-height:1.5}
-.cites{columns:2;column-gap:64px;font-size:23px;line-height:1.4;color:var(--slate)}
-.cites p{padding-left:44px;position:relative;break-inside:avoid;margin-bottom:18px}
+.cites{columns:2;column-gap:64px;font-size:21px;line-height:1.36;color:var(--slate)}
+.cites p{padding-left:44px;position:relative;break-inside:avoid;margin-bottom:14px}
 .cites p b{position:absolute;left:0;top:2px;font-family:var(--mono);font-size:17px;color:var(--teal)}
 
 /* =========================================================
@@ -367,7 +416,7 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
   .slide.active .viz .tfill{transform:none}
 }
 @media (prefers-reduced-motion: reduce){
-  .wi,.rv,[data-step],.glass .fill,.clock .wedge,.clock .hand,.donut .seg,.dots i,.mark path{transition:none!important}
+  .wi,.rv,[data-step],.glass .fill,.clock .wedge,.clock .hand,.donut .seg,.dots i,.mark path,.vs-yrs i,.vs-day i,.vs-val,.vs-src{transition:none!important}
   .bottle .lvl,.bottle .q,.glass .vap i,.pipe .d{animation:none!important}
   #wipe{display:none}
 }
@@ -390,6 +439,8 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
   #dots{display:grid!important}
   .viz .needle{transform:rotate(56deg)!important}.viz .tfill{transform:none!important}
   .emb .arc{stroke-dasharray:66.7 100!important}.emb .jw{transform:translateY(36.5px)!important}
+  .vs-yrs i,.vs-val,.vs-src{opacity:1!important;transform:none!important;transition:none!important}.vs-day i{width:100%!important;transition:none!important}
+  #versus .hd,#versus .arena{transition:none!important}.vs-kick{background:rgba(6,26,36,.86)!important}
   *{animation:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
@@ -605,6 +656,69 @@ Q: Did anyone come in thinking AI was the biggest water problem?
 If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.</template>
 </section>
 
+<!-- ============ 5b · CHATGPT VS ALMONDS ============ -->
+<section class="slide dark" id="versus" data-title="ChatGPT vs. almonds" data-chapter="2" data-steps="2" data-enter="push">
+  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>Which uses more water?</h2></header>
+  <div class="arena">
+    <div class="vs-card a rv" style="--d:1">
+      <div class="vs-top"><b class="vs-l">A</b><h3>ChatGPT</h3></div>
+      <p class="vs-what">Every question the whole world asks it, for <em class="hl">one whole year</em>.</p>
+      <p class="vs-fact">≈ 2.5 billion questions a day</p>
+      <div class="vs-res" data-step="1"><span class="vs-n"><span class="count" data-to="78">78</span> million</span><span class="vs-u">gallons</span></div>
+    </div>
+    <svg class="scale rv" style="--d:2" viewBox="0 0 640 560" role="img" aria-label="A balance scale. It teeters near level, then tips hard toward the almonds.">
+      <path d="M210 528 L430 528 L400 494 L240 494 Z" fill="#1A4559"/>
+      <rect x="312" y="110" width="16" height="390" rx="4" fill="#1A4559"/>
+      <g id="vbeam"><rect x="84" y="103" width="472" height="14" rx="7" fill="#A9C6CC"/><circle cx="90" cy="110" r="9" fill="#EEF5F3"/><circle cx="550" cy="110" r="9" fill="#EEF5F3"/></g>
+      <circle cx="320" cy="110" r="20" fill="#0B2A3C" stroke="#A9C6CC" stroke-width="5"/>
+      <g id="vpanA" transform="translate(90 110)">
+        <path d="M0 0 L-78 150 M0 0 L78 150" stroke="#A9C6CC" stroke-width="2.5" fill="none"/>
+        <path d="M-84 150 Q0 214 84 150 Z" fill="#7FE0D6"/>
+        <g transform="translate(0 112)"><path d="M-34 -26 h68 a10 10 0 0 1 10 10 v30 a10 10 0 0 1 -10 10 h-40 l-16 14 v-14 h-12 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 10 -10 z" fill="#0B2A3C" stroke="#7FE0D6" stroke-width="3"/><circle cx="-16" cy="-1" r="4" fill="#7FE0D6"/><circle cx="0" cy="-1" r="4" fill="#7FE0D6"/><circle cx="16" cy="-1" r="4" fill="#7FE0D6"/></g>
+      </g>
+      <g id="vpanB" transform="translate(550 110)">
+        <path d="M0 0 L-78 150 M0 0 L78 150" stroke="#A9C6CC" stroke-width="2.5" fill="none"/>
+        <path d="M-84 150 Q0 214 84 150 Z" fill="#FF6B4A"/>
+        <g fill="#D9A273" stroke="#8A5A36" stroke-width="2.5">
+          <path d="M-30 150 C-50 136 -46 104 -30 88 C-14 104 -10 136 -30 150 Z" transform="rotate(-24 -30 120)"/>
+          <path d="M30 150 C10 136 14 104 30 88 C46 104 50 136 30 150 Z" transform="rotate(24 30 120)"/>
+          <path d="M0 152 C-22 136 -18 100 0 82 C18 100 22 136 0 152 Z"/>
+        </g>
+      </g>
+    </svg>
+    <div class="vs-card b rv" style="--d:3">
+      <div class="vs-top"><b class="vs-l">B</b><h3>California almonds</h3></div>
+      <p class="vs-what">Every almond orchard in California, for <em class="hl">one month</em>.</p>
+      <p class="vs-fact">≈ 1.4 million acres of orchards</p>
+      <div class="vs-res" data-step="1"><span class="vs-n"><span class="count" data-to="76">76</span> billion</span><span class="vs-u">gallons</span><span class="pill ember vs-x">≈ 1,000× more</span></div>
+    </div>
+  </div>
+  <p class="vs-ask rv" style="--d:4">Hands up: A or B?</p>
+  <div class="vs-kick" data-step="2">
+    <p class="chap"><i></i>Now stretch it out</p>
+    <p class="vs-line"><span style="color:var(--aqua)">30 years</span> of ChatGPT uses less water than <span style="color:var(--ember);white-space:nowrap">1 day</span> of California almonds.</p>
+    <div class="vs-bars">
+      <div class="vs-row"><span class="vs-lab">ChatGPT · <b id="vsyr">30</b> years</span><div class="vs-yrs" id="vsyrs"></div><span class="vs-val">2.3B gal</span></div>
+      <div class="vs-row"><span class="vs-lab">Almonds · 1 day</span><div class="vs-day"><i></i></div><span class="vs-val e">2.5B gal</span></div>
+    </div>
+    <p class="src vs-src">ChatGPT: 0.000085 gal per question (OpenAI) × 2.5B a day. Almonds: 2.79M acre-feet a year (industry’s own, lowest estimate).<br>Independent researchers put AI’s water ~4× higher. Even then: 8 years of ChatGPT ≈ 1 day of almonds.</p>
+  </div>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:45) Point: Make it personal: the AI everyone uses vs. a snack nobody worries about.
+
+[Don’t give anything away. Let the scale wobble.]
+Let’s make it personal. Quick bet.
+A: every question the whole world asks ChatGPT, for an entire year. That’s about two and a half billion questions a day.
+B: every almond orchard in California, for just one month.
+Q: Hands up if you think A uses more. Now B. Think about it, this one’s closer than you’d expect.
+[Count hands, then click. The scale slams down on the almonds.]
+It’s not close at all. A whole year of ChatGPT: about 78 million gallons. One month of almonds: about 76 billion. The almonds win by about a thousand times.
+[Click: the punchline takes over the screen. Let the bars finish filling.]
+So let’s stretch it out. Run ChatGPT for 30 straight years, and it still uses less water than California’s almonds use in a single day.
+If asked: the ChatGPT number is OpenAI’s own, 0.000085 gallons per question, and it only counts answering questions, not training or the power plants. Independent researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.
+If asked: the almond number is the almond industry’s own estimate, the lowest one out there, and it’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much, so the real gap is probably even bigger.</template>
+</section>
+
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
 <section class="slide tealbg" id="real" data-title="The real problem" data-chapter="3" data-enter="rise" data-card="03|The real problem">
   <header class="hd"><p class="chap rv"><i></i>03 · The real problem</p><h2 data-split>Farms, pipes and people</h2></header>
@@ -755,21 +869,25 @@ Biggest lesson: AI gave me different numbers for the same fact, so you still hav
 <section class="slide paper" id="sources" data-title="Works cited" data-chapter="5" data-enter="push">
   <header class="hd"><p class="chap rv"><i></i>Sources</p><h2 data-split>Works cited</h2></header>
   <div class="cites rv" style="--d:1">
-    <p><b>01</b>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
-    <p><b>02</b>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers</a>.</p>
-    <p><b>03</b>Euronews. (2023, Apr. 20). <a href="https://www.euronews.com/green/2023/04/20/chatgpt-drinks-a-bottle-of-fresh-water-for-every-20-to-50-questions-we-ask-study-warns">ChatGPT ‘drinks’ a bottle of fresh water for every 20 to 50 questions</a>.</p>
-    <p><b>04</b>Latitude Media. (2026, June 11). <a href="https://latitudemedia.com/news/amazon-finally-reports-its-annual-water-use-at-data-centers/">Amazon finally reports its annual water use at data centers</a>.</p>
-    <p><b>05</b>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 US Data Center Energy Usage Report</i></a>.</p>
-    <p><b>06</b>Levi Strauss &amp; Co. (n.d.). <a href="https://www.levistrauss.com/sustainability/water-stewardship/">Water stewardship</a>.</p>
-    <p><b>07</b>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
-    <p><b>08</b>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
-    <p><b>09</b>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">What AQUASTAT 2025 reveals about agriculture</a>.</p>
-    <p><b>10</b>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
-    <p><b>11</b>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
-    <p><b>12</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
-    <p><b>13</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
-    <p><b>14</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
-    <p><b>15</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
+    <p><b>01</b>Almond Board of California. (n.d.). <a href="https://www.almonds.com/why-almonds/almond-living-magazine/latest-news-almonds-and-water">Almonds and water</a> (2.79 million acre-feet a year).</p>
+    <p><b>02</b>Altman, S. (2025, June 10). <a href="https://blog.samaltman.com/the-gentle-singularity">The gentle singularity</a>.</p>
+    <p><b>03</b>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
+    <p><b>04</b>California Water Impact Network. (2024, Sept. 23). <a href="https://www.c-win.org/cwin-water-blog/2024/9/23/california-almond-water-usage-updated">California almond water usage: Updated</a>.</p>
+    <p><b>05</b>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers</a>.</p>
+    <p><b>06</b>Euronews. (2023, Apr. 20). <a href="https://www.euronews.com/green/2023/04/20/chatgpt-drinks-a-bottle-of-fresh-water-for-every-20-to-50-questions-we-ask-study-warns">ChatGPT ‘drinks’ a bottle of fresh water for every 20 to 50 questions</a>.</p>
+    <p><b>07</b>Latitude Media. (2026, June 11). <a href="https://latitudemedia.com/news/amazon-finally-reports-its-annual-water-use-at-data-centers/">Amazon finally reports its annual water use at data centers</a>.</p>
+    <p><b>08</b>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 US Data Center Energy Usage Report</i></a>.</p>
+    <p><b>09</b>Levi Strauss &amp; Co. (n.d.). <a href="https://www.levistrauss.com/sustainability/water-stewardship/">Water stewardship</a>.</p>
+    <p><b>10</b>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
+    <p><b>11</b>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
+    <p><b>12</b>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">What AQUASTAT 2025 reveals about agriculture</a>.</p>
+    <p><b>13</b>TechCrunch. (2025, July 21). <a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">ChatGPT users send 2.5 billion prompts a day</a>.</p>
+    <p><b>14</b>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
+    <p><b>15</b>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
+    <p><b>16</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
+    <p><b>17</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
+    <p><b>18</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
+    <p><b>19</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
   <template class="notes">(0:05) Point: Close and take questions.
@@ -1124,6 +1242,40 @@ void main(){
     if (!on) { leakOn = false; cancelAnimationFrame(leakRaf); }
   };
   leakFrame();
+
+  /* ---- ChatGPT vs almonds: a balance that teeters, then slams; 30 year-blocks vs one day ---- */
+  const vsyrs = $('#vsyrs');
+  for (let k = 0; k < 30; k++) { const b = document.createElement('i'); b.style.setProperty('--k', k); vsyrs.appendChild(b); }
+  const VB = $('#vbeam'), VA = $('#vpanA'), VBp = $('#vpanB'), PX = 320, PY = 110, ARM = 230, TIP = 15;
+  let vsA = 0, vsV = 0, vsStep = -1, vsRaf = 0, vsT0 = 0, vsYrT = [];
+  const vsPose = a => {
+    const r = a * Math.PI / 180, dx = ARM * Math.cos(r), dy = ARM * Math.sin(r);
+    VB.setAttribute('transform', `rotate(${a.toFixed(3)} ${PX} ${PY})`);
+    VA.setAttribute('transform', `translate(${(PX - dx).toFixed(2)} ${(PY - dy).toFixed(2)})`);
+    VBp.setAttribute('transform', `translate(${(PX + dx).toFixed(2)} ${(PY + dy).toFixed(2)})`);
+  };
+  const vsFrame = t => {
+    const s = (t - vsT0) / 1000;
+    // before the reveal it hovers near level, as if it could go either way
+    const target = vsStep >= 1 ? TIP : 3.2 * Math.sin(s * 1.25) + 1.3 * Math.sin(s * 2.7 + 1);
+    const k = vsStep >= 1 ? .016 : .05, c = vsStep >= 1 ? .085 : .25;
+    vsV += (target - vsA) * k - vsV * c; vsA += vsV; vsPose(vsA);
+    vsRaf = requestAnimationFrame(vsFrame);
+  };
+  const vsSet = (on, st) => {
+    vsYrT.forEach(clearTimeout); vsYrT = [];
+    if (!on) { cancelAnimationFrame(vsRaf); vsRaf = 0; vsStep = -1; return; }
+    const was = vsStep; vsStep = st;
+    if (was === -1) { vsA = st >= 1 ? TIP : 0; vsV = 0; vsT0 = performance.now(); }
+    if (st >= 1 && was === 0) vsV = -1.2;   // a small lift before it drops: the "wait for it" moment
+    if (reduce) { vsPose(st >= 1 ? TIP : 0); return; }
+    if (!vsRaf) vsRaf = requestAnimationFrame(vsFrame);
+    const yr = $('#vsyr');
+    if (st >= 2 && was < 2) { yr.textContent = '1'; for (let y = 2; y <= 30; y++) vsYrT.push(setTimeout(() => { yr.textContent = y; }, 700 + (y - 1) * 55)); }
+    else yr.textContent = '30';
+  };
+  vsPose(TIP);
+  document.addEventListener('ftw', e => vsSet(e.detail.id === 'versus', e.detail.step));
 
   /* ---- render ---- */
   const notesText = $('#notestext');
