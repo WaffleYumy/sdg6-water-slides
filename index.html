@@ -394,7 +394,7 @@ em.hl{font-style:italic;color:var(--aqua)}
    ========================================================= */
 #chapters{position:fixed;left:0;right:0;top:0;height:5px;display:flex;gap:3px;z-index:5}
 #chapters button{flex:1;position:relative;background:rgba(255,255,255,.1);height:5px;padding:0}
-#chapters button i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--aqua);transition:width .5s ease}
+#chapters button i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--aqua);transition:width .4s cubic-bezier(.2,.8,.2,1)}
 #chapters button:hover{background:rgba(255,255,255,.25)}
 #ui{position:fixed;right:16px;bottom:14px;display:flex;align-items:center;gap:4px;z-index:6;background:rgba(6,26,36,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:5px;border-radius:14px;border:1px solid rgba(127,224,214,.15);color:#DDEBEC;font:13px var(--mono);transition:opacity .45s}
 #ui.idle,#hint.idle{opacity:0}
@@ -1693,6 +1693,7 @@ void main(){
   const applySteps = () => {
     $$('[data-step]', slides[i]).forEach(el => el.classList.toggle('shown', +el.dataset.step <= step));
     document.body.dataset.atSlide = slides[i].id; document.body.dataset.atBuild = step;
+    drawChapters();
     document.dispatchEvent(new CustomEvent('ftw', { detail: { id: slides[i].id, step } }));
   };
   const render = () => {
@@ -1724,9 +1725,13 @@ void main(){
   const cb = $('#chapters');
   for (let c = 0; c < chapCount; c++) { const b = document.createElement('button'); b.setAttribute('aria-label', 'Chapter ' + c); b.appendChild(document.createElement('i'));
     b.onclick = () => go(chapIdx.indexOf(c)); cb.appendChild(b); }
-  function drawChapters() { const cur = chapIdx[i];
+  // The bar shows where you are: each slide gets an equal share of its chapter, and every click
+  // (including the extra clicks inside a slide) fills part of that share. It is drawn the moment
+  // you click, not when the transition finishes, so it never lags or jumps.
+  function drawChapters(at = i, st = step) { const cur = chapIdx[at];
+    const builds = +slides[at].dataset.steps || 0, part = (Math.min(st, builds) + 1) / (builds + 1);
     [...cb.children].forEach((b, c) => { const inC = chapIdx.map((x, k) => x === c ? k : -1).filter(k => k >= 0);
-      const done = c < cur ? 1 : c > cur ? 0 : (inC.indexOf(i) + 1) / inC.length; b.firstChild.style.width = done * 100 + '%'; }); }
+      const done = c < cur ? 1 : c > cur ? 0 : (inC.indexOf(at) + part) / inC.length; b.firstChild.style.width = (done * 100).toFixed(3) + '%'; }); }
 
   /* ---- transitions: each slide picks how it enters (data-enter) ----
      wave  = liquid wipe across (new chapter)
@@ -1743,6 +1748,7 @@ void main(){
   function go(n, toStep = 0) {
     n = Math.max(0, Math.min(N - 1, n));
     finish();
+    drawChapters(n, toStep);
     if (n === i) { step = toStep; render(); return; }
     visit++;
     const from = slides[i], to = slides[n], fwd = n > i;
