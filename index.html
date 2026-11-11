@@ -202,6 +202,9 @@ em.hl{font-style:italic;color:var(--aqua)}
 #versus{gap:30px;overflow:hidden}
 #versus,#stage:has(.leaving) #versus{background:radial-gradient(ellipse 80% 70% at 50% 58%,#0F3447 0%,#0A2433 55%,#061A24 100%)}
 #versus .hd,#versus .arena,#versus .vs-ask{position:relative;z-index:1;transition:filter .9s ease,opacity .9s ease}
+#vs3d{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:0;transition:filter .9s ease,opacity .9s ease}
+#versus.gl .scale,#versus.gl .vs-spot,#versus.gl #vsfx{visibility:hidden}
+#versus:has(.vs-kick.shown) #vs3d{filter:blur(14px);opacity:.45}
 #vsfx{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:2}
 /* stage lighting: a cool spotlight on the scale, a warm one that finds the winner */
 .vs-spot{position:absolute;top:-40px;left:50%;width:900px;height:1120px;margin-left:-450px;pointer-events:none;z-index:0;
@@ -226,8 +229,7 @@ em.hl{font-style:italic;color:var(--aqua)}
   transition:border-color .7s ease,box-shadow .9s ease,opacity .8s ease,filter .8s ease,transform .9s var(--ease)}
 .vs-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.16) 46%,transparent 62%);transform:translateX(-120%)}
 .vs-card > *{position:relative}
-.vs-wm{position:absolute!important;right:-14px;bottom:-96px;font-family:var(--serif);font-weight:800;font-size:380px;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(127,224,214,.09);pointer-events:none;user-select:none}
-.vs-card.b .vs-wm{-webkit-text-stroke-color:rgba(255,107,74,.1)}
+.vs-card.b .vs-top{display:flex;align-items:center;gap:18px}
 .vs-top{display:flex;align-items:center;gap:18px}
 .vs-l{width:62px;height:62px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:26px;color:var(--ink)}
 .vs-card.a .vs-l{background:radial-gradient(circle at 35% 30%,#D9FBF6,var(--aqua) 55%,#2FA79C);box-shadow:0 0 0 6px rgba(127,224,214,.12),0 0 30px rgba(127,224,214,.45)}
@@ -248,7 +250,6 @@ em.hl{font-style:italic;color:var(--aqua)}
 #versus:has(.vs-res.shown) .vs-card.a{opacity:.72;filter:saturate(.6);transform:scale(.97)}
 #versus.hit .vs-card.b::before{animation:vsSweep 1.1s cubic-bezier(.3,.6,.3,1) .05s}
 #versus.hit .vs-x{animation:vsPop .7s cubic-bezier(.3,1.6,.5,1) .5s both}
-#versus.hit .vs-card.b{animation:vsKnock .55s ease-out}
 @keyframes vsSweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
 @keyframes vsPop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
 @keyframes vsKnock{0%{transform:translateY(0)}25%{transform:translateY(10px)}60%{transform:translateY(-3px)}100%{transform:none}}
@@ -290,9 +291,9 @@ em.hl{font-style:italic;color:var(--aqua)}
 /* one day of almonds pours in as a single flood */
 .vs-day{position:relative;height:58px;border-radius:7px;background:rgba(255,107,74,.08);box-shadow:inset 0 0 0 1px rgba(255,107,74,.25)}
 .vs-day i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:7px;overflow:hidden;background:linear-gradient(180deg,#FFC2B2,#FF6B4A 35%,#B8381F);box-shadow:0 0 44px rgba(255,107,74,.5);transition:width 1.1s cubic-bezier(.7,0,.2,1)}
-.vs-day i::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,0) 0 46px,rgba(255,255,255,.2) 46px 64px,rgba(255,255,255,0) 64px 110px);background-size:220px 100%;animation:vsFlow 1.1s linear infinite}
+.vs-day i::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent) no-repeat;background-size:30% 100%;box-shadow:inset 0 1px 0 rgba(255,255,255,.45);animation:vsFlow 2.6s cubic-bezier(.5,0,.5,1) infinite}
 .vs-day i::after{content:"";position:absolute;right:0;top:0;bottom:0;width:26px;background:linear-gradient(90deg,transparent,rgba(255,240,234,.9));filter:blur(3px)}
-@keyframes vsFlow{to{background-position:220px 0}}
+@keyframes vsFlow{from{background-position:-40% 0}to{background-position:140% 0}}
 .vs-kick.shown .vs-day i{width:100%;transition-delay:2.55s}
 .vs-mark{position:absolute;left:93.6%;top:-80px;bottom:-12px;border-left:2px dashed rgba(127,224,214,.75);opacity:0;transition:opacity .5s ease}
 .vs-kick.shown .vs-mark{opacity:1;transition-delay:2.4s}
@@ -488,7 +489,8 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
   .dots svg.hit{fill:var(--ember)!important}
   .days circle.f{stroke-dasharray:220 220!important}
   .mark path{stroke-dashoffset:0!important}
-  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,.vs-spot{display:none!important}
+  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,#vs3d,.vs-spot{display:none!important}
+  #versus .scale{visibility:visible!important}
   #dots{display:grid!important}
   .viz .needle{transform:rotate(56deg)!important}.viz .tfill{transform:none!important}
   .emb .arc{stroke-dasharray:66.7 100!important}.emb .jw{transform:translateY(36.5px)!important}
@@ -712,11 +714,11 @@ If asked: the two numbers are from different years, 2015 and 2023, so it’s a r
 <!-- ============ 5b · CHATGPT VS ALMONDS ============ -->
 <section class="slide dark" id="versus" data-title="ChatGPT vs. almonds" data-chapter="2" data-steps="2" data-enter="push">
   <div class="vs-spot" aria-hidden="true"></div><div class="vs-spot b" aria-hidden="true"></div>
+  <canvas id="vs3d" width="1920" height="1080" aria-hidden="true"></canvas>
   <canvas id="vsfx" width="1920" height="1080" aria-hidden="true"></canvas>
   <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>Which uses more water?</h2></header>
   <div class="arena">
     <div class="vs-card a rv" style="--d:1">
-      <span class="vs-wm" aria-hidden="true">A</span>
       <div class="vs-top"><b class="vs-l">A</b><h3>ChatGPT</h3></div>
       <p class="vs-what">Every question the whole world asks it, for <em class="hl">one whole year</em>.</p>
       <p class="vs-fact">≈ 2.5 billion questions a day</p>
@@ -793,7 +795,6 @@ If asked: the two numbers are from different years, 2015 and 2023, so it’s a r
       </g>
     </svg>
     <div class="vs-card b rv" style="--d:3">
-      <span class="vs-wm" aria-hidden="true">B</span>
       <div class="vs-top"><b class="vs-l">B</b><h3>California almonds</h3></div>
       <p class="vs-what">Every almond orchard in California, for <em class="hl">one month</em>.</p>
       <p class="vs-fact">≈ 1.4 million acres of orchards</p>
@@ -1364,7 +1365,7 @@ void main(){
   let vsA = 0, vsV = 0, vsStep = -1, vsRaf = 0, vsT0 = 0, vsYrT = [], vsHit = true;
   const vsPose = a => {
     const r = a * Math.PI / 180, dx = ARM * Math.cos(r), dy = ARM * Math.sin(r);
-    VB.setAttribute('transform', `rotate(${a.toFixed(3)} ${PX} ${PY})`);
+    vsEl._a = a; VB.setAttribute('transform', `rotate(${a.toFixed(3)} ${PX} ${PY})`);
     VN.setAttribute('transform', `rotate(${Math.max(-33, Math.min(33, a * 1.9)).toFixed(3)} ${PX} ${PY})`);
     VA.setAttribute('transform', `translate(${(PX - dx).toFixed(2)} ${(PY - dy).toFixed(2)})`);
     VBp.setAttribute('transform', `translate(${(PX + dx).toFixed(2)} ${(PY + dy).toFixed(2)})`);
@@ -1410,12 +1411,14 @@ void main(){
     if (fxOn) fxRaf = requestAnimationFrame(fxFrame);
   };
   const fxSet = on => {
-    if (reduce) return;
+    if (reduce || vsEl.classList.contains('gl')) return;
     if (on && !fxOn) { fxOn = true; fxLast = 0; fxRaf = requestAnimationFrame(fxFrame); }
     if (!on && fxOn) { fxOn = false; cancelAnimationFrame(fxRaf); PARTS = []; RINGS = []; flash = null; vcx.clearRect(0, 0, 1920, 1080); }
   };
   const vsImpact = () => {
     vsEl.classList.remove('hit'); void vsEl.offsetWidth; vsEl.classList.add('hit');
+    vsEl.dispatchEvent(new CustomEvent('vsimpact'));
+    if (vsEl.classList.contains('gl')) return;
     const sr = stage.getBoundingClientRect(), k = sr.width / 1920, r = VBp.getBoundingClientRect();
     const x = (r.left + r.width / 2 - sr.left) / k, y = (r.top + r.height * .68 - sr.top) / k;
     flash = { x, y, t: 0 };
@@ -1809,6 +1812,278 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
   document.addEventListener('ftw', sync); sync();
 })();
 
+</script>
+<!-- ChatGPT vs almonds: the balance as a real 3D object. The SVG scale stays as the fallback. -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const slide = document.getElementById('versus'), cv = document.getElementById('vs3d');
+  if (!slide || !cv) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); renderer.setSize(1920, 1080, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(30, 16 / 9, .1, 100);
+  const LOOK = new THREE.Vector3(0, 1.3, 0), CAM = new THREE.Vector3(0, 3.5, 11.6);
+  cam.position.copy(CAM); cam.lookAt(LOOK);
+
+  /* ---- studio reflections: a dark room with three softboxes (teal left, warm right, white top) ---- */
+  {
+    const env = new THREE.Scene();
+    env.add(new THREE.Mesh(new THREE.BoxGeometry(24, 24, 24), new THREE.MeshBasicMaterial({ color: '#0a1a23', side: THREE.BackSide })));
+    const panel = (w, h, c, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
+    panel(9, 2.4, '#ffffff', 5, 0, 10, 2);
+    panel(2.6, 9, '#9ff0e6', 3.2, -10, 2, 3);
+    panel(2.6, 9, '#ffb6a2', 2.6, 10, 1, -2);
+    panel(12, .8, '#ffffff', 2.2, 0, .5, 10);
+    const pm = new THREE.PMREMGenerator(renderer);
+    scene.environment = pm.fromScene(env, .03).texture; pm.dispose();
+  }
+
+  /* ---- materials ---- */
+  const steel = new THREE.MeshPhysicalMaterial({ color: '#cfdcdf', metalness: 1, roughness: .22, clearcoat: .4, clearcoatRoughness: .2, envMapIntensity: 1.25 });
+  const brushed = new THREE.MeshPhysicalMaterial({ color: '#aebfc4', metalness: 1, roughness: .38, envMapIntensity: 1.1 });
+  const lacquer = new THREE.MeshPhysicalMaterial({ color: '#0a1e29', metalness: .1, roughness: .28, clearcoat: 1, clearcoatRoughness: .06, envMapIntensity: 1 });
+  const glowTeal = new THREE.MeshBasicMaterial({ color: new THREE.Color('#7FE0D6').multiplyScalar(1.6) });
+  const shadowed = o => { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; };
+  const lathe = (pts, mat, seg = 96) => new THREE.Mesh(new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg), mat);
+
+  const rig = new THREE.Group(); scene.add(rig);
+
+  /* ---- plinth and column ---- */
+  rig.add(shadowed(lathe([[0, 0], [.8, 0], [.83, .02], [.83, .085], [.8, .105], [.64, .118], [.61, .16], [0, .16]], lacquer)));
+  const inlay = new THREE.Mesh(new THREE.TorusGeometry(.625, .0045, 8, 160), glowTeal); inlay.rotation.x = Math.PI / 2; inlay.position.y = .139; rig.add(inlay);
+  const trim = new THREE.Mesh(new THREE.TorusGeometry(.832, .011, 12, 160), steel); trim.rotation.x = Math.PI / 2; trim.position.y = .055; rig.add(trim);
+  rig.add(shadowed(lathe([[0, .16], [.21, .16], [.21, .19], [.14, .23], [.085, .3], [.062, .42], [.052, .6], [.07, .62], [.07, .66], [.052, .68], [.047, 1.96], [.07, 2.0], [.09, 2.05], [.065, 2.09], [.065, 2.14], [0, 2.14]], steel)));
+  // yoke that cradles the pivot
+  for (const z of [-.085, .085]) { const p = new THREE.Mesh(new THREE.BoxGeometry(.11, .2, .022), brushed); p.position.set(0, 2.2, z); rig.add(shadowed(p)); }
+
+  /* ---- dial behind the beam ---- */
+  const P = new THREE.Vector3(0, 2.25, 0);
+  const dial = new THREE.Group(); dial.position.copy(P); dial.position.z = -.11; rig.add(dial);
+  const arc = new THREE.Mesh(new THREE.RingGeometry(.5, .56, 96, 1, Math.PI / 2 - .62, 1.24), new THREE.MeshPhysicalMaterial({ color: '#16384a', metalness: .6, roughness: .35, side: THREE.DoubleSide })); dial.add(arc);
+  for (let d = -30; d <= 30; d += 5) {
+    const big = d % 15 === 0, t = new THREE.Mesh(new THREE.BoxGeometry(.008, big ? .07 : .04, .006), d === 0 ? glowTeal : steel), r = d * Math.PI / 180;
+    t.position.set(-Math.sin(r) * (big ? .565 : .55), Math.cos(r) * (big ? .565 : .55), .01); t.rotation.z = r; dial.add(t);
+  }
+  const label = (txt, col) => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+    x.fillStyle = col; x.font = '600 44px JetBrains Mono, monospace'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(txt, 32, 34);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.Mesh(new THREE.PlaneGeometry(.14, .14), new THREE.MeshBasicMaterial({ map: t, transparent: true })); };
+  const la = label('A', '#7FE0D6'), lb = label('B', '#FF8A6E'); la.position.set(-.43, .64, .01); lb.position.set(.43, .64, .01); dial.add(la, lb);
+
+  /* ---- beam ---- */
+  const beam = new THREE.Group(); beam.position.copy(P); rig.add(beam);
+  const L = 1.1;
+  {
+    const s = new THREE.Shape();
+    s.moveTo(-1.13, .028); s.lineTo(-.16, .062); s.quadraticCurveTo(0, .085, .16, .062); s.lineTo(1.13, .028);
+    s.lineTo(1.13, -.028); s.lineTo(.16, -.062); s.quadraticCurveTo(0, -.085, -.16, -.062); s.lineTo(-1.13, -.028); s.closePath();
+    const g = new THREE.ExtrudeGeometry(s, { depth: .06, bevelEnabled: true, bevelThickness: .012, bevelSize: .012, bevelSegments: 4, curveSegments: 24 }); g.translate(0, 0, -.03);
+    beam.add(shadowed(new THREE.Mesh(g, steel)));
+    for (const x of [-L, L]) { const k = new THREE.Mesh(new THREE.SphereGeometry(.042, 32, 24), steel); k.position.x = x; beam.add(shadowed(k)); }
+    const needle = new THREE.Mesh(new THREE.BoxGeometry(.012, .5, .01), steel); needle.position.set(0, .27, -.075); beam.add(needle);
+    const tip = new THREE.Mesh(new THREE.SphereGeometry(.018, 16, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color('#FF6B4A').multiplyScalar(1.8) })); tip.position.set(0, .52, -.075); beam.add(tip);
+  }
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, .2, 64), brushed); hub.rotation.x = Math.PI / 2; hub.position.copy(P); rig.add(shadowed(hub));
+  const hubRing = new THREE.Mesh(new THREE.TorusGeometry(.12, .012, 12, 64), steel); hubRing.position.set(P.x, P.y, .1); rig.add(hubRing);
+  const jewel = new THREE.Mesh(new THREE.SphereGeometry(.045, 32, 24), glowTeal); jewel.position.set(P.x, P.y, .1); rig.add(jewel);
+
+  /* ---- pans: a polished dish hung on three fine cables ---- */
+  const DROP = 1.0, RIM = .4;
+  const dishGeo = new THREE.LatheGeometry([[0, -.122], [.16, -.116], [.29, -.09], [.37, -.05], [.405, 0], [.41, .012], [.398, .014], [.36, -.036], [.28, -.077], [.16, -.1], [0, -.105]].map(p => new THREE.Vector2(p[0], p[1])), 128);
+  const makePan = () => {
+    const g = new THREE.Group();
+    const hook = new THREE.Mesh(new THREE.TorusGeometry(.04, .009, 12, 32), steel); g.add(hook);
+    const dish = new THREE.Mesh(dishGeo, steel); dish.position.y = -DROP; g.add(dish);
+    const lip = new THREE.Mesh(new THREE.TorusGeometry(.405, .009, 12, 128), steel); lip.rotation.x = Math.PI / 2; lip.position.y = -DROP + .006; g.add(lip);
+    const top = new THREE.Vector3(0, -.04, 0), up = new THREE.Vector3(0, 1, 0);
+    for (const a of [Math.PI / 2, Math.PI / 2 + 2.094, Math.PI / 2 + 4.189]) {
+      const end = new THREE.Vector3(Math.cos(a) * (RIM - .01), -DROP + .01, Math.sin(a) * (RIM - .01)), dir = end.clone().sub(top), len = dir.length();
+      const c = new THREE.Mesh(new THREE.CylinderGeometry(.0042, .0042, len, 8), steel);
+      c.position.copy(top).addScaledVector(dir, .5); c.quaternion.setFromUnitVectors(up, dir.normalize()); g.add(c);
+    }
+    const holder = new THREE.Group(); holder.position.y = -DROP - .1; g.add(holder);
+    return { g: shadowed(g), holder };
+  };
+  const panA = makePan(), panB = makePan(); rig.add(panA.g, panB.g);
+
+  /* A holds an AI chip */
+  {
+    const chip = new THREE.Group();
+    const sub = new THREE.Mesh(new THREE.BoxGeometry(.36, .026, .36), new THREE.MeshPhysicalMaterial({ color: '#0f2a22', roughness: .45, clearcoat: .6, clearcoatRoughness: .3 })); chip.add(sub);
+    const lid = new THREE.Mesh(new THREE.BoxGeometry(.24, .03, .24), brushed); lid.position.y = .028; chip.add(lid);
+    const edge = new THREE.Mesh(new THREE.BoxGeometry(.246, .004, .246), glowTeal); edge.position.y = .012; chip.add(edge);
+    const gold = new THREE.MeshPhysicalMaterial({ color: '#d9a948', metalness: 1, roughness: .3 });
+    for (let k = 0; k < 10; k++) for (const [x, z, rot] of [[-.165, -.135 + k * .03, 0], [.165, -.135 + k * .03, 0], [-.135 + k * .03, -.165, 1], [-.135 + k * .03, .165, 1]]) {
+      const pin = new THREE.Mesh(new THREE.BoxGeometry(rot ? .012 : .022, .006, rot ? .022 : .012), gold); pin.position.set(x, .015, z); chip.add(pin);
+    }
+    for (const [x, z] of [[-.15, -.15], [.15, -.15], [-.15, .15], [.15, .15]]) { const cap = new THREE.Mesh(new THREE.BoxGeometry(.02, .014, .012), gold); cap.position.set(x, .02, z); chip.add(cap); }
+    chip.scale.setScalar(1.15); chip.rotation.set(.32, .55, .08); chip.position.set(0, .07, -.04); panA.holder.add(shadowed(chip));
+  }
+
+  /* B holds a pile of almonds */
+  const almonds = [];
+  {
+    const tex = (() => { const c = document.createElement('canvas'); c.width = 256; c.height = 256; const x = c.getContext('2d');
+      x.fillStyle = '#a8693c'; x.fillRect(0, 0, 256, 256);
+      for (let k = 0; k < 2600; k++) { const v = 90 + Math.random() * 70 | 0; x.fillStyle = `rgba(${v + 40},${v - 10},${v - 50},.25)`; x.fillRect(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 2, 4 + Math.random() * 10); }
+      for (let k = 0; k < 340; k++) { x.fillStyle = 'rgba(70,35,15,.35)'; x.beginPath(); x.ellipse(Math.random() * 256, Math.random() * 256, 1.2 + Math.random() * 1.6, 3 + Math.random() * 5, 0, 0, 6.28); x.fill(); }
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; })();
+    const bump = (() => { const c = document.createElement('canvas'); c.width = 256; c.height = 256; const x = c.getContext('2d');
+      x.fillStyle = '#888'; x.fillRect(0, 0, 256, 256);
+      for (let k = 0; k < 520; k++) { x.fillStyle = Math.random() < .5 ? 'rgba(0,0,0,.5)' : 'rgba(255,255,255,.25)'; x.beginPath(); x.ellipse(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 1.5, 3 + Math.random() * 6, 0, 0, 6.28); x.fill(); }
+      const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; })();
+    const g = new THREE.SphereGeometry(1, 40, 28), p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const y = p.getY(i), taper = 1 - .32 * Math.max(0, y) - .1 * Math.max(0, y) ** 3;
+      p.setXYZ(i, p.getX(i) * .6 * taper + .05 * y * y, y, p.getZ(i) * .36 * taper);
+    }
+    g.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({ map: tex, bumpMap: bump, bumpScale: 2.2, roughness: .78, color: '#ffffff' });
+    const spots = [[0, 0, 0], [.13, 0, .05], [-.13, 0, .04], [.06, 0, -.13], [-.08, 0, -.12], [.2, 0, -.06], [-.2, 0, -.04], [.02, 0, .17], [-.15, 0, .15], [.16, 0, .14],
+                   [.04, .05, .02], [-.07, .05, -.03], [.09, .05, -.06], [-.03, .055, .09], [.11, .05, .08], [-.12, .05, .07], [.0, .095, -.02], [-.05, .1, .05], [.06, .1, .05], [0, .14, .02]];
+    spots.forEach(([x, y, z], k) => {
+      const m = new THREE.Mesh(g, mat); m.scale.setScalar(.088);
+      const rx = Math.PI / 2 + (Math.random() - .5) * .5, ry = Math.random() * 6.28, rz = (Math.random() - .5) * .5;
+      const r = Math.hypot(x, z), lift = r * r * .9;   // the dish curves up, so outer almonds sit higher
+      m.rotation.set(rx, ry, rz); m.position.set(x, y + .028 + lift, z); m.castShadow = m.receiveShadow = true;
+      panB.holder.add(m); almonds.push({ m, y0: m.position.y, r0: m.rotation.clone(), vy: 0, dy: 0, spin: 0 });
+    });
+  }
+
+  /* ---- floor: soft shadow and a pool of light ---- */
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 8), new THREE.ShadowMaterial({ opacity: .55 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+  const radial = (inner, outer) => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+    const gr = x.createRadialGradient(128, 128, 0, 128, 128, 128); gr.addColorStop(0, inner); gr.addColorStop(1, outer); x.fillStyle = gr; x.fillRect(0, 0, 256, 256);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 3.2), new THREE.MeshBasicMaterial({ map: radial('rgba(127,224,214,.32)', 'rgba(127,224,214,0)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  pool.rotation.x = -Math.PI / 2; pool.position.y = .002; scene.add(pool);
+  const warmPool = new THREE.Mesh(new THREE.PlaneGeometry(3, 1.8), new THREE.MeshBasicMaterial({ map: radial('rgba(255,120,90,.5)', 'rgba(255,107,74,0)'), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+  warmPool.rotation.x = -Math.PI / 2; warmPool.position.set(1.1, .003, 0); scene.add(warmPool);
+
+  /* ---- a faint beam of light from above, with dust in it ---- */
+  const cone = new THREE.Mesh(new THREE.CylinderGeometry(.35, 2.3, 7, 64, 1, true), new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+    uniforms: { k: { value: 1 } },
+    vertexShader: 'varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vUv = uv; vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position,1.); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'uniform float k; varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ float edge = pow(abs(dot(vN, vV)), 1.6); float a = .075 * k * edge * smoothstep(0., .55, vUv.y) * (1. - smoothstep(.9, 1., vUv.y)); gl_FragColor = vec4(vec3(.55,.92,.88) * a, a); }' }));
+  cone.position.y = 3.5; scene.add(cone);
+  const dustN = 260, dustGeo = new THREE.BufferGeometry(), dustPos = new Float32Array(dustN * 3), dustSeed = new Float32Array(dustN);
+  for (let k = 0; k < dustN; k++) { const a = Math.random() * 6.28, r = Math.sqrt(Math.random()) * 1.9; dustPos[k * 3] = Math.cos(a) * r; dustPos[k * 3 + 1] = Math.random() * 5.2; dustPos[k * 3 + 2] = Math.sin(a) * r; dustSeed[k] = Math.random() * 6.28; }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ size: .022, map: radial('rgba(255,255,255,1)', 'rgba(255,255,255,0)'), color: '#cdf3ee', transparent: true, opacity: .6, depthWrite: false, blending: THREE.AdditiveBlending }));
+  scene.add(dust);
+
+  /* ---- water droplets thrown out on impact ---- */
+  const DN = 90, drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 16, 12), new THREE.MeshPhysicalMaterial({ color: '#a9e6ef', metalness: 0, roughness: .02, clearcoat: 1, envMapIntensity: 2.6, transparent: true, opacity: .55 }), DN);
+  drops.instanceMatrix.setUsage(THREE.DynamicDrawUsage); drops.castShadow = true; scene.add(drops);
+  const D = Array.from({ length: DN }, () => ({ on: false, p: new THREE.Vector3(), v: new THREE.Vector3(), s: 0, life: 0 }));
+  const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), S3 = new THREE.Vector3(), V3 = new THREE.Vector3();
+
+  /* ---- lights ---- */
+  scene.add(new THREE.HemisphereLight('#7fb9c4', '#06141b', .35));
+  const key = new THREE.SpotLight('#eafffb', 70, 0, .42, .85, 1.6); key.position.set(.8, 7.5, 3.2); key.target.position.set(0, .9, 0);
+  key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004; key.shadow.normalBias = .02; key.shadow.radius = 6; key.shadow.camera.near = 3; key.shadow.camera.far = 14;
+  scene.add(key, key.target);
+  const rimL = new THREE.DirectionalLight('#9ff0e6', 1.3); rimL.position.set(-5, 3, -4); scene.add(rimL);
+  const rimR = new THREE.DirectionalLight('#ffb6a2', .9); rimR.position.set(5, 2.5, -4); scene.add(rimR);
+  const warm = new THREE.SpotLight('#ff8a68', 0, 0, .32, .7, 1.4); warm.position.set(3.4, 5.5, 2.4); scene.add(warm, warm.target);
+
+  /* ---- state, driven by the slide (the swing physics lives in the main script; we read its angle) ---- */
+  let active = false, raf = 0, last = 0, intro = 0, t0 = performance.now(), shake = 0, warmK = 0, warmTo = 0, kickTo = 0, kick = 0, swingA = 0, swingB = 0, prevA = 0, ready = false;
+  let pmx = 0, pmy = 0;
+  addEventListener('pointermove', e => { pmx = e.clientX / innerWidth - .5; pmy = e.clientY / innerHeight - .5; }, { passive: true });
+  const outCubic = x => 1 - Math.pow(1 - x, 3);
+  const hang = (a, side) => { const r = a * Math.PI / 180; return new THREE.Vector3(side * L * Math.cos(r), P.y - side * L * Math.sin(r), 0); };
+
+  slide.addEventListener('vsimpact', () => {
+    shake = 1;
+    almonds.forEach(a => { a.vy = .9 + Math.random() * 1.1; a.spin = (Math.random() - .5) * 9; });
+    const c = hang(slide._a || 15, 1); c.y -= DROP - .02;
+    let n = 0;
+    for (const d of D) {
+      if (n++ >= DN) break;
+      const ang = Math.random() * 6.28, sp = 1.2 + Math.random() * 2.6;
+      d.on = true; d.life = 1.6; d.s = .004 + Math.random() * .008;
+      d.p.set(c.x + Math.cos(ang) * RIM * .9, c.y + .02, Math.sin(ang) * RIM * .9);
+      d.v.set(Math.cos(ang) * sp * .9, 1.2 + Math.random() * 2.2, Math.sin(ang) * sp * .9);
+    }
+  });
+
+  const frame = now => {
+    const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+    const t = (now - t0) / 1000;
+    const a = slide._a || 0;
+    // beam and pans
+    beam.rotation.z = -a * Math.PI / 180;
+    const pa = hang(a, -1), pb = hang(a, 1);
+    // pans lag a little behind the beam, like real hanging pans
+    const av = (a - prevA) / Math.max(dt, .001); prevA = a;
+    swingA += ((-av * .004) - swingA) * Math.min(1, dt * 6); swingB += ((av * .004) - swingB) * Math.min(1, dt * 6);
+    panA.g.position.copy(pa); panB.g.position.copy(pb);
+    panA.g.rotation.z = THREE.MathUtils.clamp(swingA, -.12, .12) + Math.sin(t * 1.3) * .006;
+    panB.g.rotation.z = THREE.MathUtils.clamp(-swingB, -.12, .12) + Math.sin(t * 1.1 + 1) * .006;
+    // almonds hop when the pan lands
+    for (const al of almonds) {
+      if (al.vy || al.dy > 0) { al.vy -= 9.8 * dt; al.dy += al.vy * dt; if (al.dy <= 0) { al.dy = 0; al.vy = Math.abs(al.vy) > .5 ? -al.vy * .32 : 0; } al.m.rotation.y += al.spin * dt * (al.dy > 0 ? 1 : 0); al.spin *= .97; }
+      al.m.position.y = al.y0 + al.dy;
+    }
+    // droplets
+    let vis = 0;
+    for (let k = 0; k < DN; k++) {
+      const d = D[k];
+      if (d.on) { d.v.y -= 9.8 * dt; d.p.addScaledVector(d.v, dt); d.life -= dt; if (d.p.y < .01) { d.p.y = .01; d.v.y *= -.25; d.v.x *= .6; d.v.z *= .6; d.s *= .85; } if (d.life <= 0 || d.s < .003) d.on = false; }
+      S3.set(d.on ? d.s : 0, d.on ? d.s * (1 + Math.min(2.2, d.v.length() * .45)) : 0, d.on ? d.s : 0);
+      Q.setFromUnitVectors(V3.set(0, 1, 0), d.on ? V3.copy(d.v).normalize() : V3.set(0, 1, 0));
+      M4.compose(d.p, Q, S3); drops.setMatrixAt(k, M4); if (d.on) vis++;
+    }
+    drops.instanceMatrix.needsUpdate = true; drops.visible = vis > 0;
+    // dust drifts slowly upward
+    const dp = dustGeo.attributes.position;
+    for (let k = 0; k < dustN; k++) { let y = dp.getY(k) + dt * .05; if (y > 5.2) y = 0; dp.setY(k, y); dp.setX(k, dp.getX(k) + Math.sin(t * .4 + dustSeed[k]) * dt * .02); }
+    dp.needsUpdate = true;
+    // light
+    warmK += (warmTo - warmK) * Math.min(1, dt * 2.2);
+    warm.intensity = 60 * warmK; warm.target.position.copy(pb).setY(pb.y - DROP); warmPool.material.opacity = warmK; warmPool.position.x = pb.x;
+    key.intensity = 70 - 18 * warmK;
+    kick += (kickTo - kick) * Math.min(1, dt * 2);
+    // camera: a slow dolly in on entry, a gentle drift, a hit of shake on impact
+    const ip = reduce ? 1 : outCubic(Math.min(1, (now - intro) / 2200));
+    shake = Math.max(0, shake - dt * 1.9);
+    const sk = shake * shake * .09;
+    cam.position.set(
+      CAM.x + Math.sin(t * .13) * .35 + pmx * .5 + (Math.random() - .5) * sk,
+      CAM.y + (1 - ip) * 1.1 + Math.sin(t * .17) * .08 - pmy * .3 + (Math.random() - .5) * sk,
+      CAM.z + (1 - ip) * 4.2 - kick * 1.2);
+    cam.lookAt(LOOK.x, LOOK.y + (Math.random() - .5) * sk * .3, LOOK.z);
+    renderer.render(scene, cam);
+    if (!ready) { ready = true; slide.classList.add('gl'); }
+    if (active && !reduce) raf = requestAnimationFrame(frame);
+  };
+
+  let lost = false;
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; active = false; cancelAnimationFrame(raf); slide.classList.remove('gl'); cv.style.display = 'none'; });
+  const sync = () => {
+    if (lost) return;
+    const on = document.body.dataset.atSlide === 'versus', st = +document.body.dataset.atBuild;
+    warmTo = on && st >= 1 ? 1 : 0; kickTo = on && st >= 2 ? 1 : 0;
+    if (on && !active) {
+      active = true; intro = performance.now(); last = performance.now();
+      if (st >= 1) warmK = 1;
+      raf = requestAnimationFrame(frame);
+    } else if (on && reduce) requestAnimationFrame(frame);
+    if (!on && active) { active = false; cancelAnimationFrame(raf); shake = 0; D.forEach(d => { d.on = false; }); almonds.forEach(a => { a.vy = 0; a.dy = 0; }); }
+  };
+  document.addEventListener('ftw', sync); sync();
+  // render one frame up front so the slide is ready before anyone gets there
+  requestAnimationFrame(frame);
+})();
 </script>
 </body>
 </html>
