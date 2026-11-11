@@ -302,8 +302,7 @@ em.hl{font-style:italic;color:var(--aqua)}
 @keyframes vsGap{0%,100%{opacity:0}50%{opacity:1}}
 
 /* live counter: two pools filling in real time */
-#live{gap:26px;background:radial-gradient(ellipse 80% 70% at 50% 60%,#0F3447 0%,#0A2433 55%,#061A24 100%)}
-#stage:has(.leaving) #live{background:radial-gradient(ellipse 80% 70% at 50% 60%,#0F3447 0%,#0A2433 55%,#061A24 100%)}
+#live,#stage:has(.leaving) #live{gap:26px;background:#04151d}
 .lv-hd{flex-direction:row;align-items:flex-end;justify-content:space-between}
 .lv-hd > div{display:flex;flex-direction:column;gap:18px}
 .lv-clock{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:.16em;color:var(--mist);padding:12px 20px;border:1.5px solid rgba(169,198,204,.22);border-radius:999px;margin-bottom:10px}
@@ -330,6 +329,12 @@ em.hl{font-style:italic;color:var(--aqua)}
 .lv-pop{animation:lvPop .6s cubic-bezier(.3,1.6,.5,1)}
 @keyframes lvPop{0%{transform:scale(1.6)}100%{transform:none}}
 #lvPools{display:inline-block}
+#lv3d{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:0}
+#live .hd,#live .lv-cols,#live .lv-src{position:relative;z-index:1}
+#live .foot{z-index:1}
+#live.gl .lv-tank{visibility:hidden}
+#live.gl .lv-num{text-shadow:0 4px 30px rgba(6,26,36,.9)}
+#live.gl .lv-top{border-bottom-color:rgba(169,198,204,.28)}
 
 /* real problem */
 .panel{flex:1;display:flex;flex-direction:column;gap:14px}
@@ -519,7 +524,8 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
   .dots svg.hit{fill:var(--ember)!important}
   .days circle.f{stroke-dasharray:220 220!important}
   .mark path{stroke-dashoffset:0!important}
-  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,#vs3d,.vs-spot{display:none!important}
+  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,#vs3d,#lv3d,.vs-spot{display:none!important}
+  #live .lv-tank{visibility:visible!important}
   #versus .scale{visibility:visible!important}
   #dots{display:grid!important}
   .viz .needle{transform:rotate(56deg)!important}.viz .tfill{transform:none!important}
@@ -858,7 +864,8 @@ If asked: the almond number is the almond industry’s own estimate, the lowest 
 </section>
 
 <!-- ============ 5c · LIVE: RIGHT NOW ============ -->
-<section class="slide dark" id="live" data-title="Live: right now" data-chapter="2" data-enter="push">
+<section class="slide dark" id="live" data-title="Live: right now" data-chapter="2" data-enter="iris" data-from="#versus .vs-day">
+  <canvas id="lv3d" width="1920" height="1080" aria-hidden="true"></canvas>
   <header class="hd lv-hd">
     <div><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>Since this slide opened</h2></div>
     <p class="lv-clock rv" style="--d:1"><span class="lv-dot"></span>LIVE <b id="lvT">0:00</b></p>
@@ -881,11 +888,12 @@ If asked: the almond number is the almond industry’s own estimate, the lowest 
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
   <template class="notes">(0:25) Point: Show the gap happening in real time.
 
-[The counters started the moment this slide opened. Point at them.]
+[The camera swoops down from straight overhead. Let it land, then point at the counters. They started the moment the slide opened.]
 These counters started when this slide came up. They run at the same rates as the last slide.
 ChatGPT, the whole world using it: about two and a half gallons a second. That’s the drip on the left.
 California almonds: almost 29 thousand gallons a second. That’s a full Olympic swimming pool every 23 seconds.
 At ChatGPT’s rate, filling one pool would take about three days.
+Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.
 [Glance at the pools-filled count, then move on.]
 If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.</template>
 </section>
@@ -1533,7 +1541,7 @@ void main(){
   const POOL = 660430;                              // one Olympic pool, gal
   const TW = 760, TH = 360, X0 = 24, X1 = 736, YT = 70, YF = 334, SX = 132;
   const mkTank = (id, kind) => { const cv = $(id); return { cv, cx: cv.getContext('2d'), kind, disp: 0, parts: [], drops: [], rips: [], nextDrop: 0 }; };
-  const TA = mkTank('#lvTankA', 'drip'), TB = mkTank('#lvTankB', 'gush');
+  const TA = mkTank('#lvTankA', 'drip'), TB = mkTank('#lvTankB', 'gush'), liveSlide = $('#live');
   const lvEl = { a: $('#lvA'), b: $('#lvB'), t: $('#lvT'), pct: $('#lvPctA'), pools: $('#lvPools') };
   let lvOn = false, lvRaf = 0, lvT0 = 0, lvLast = 0, lvPools = 0;
 
@@ -1656,8 +1664,11 @@ void main(){
     lvEl.a.textContent = lvFmt(ga, 1); lvEl.b.textContent = lvFmt(Math.floor(gb), 0);
     lvEl.pct.textContent = (ga / POOL * 100).toFixed(4);
     lvEl.t.textContent = Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+    const grew = pools > lvPools;
     if (pools !== lvPools) { lvPools = pools; lvEl.pools.textContent = pools; lvEl.pools.classList.remove('lv-pop'); void lvEl.pools.offsetWidth; lvEl.pools.classList.add('lv-pop'); }
-    drawTank(TA, ga / POOL, ga, s, dt); drawTank(TB, TB.disp, gb, s, dt);
+    liveSlide._lv = { s, fb, ga, pools };
+    if (grew && lvOn) liveSlide.dispatchEvent(new CustomEvent('lvpool'));
+    if (!liveSlide.classList.contains('gl')) { drawTank(TA, ga / POOL, ga, s, dt); drawTank(TB, TB.disp, gb, s, dt); }
   };
   const lvFrame = () => {
     if (!lvOn) return;
@@ -2304,6 +2315,258 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
   document.addEventListener('ftw', sync); sync();
   // render one frame up front so the slide is ready before anyone gets there
   requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- Live slide: two Olympic pools at night, in 3D. The 2D tanks stay as the fallback and in print. -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const slide = document.getElementById('live'), cv = document.getElementById('lv3d');
+  if (!slide || !cv) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, LVT = +new URLSearchParams(location.search).get('lvt') || 0;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25)); renderer.setSize(1920, 1080, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog('#08202b', 15, 36);
+  const cam = new THREE.PerspectiveCamera(30, 16 / 9, .1, 200);
+
+  /* ---- night reflections: dark sky, a band of teal city glow, a few bright floodlights ---- */
+  {
+    const env = new THREE.Scene();
+    env.add(new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: '#08141b', side: THREE.BackSide })));
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(38, 38, 6, 48, 1, true), new THREE.MeshBasicMaterial({ color: new THREE.Color('#1d6f72').multiplyScalar(1.4), side: THREE.BackSide })); band.position.y = 2; env.add(band);
+    const lamp = (x, y, z, c, k, s) => { const m = new THREE.Mesh(new THREE.SphereGeometry(s, 16, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k) })); m.position.set(x, y, z); env.add(m); };
+    lamp(-14, 18, -10, '#ffffff', 9, 2.4); lamp(16, 16, -8, '#ffd9cc', 7, 2.2); lamp(0, 22, 14, '#e6fffb', 6, 3);
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, .02).texture; pm.dispose();
+  }
+
+  /* ---- textures, drawn here so nothing has to load ---- */
+  const canvasTex = (w, h, draw, srgb = true) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+    const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+  const tiles = (x, w, h, n, base, grout) => { x.fillStyle = base; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < w; i += n) for (let j = 0; j < h; j += n) { const v = (Math.random() - .5) * 14; x.fillStyle = `rgba(${v > 0 ? 255 : 0},${v > 0 ? 255 : 0},${v > 0 ? 255 : 0},${Math.abs(v) / 255})`; x.fillRect(i, j, n, n); }
+    x.strokeStyle = grout; x.lineWidth = 1.2; x.beginPath(); for (let i = 0; i <= w; i += n) { x.moveTo(i, 0); x.lineTo(i, h); } for (let j = 0; j <= h; j += n) { x.moveTo(0, j); x.lineTo(w, j); } x.stroke(); };
+  const floorTex = canvasTex(1024, 512, (x, w, h) => {
+    tiles(x, w, h, 16, '#cfeeea', 'rgba(70,140,145,.55)');
+    x.fillStyle = '#123a52';
+    for (let k = 0; k < 6; k++) { const y = (k + .5) * h / 6; x.fillRect(w * .08, y - 7, w * .84, 14); x.fillRect(w * .08 - 2, y - 26, 14, 52); x.fillRect(w * .92 - 12, y - 26, 14, 52); }
+  });
+  const wallTex = canvasTex(512, 128, (x, w, h) => tiles(x, w, h, 16, '#cfeeea', 'rgba(70,140,145,.55)'));
+  const deckTex = canvasTex(512, 512, (x, w, h) => {
+    x.fillStyle = '#0d2029'; x.fillRect(0, 0, w, h);
+    for (let k = 0; k < 900; k++) { x.fillStyle = `rgba(255,255,255,${Math.random() * .03})`; x.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+    x.strokeStyle = 'rgba(0,0,0,.45)'; x.lineWidth = 4; x.strokeRect(2, 2, w - 4, h - 4);
+  });
+  deckTex.wrapS = deckTex.wrapT = THREE.RepeatWrapping; deckTex.repeat.set(.5, .5);
+  const sprite = canvasTex(64, 64, (x, w) => { const g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.4, 'rgba(255,255,255,.5)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, w, w); });
+
+  /* ---- the two pools ---- */
+  const PW = 5, PD = 2.5, PH = 1, AX = -3.3, BX = 3.3;
+  {
+    const s = new THREE.Shape(); s.moveTo(-60, -40); s.lineTo(60, -40); s.lineTo(60, 14); s.lineTo(-60, 14); s.closePath();
+    for (const cx of [AX, BX]) { const h = new THREE.Path(); h.moveTo(cx - PW / 2, -PD / 2); h.lineTo(cx - PW / 2, PD / 2); h.lineTo(cx + PW / 2, PD / 2); h.lineTo(cx + PW / 2, -PD / 2); h.closePath(); s.holes.push(h); }
+    const deck = new THREE.Mesh(new THREE.ShapeGeometry(s), new THREE.MeshStandardMaterial({ map: deckTex, roughness: .48, metalness: .1, envMapIntensity: .9 }));
+    deck.rotation.x = -Math.PI / 2; scene.add(deck);
+  }
+  const coping = new THREE.MeshPhysicalMaterial({ color: '#7f9599', roughness: .35, clearcoat: .6, clearcoatRoughness: .2, envMapIntensity: 1 });
+  const makePool = cx => {
+    const g = new THREE.Group(); g.position.x = cx; scene.add(g);
+    const fm = new THREE.MeshStandardMaterial({ map: floorTex, roughness: .25, emissive: '#2a8f8f', emissiveMap: floorTex, emissiveIntensity: .2, envMapIntensity: .6 });
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(PW, PD), fm); floor.rotation.x = -Math.PI / 2; floor.position.y = -PH; g.add(floor);
+    const wm = (len) => { const t = wallTex.clone(); t.needsUpdate = true; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(len / 2.5, PH / .625); return new THREE.MeshStandardMaterial({ map: t, roughness: .25, emissive: '#2a8f8f', emissiveMap: t, emissiveIntensity: .16, envMapIntensity: .6 }); };
+    const wall = (w, x, z, ry) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, PH), wm(w)); m.position.set(x, -PH / 2, z); m.rotation.y = ry; g.add(m); };
+    wall(PW, 0, -PD / 2, 0); wall(PW, 0, PD / 2, Math.PI); wall(PD, -PW / 2, 0, Math.PI / 2); wall(PD, PW / 2, 0, -Math.PI / 2);
+    for (const [w, d, x, z] of [[PW + .36, .18, 0, -PD / 2 - .09], [PW + .36, .18, 0, PD / 2 + .09], [.18, PD, -PW / 2 - .09, 0], [.18, PD, PW / 2 + .09, 0]]) {
+      const c = new THREE.Mesh(new THREE.BoxGeometry(w, .07, d), coping); c.position.set(x, .035, z); g.add(c);
+    }
+    const lampMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#e6fffb').multiplyScalar(2.6) });
+    for (const x of [-1.7, 0, 1.7]) for (const z of [-PD / 2 + .003, PD / 2 - .003]) { const l = new THREE.Mesh(new THREE.CircleGeometry(.045, 24), lampMat); l.position.set(x, -.52, z); l.rotation.y = z < 0 ? 0 : Math.PI; g.add(l); }
+    const pl = new THREE.PointLight('#7fe0d6', 5, 7, 1.6); pl.position.set(0, -.55, 0); g.add(pl);
+    for (const x of [-1.7, 0, 1.7]) for (const z of [-PD / 2 + .02, PD / 2 - .02]) { const hs = new THREE.Sprite(new THREE.SpriteMaterial({ map: sprite, color: '#9ff0e6', transparent: true, opacity: .55, depthWrite: false, blending: THREE.AdditiveBlending })); hs.scale.setScalar(.5); hs.position.set(x, -.52, z); g.add(hs); }
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: sprite, color: '#5fd6cc', transparent: true, opacity: .18, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+    halo.scale.set(7.5, 3.6, 1); halo.position.set(0, .05, 0); g.add(halo);
+    return { g, pl, halo };
+  };
+  const poolA = makePool(AX), poolB = makePool(BX);
+
+  /* caustic light on the floor of the full pool */
+  const causMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { t: { value: 0 }, k: { value: 0 } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }',
+    fragmentShader: `uniform float t; uniform float k; varying vec2 vUv;
+      float caus(vec2 uv){ vec2 p = mod(uv * 6.2831, 6.2831) - 250.; vec2 i = p; float c = 1.; float inten = .005;
+        for (int n = 0; n < 4; n++){ float tt = t * (1. - (3.5 / float(n + 1))); i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+          c += 1. / length(vec2(p.x / (sin(i.x + tt) / inten), p.y / (cos(i.y + tt) / inten))); }
+        c /= 4.; c = 1.17 - pow(c, 1.4); return pow(abs(c), 8.); }
+      void main(){ float c = caus(vUv * vec2(2., 1.) * 1.3); gl_FragColor = vec4(vec3(.75, 1., .95) * c * .8 * k, 1.); }` });
+  const caus = new THREE.Mesh(new THREE.PlaneGeometry(PW, PD), causMat); caus.rotation.x = -Math.PI / 2; caus.position.set(BX, -PH + .004, 0); scene.add(caus);
+
+  /* water surface in pool B, rebuilt each frame with waves and the churn under the falling water */
+  const waterGeo = new THREE.PlaneGeometry(PW, PD, 100, 50); waterGeo.rotateX(-Math.PI / 2);
+  const wPos = waterGeo.attributes.position, wBase = Float32Array.from(wPos.array);
+  const waterMat = new THREE.MeshPhysicalMaterial({ color: '#1f9e9b', roughness: .03, metalness: 0, transparent: true, opacity: .84, clearcoat: 1, clearcoatRoughness: .02, envMapIntensity: 2.6, emissive: '#0a5a5c', emissiveIntensity: .55, side: THREE.DoubleSide });
+  const water = new THREE.Mesh(waterGeo, waterMat); water.position.set(BX, -PH, 0); scene.add(water);
+  const HIT = new THREE.Vector2(1.55, .15);   // where the column lands, in pool B's local x/z
+
+  /* the column of water from the sky */
+  const fallMat = (r, a) => new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { t: { value: 0 }, a: { value: a } },
+    vertexShader: 'varying vec2 vUv; varying float vF; void main(){ vUv = uv; vec3 n = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position,1.); vF = abs(dot(n, normalize(-mv.xyz))); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: `uniform float t; uniform float a; varying vec2 vUv; varying float vF;
+      float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+      void main(){ vec2 p = vec2(vUv.x * 16., vUv.y * 40. + t * 34.); float s = n(p) * .6 + n(p * 2.7 + 3.) * .4; float st = smoothstep(.42, .82, s);
+        vec3 col = mix(vec3(.42, .86, .83), vec3(1.), st); float al = a * (.3 + .6 * st) * (.35 + .65 * vF); gl_FragColor = vec4(col, al); }` });
+  const fallIn = new THREE.Mesh(new THREE.CylinderGeometry(.42, .38, 1, 48, 1, true), fallMat(.42, 1));
+  const fallOut = new THREE.Mesh(new THREE.CylinderGeometry(.62, .56, 1, 48, 1, true), fallMat(.62, .38));
+  const fallGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: sprite, color: '#7fe0d6', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+  scene.add(fallIn, fallOut, fallGlow);
+  const SKY = 15;
+
+  /* spray, mist and foam */
+  const SN = 1600, sPos = new Float32Array(SN * 3), sVel = new Float32Array(SN * 3), sLife = new Float32Array(SN); let sHead = 0;
+  const sGeo = new THREE.BufferGeometry(); sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+  const spray = new THREE.Points(sGeo, new THREE.PointsMaterial({ size: .085, map: sprite, color: '#e2fbf8', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .9 }));
+  spray.frustumCulled = false; scene.add(spray);
+  for (let k = 0; k < SN; k++) sPos[k * 3 + 1] = -99;
+  const emit = (x, y, z, vx, vy, vz, life) => { const k = sHead; sHead = (sHead + 1) % SN; sPos[k * 3] = x; sPos[k * 3 + 1] = y; sPos[k * 3 + 2] = z; sVel[k * 3] = vx; sVel[k * 3 + 1] = vy; sVel[k * 3 + 2] = vz; sLife[k] = life; };
+  const mist = Array.from({ length: 26 }, () => { const m = new THREE.Sprite(new THREE.SpriteMaterial({ map: sprite, color: '#bfeee8', transparent: true, opacity: 0, depthWrite: false })); scene.add(m); return { m, age: Math.random() * 3, life: 2.5 + Math.random() * 2, vx: 0, vz: 0 }; });
+  const foam = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshBasicMaterial({ map: sprite, color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+  foam.rotation.x = -Math.PI / 2; scene.add(foam);
+
+  /* pool A: one drip at a time onto a dry floor, and the wet patch it leaves */
+  const dropMat = new THREE.MeshPhysicalMaterial({ color: '#c8f3ef', roughness: .02, clearcoat: 1, envMapIntensity: 2.4, emissive: '#3aa39c', emissiveIntensity: .4 });
+  const drops = []; let nextDrip = 0;
+  const wet = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshPhysicalMaterial({ color: '#0f5b62', roughness: .05, clearcoat: 1, transparent: true, opacity: .55, envMapIntensity: 1.6 }));
+  wet.rotation.x = -Math.PI / 2; wet.position.set(AX + HIT.x, -PH + .003, HIT.y); scene.add(wet);
+  const rings = [];
+  const ring = (x, y, z, c, r1, life) => { const m = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 64), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: .9, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+    m.rotation.x = -Math.PI / 2; m.position.set(x, y, z); m.scale.setScalar(.01); scene.add(m); rings.push({ m, age: 0, r1, life }); };
+
+  /* every full pool lifts out as a block of water and lands on a growing tower */
+  const blocks = [], BS = .22;
+  const blockGeo = new THREE.BoxGeometry(PW * .98, PH * .96, PD * .98), edgeGeo = new THREE.EdgesGeometry(blockGeo);
+  const addBlock = n => {
+    const g = new THREE.Group();
+    const m = new THREE.Mesh(blockGeo, new THREE.MeshPhysicalMaterial({ color: '#36c4bb', roughness: .05, transparent: true, opacity: .78, clearcoat: 1, envMapIntensity: 1.7, emissive: '#0d6b6a', emissiveIntensity: .9 }));
+    const e = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ color: '#bff8f2', transparent: true, opacity: .9 }));
+    g.add(m, e); g.position.set(BX, -PH / 2, 0); scene.add(g);
+    const col = n % 8, layer = Math.floor(n / 8);
+    const slot = new THREE.Vector3(BX + 1.2 - col * 1.25, PH * .96 * BS / 2 + layer * (PH * .96 * BS + .03), PD / 2 + .82);
+    blocks.push({ g, m, age: 0, slot, landed: false });
+    for (let k = 0; k < 220; k++) { const a = Math.random() * 6.28, sp = 1 + Math.random() * 3.5; emit(BX + (Math.random() - .5) * PW, 0, (Math.random() - .5) * PD, Math.cos(a) * sp * .4, 2 + Math.random() * 4, Math.sin(a) * sp * .4, 1.4); }
+    shake = Math.max(shake, .6);
+  };
+  const clearBlocks = () => { blocks.forEach(b => scene.remove(b.g)); blocks.length = 0; };
+  slide.addEventListener('lvpool', e => { if (active && !reduce) addBlock(blocks.length); });
+
+  /* ---- lights ---- */
+  scene.add(new THREE.HemisphereLight('#5d93a0', '#04121a', .55));
+  const moon = new THREE.DirectionalLight('#cfe9ff', 1.1); moon.position.set(-6, 12, 6); scene.add(moon);
+  const warm = new THREE.PointLight('#ffb39f', 0, 12, 1.4); warm.position.set(BX + HIT.x, 2.2, 1.5); scene.add(warm);
+
+  /* ---- camera: from straight overhead (like a satellite photo) down to the hero angle ---- */
+  const HERO = new THREE.Vector3(0, 7.1, 12.4), HERO_AT = new THREE.Vector3(0, -.15, -1.15);
+  const SAT = new THREE.Vector3(0, 34, .01), SAT_AT = new THREE.Vector3(0, 0, 0);
+  const io = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  let pmx = 0, pmy = 0;
+  addEventListener('pointermove', e => { pmx = e.clientX / innerWidth - .5; pmy = e.clientY / innerHeight - .5; }, { passive: true });
+
+  let active = false, raf = 0, ready = false, t0 = performance.now(), last = t0, shake = 0, head = SKY, headV = 0, landed = false, flash = 0;
+  const reset = () => { t0 = performance.now(); last = t0; head = SKY + 2; headV = 0; landed = false; flash = 0; clearBlocks(); drops.length = 0;
+    rings.forEach(r => scene.remove(r.m)); rings.length = 0; for (let k = 0; k < SN; k++) { sPos[k * 3 + 1] = -99; sLife[k] = 0; } nextDrip = .6; };
+  const V = new THREE.Vector3(), AT = new THREE.Vector3();
+
+  const draw = () => {
+    const now = performance.now(), dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+    const t = LVT || Math.max(0, (now - t0) / 1000), lv = slide._lv || { s: 12, fb: .52, ga: 29.5 };
+    // camera
+    const ip = reduce ? 1 : io(Math.min(1, Math.max(0, (t - .15) / 2.7)));
+    V.lerpVectors(SAT, HERO, ip); AT.lerpVectors(SAT_AT, HERO_AT, ip);
+    const drift = ip * (Math.sin(t * .09) * .9 + pmx * 1.2);
+    V.x += drift; V.y += ip * (Math.sin(t * .13) * .15 - pmy * .5);
+    shake = Math.max(0, shake - dt * 1.6); const sk = shake * shake * .12;
+    V.x += (Math.random() - .5) * sk; V.y += (Math.random() - .5) * sk;
+    cam.position.copy(V); cam.up.set(.35 * (1 - ip), ip, -(1 - ip)).normalize(); cam.lookAt(AT);
+    cam.fov = 22 + 8 * ip; cam.updateProjectionMatrix();
+    scene.fog.near = 15 + (1 - ip) * 26; scene.fog.far = 36 + (1 - ip) * 34;
+
+    // the column falls from the sky, lands, and keeps pouring
+    const level = Math.max(0, Math.min(1, lv.fb)), wy = -PH + level * PH * .96;
+    const surf = wy + .02;
+    if (!landed) { if (t > .35) { headV += 26 * dt; head -= headV * dt; } if (head <= surf) { head = surf; landed = true; shake = 1; flash = 1;
+      for (let k = 0; k < 420; k++) { const a = Math.random() * 6.28, sp = 1 + Math.random() * 5; emit(BX + HIT.x, surf, HIT.y, Math.cos(a) * sp, 2 + Math.random() * 6, Math.sin(a) * sp, 1.6); } } }
+    else head = surf;
+    const len = Math.max(.001, SKY - head);
+    for (const f of [fallIn, fallOut]) { f.visible = head < SKY; f.scale.set(1, len, 1); f.position.set(BX + HIT.x, head + len / 2, HIT.y); f.material.uniforms.t.value = t; }
+    fallGlow.visible = head < SKY; fallGlow.position.set(BX + HIT.x, surf + 2.2, HIT.y); fallGlow.scale.set(1.5, 4.2, 1); fallGlow.material.opacity = landed ? .13 + .03 * Math.sin(t * 11) : .08;
+    flash = Math.max(0, flash - dt * 1.5); warm.intensity = 6 * flash;
+
+    // water surface
+    water.visible = level > .004; water.position.y = wy;
+    if (water.visible) {
+      for (let i = 0; i < wPos.count; i++) {
+        const x = wBase[i * 3], z = wBase[i * 3 + 2], dx = x - HIT.x, dz = z - HIT.y, d = Math.hypot(dx, dz);
+        let h = Math.sin(x * 2.1 + t * 1.7) * .012 + Math.sin(z * 3.3 - t * 2.3) * .009 + Math.sin((x + z) * 4.1 + t * 3.1) * .005;
+        if (landed) h += .07 * Math.exp(-d * 1.3) * Math.sin(d * 9 - t * 13) + .05 * Math.exp(-d * 3);
+        wPos.setY(i, h);
+      }
+      wPos.needsUpdate = true; waterGeo.computeVertexNormals();
+    }
+    causMat.uniforms.t.value = t * .7; causMat.uniforms.k.value = Math.min(1, level * 8);
+    foam.visible = landed && water.visible; foam.position.set(BX + HIT.x, surf + .012, HIT.y); foam.scale.setScalar(.8 + Math.sin(t * 9) * .06); foam.material.opacity = .55;
+
+    // spray from the impact
+    if (landed && !reduce) for (let k = 0; k < 26; k++) { const a = Math.random() * 6.28, sp = .6 + Math.random() * 2.4; emit(BX + HIT.x + Math.cos(a) * .3, surf, HIT.y + Math.sin(a) * .3, Math.cos(a) * sp, 1.2 + Math.random() * 3.4, Math.sin(a) * sp, .9 + Math.random() * .6); }
+    for (let k = 0; k < SN; k++) { if (sLife[k] <= 0) continue; sLife[k] -= dt;
+      sVel[k * 3 + 1] -= 9.8 * dt; sPos[k * 3] += sVel[k * 3] * dt; sPos[k * 3 + 1] += sVel[k * 3 + 1] * dt; sPos[k * 3 + 2] += sVel[k * 3 + 2] * dt;
+      if (sLife[k] <= 0 || sPos[k * 3 + 1] < -1.2) { sLife[k] = 0; sPos[k * 3 + 1] = -99; } }
+    sGeo.attributes.position.needsUpdate = true;
+    for (const m of mist) { m.age += dt; if (m.age > m.life) { m.age = 0; m.vx = (Math.random() - .5) * .8; m.vz = (Math.random() - .5) * .8; m.m.position.set(BX + HIT.x + (Math.random() - .5) * .6, surf + .2, HIT.y + (Math.random() - .5) * .6); }
+      const p = m.age / m.life; m.m.position.x += m.vx * dt; m.m.position.z += m.vz * dt; m.m.position.y += .35 * dt;
+      m.m.scale.setScalar(1 + p * 3.6); m.m.material.opacity = landed ? .24 * Math.sin(p * Math.PI) : 0; }
+
+    // pool A: the drip
+    if (!reduce && t > nextDrip) { const m = new THREE.Mesh(new THREE.SphereGeometry(.045, 20, 14), dropMat); m.position.set(AX + HIT.x, 4.2, HIT.y); scene.add(m); drops.push({ m, v: 0 }); nextDrip = t + 1.15; }
+    for (let k = drops.length - 1; k >= 0; k--) { const d = drops[k]; d.v += 16 * dt; d.m.position.y -= d.v * dt; d.m.scale.set(1, 1 + Math.min(1.6, d.v * .09), 1);
+      if (d.m.position.y <= -PH + .04) { scene.remove(d.m); d.m.geometry.dispose(); drops.splice(k, 1); ring(AX + HIT.x, -PH + .006, HIT.y, '#9ff0e6', .55, .9);
+        for (let n = 0; n < 16; n++) { const a = Math.random() * 6.28, sp = .3 + Math.random() * .8; emit(AX + HIT.x, -PH + .03, HIT.y, Math.cos(a) * sp, .6 + Math.random() * 1.2, Math.sin(a) * sp, .5); } } }
+    wet.scale.setScalar(Math.min(.9, .05 + Math.sqrt(Math.max(0, lv.ga || 0)) * .028));
+    for (let k = rings.length - 1; k >= 0; k--) { const r = rings[k]; r.age += dt; const p = r.age / r.life;
+      if (p >= 1) { scene.remove(r.m); rings.splice(k, 1); continue; } r.m.scale.setScalar(.02 + r.r1 * (1 - Math.pow(1 - p, 3))); r.m.material.opacity = .9 * (1 - p); }
+
+    // blocks: lift out, arc over, land on the tower
+    for (const b of blocks) {
+      b.age += dt; const g = b.g;
+      if (b.age < .7) { const p = 1 - Math.pow(1 - b.age / .7, 3); g.position.set(BX, -PH / 2 + p * 1.0, 0); g.rotation.set(0, 0, Math.sin(b.age * 7) * .02); g.scale.setScalar(1 - .45 * p); b.m.material.emissiveIntensity = .9 + (1 - p) * 1.5; }
+      else if (b.age < 2.1) { const p = io((b.age - .7) / 1.4); const from = new THREE.Vector3(BX, -PH / 2 + 1.0, 0);
+        g.position.lerpVectors(from, b.slot, p); g.position.y += Math.sin(p * Math.PI) * .55; g.scale.setScalar(.55 + (BS - .55) * p); g.rotation.set(0, p * Math.PI * 2, 0); }
+      else { if (!b.landed) { b.landed = true; shake = Math.max(shake, .35); } const p = Math.min(1, (b.age - 2.1) / .4);
+        g.position.copy(b.slot); g.position.y += Math.sin(p * Math.PI) * .05 * (1 - p); g.scale.setScalar(BS); g.rotation.set(0, 0, 0); b.m.material.emissiveIntensity = .6; }
+    }
+    poolB.pl.intensity = 4 + 3 * level; poolB.halo.material.opacity = .14 + .2 * level;
+    renderer.render(scene, cam);
+    if (!ready) { ready = true; slide.classList.add('gl'); }
+  };
+  const frame = () => {
+    if (active && !reduce) raf = requestAnimationFrame(frame);    // schedule first, so one bad frame can't freeze the slide
+    try { draw(); } catch (e) { console.warn('live 3D frame', e); }
+  };
+  let lost = false;
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; active = false; cancelAnimationFrame(raf); slide.classList.remove('gl'); cv.style.display = 'none'; });
+  const sync = () => {
+    if (lost) return;
+    const on = document.body.dataset.atSlide === 'live';
+    if (on && !active) { active = true; reset(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); }
+    else if (on && reduce) requestAnimationFrame(frame);
+    if (!on && active) { active = false; cancelAnimationFrame(raf); }
+  };
+  document.addEventListener('ftw', sync); sync();
+  requestAnimationFrame(frame);   // one frame up front, so the slide is ready before anyone gets there
 })();
 </script>
 </body>

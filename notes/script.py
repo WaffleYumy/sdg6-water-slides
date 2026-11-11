@@ -73,11 +73,12 @@ SLIDES = [
         "If asked: the almond number is the almond industry’s own estimate, the lowest one out there, and it’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much, so the real gap is probably even bigger.",
     ]),
     ("live", "Live: right now", "0:25", "Show the gap happening in real time.", [
-        "[The counters started the moment this slide opened. Point at them.]",
+        "[The camera swoops down from straight overhead. Let it land, then point at the counters. They started the moment the slide opened.]",
         "These counters started when this slide came up. They run at the same rates as the last slide.",
         "ChatGPT, the whole world using it: about two and a half gallons a second. That’s the drip on the left.",
         "California almonds: almost 29 thousand gallons a second. That’s a full Olympic swimming pool every 23 seconds.",
         "At ChatGPT’s rate, filling one pool would take about three days.",
+        "Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.",
         "[Glance at the pools-filled count, then move on.]",
         "If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.",
     ]),
