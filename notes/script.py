@@ -48,14 +48,11 @@ SLIDES = [
         "Data-center cooling towers evaporate 70 to 80%, and it all comes out of one town’s supply.",
         "So the question isn’t how much. It’s where and when. A gallon in rainy Seattle isn’t the same as a gallon in Phoenix during a drought.",
     ]),
-    ("ai", "AI and water", "1:15", "AI’s water use is small nationally but can hurt locally.", [
+    ("ai", "AI and water", "0:50", "Nationally, AI’s water use is small.", [
         "The answer is C: about six hours.",
         "All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.",
         "[Click: the three rings appear.]",
         "Even if you add the water used by the power plants that run them, it’s about three days.",
-        "[Click: downsides and upsides appear.]",
-        "That doesn’t mean data centers don’t matter. They cluster in a few towns, often dry ones in places like Arizona and Texas. The water at the power plants behind them is about 12 times their direct use, and their water use could double or quadruple by 2028.",
-        "But there’s good news too: new closed-loop designs use almost no cooling water, efficiency is improving fast, and host towns get tax revenue.",
         "Q: Did anyone come in thinking AI was the biggest water problem?",
         "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.",
     ]),
@@ -81,6 +78,16 @@ SLIDES = [
         "Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.",
         "[Glance at the pools-filled count, then move on.]",
         "If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.",
+    ]),
+    ("hook", "Not off the hook", "0:40", "AI isn’t the water villain, but it isn’t off the hook either.", [
+        "So is AI off the hook? Not quite. Two things.",
+        "First: it’s the same kind of use, but different water. Data centers and almond trees both evaporate their water, so it leaves the area.",
+        "But data centers often use treated drinking water, straight from the town’s taps. Almonds use river water, plus groundwater that took thousands of years to collect.",
+        "[Click: the electricity side appears.]",
+        "Second, and this is the bigger one: electricity. Data centers used about 4.4% of all US electricity in 2023, and that could reach 12% by 2028.",
+        "And the power plants behind them use about 12 times more water than the data centers themselves.",
+        "So the fix isn’t less AI. It’s clean power, built in the right places.",
+        "If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And how much almond water is groundwater depends on the year: more in droughts.",
     ]),
     ("real", "The real problem", "1:00", "The real problem is farms, pipes and people.", [
         "[A chapter title card washes across the screen. Let it pass, then start.]",

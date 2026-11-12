@@ -336,6 +336,53 @@ em.hl{font-style:italic;color:var(--aqua)}
 #live.gl .lv-num{text-shadow:0 4px 30px rgba(6,26,36,.9)}
 #live.gl .lv-top{border-bottom-color:rgba(169,198,204,.28)}
 
+/* not off the hook: different water, and the electricity problem */
+#hook{gap:30px}
+.hk-cols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.hk-card{position:relative;overflow:hidden;border-radius:28px;padding:34px 38px;display:flex;flex-direction:column;gap:16px;
+  background:linear-gradient(155deg,rgba(32,82,104,.55),rgba(11,42,60,.5) 60%,rgba(6,26,36,.55));border:1.5px solid rgba(127,224,214,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 30px 80px rgba(0,0,0,.3)}
+.hk-card.e{border-color:rgba(255,107,74,.45);background:linear-gradient(155deg,rgba(110,44,34,.42),rgba(30,30,42,.45) 60%,rgba(6,26,36,.55))}
+.hk-lead{font-size:26px;line-height:1.38;color:#DCEAEC}
+.hk-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:4px}
+.hk-src{display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px;border-radius:20px;background:rgba(6,26,36,.45);border:1px solid rgba(169,198,204,.14)}
+.hk-src svg{width:150px;height:140px;align-self:center}
+.hk-src h3{font-size:32px}
+.hk-src.a h3{color:var(--aqua)}
+.hk-src.b h3{color:var(--ember)}
+.hk-src p{font-size:23px;line-height:1.36;color:#C9DCDF}
+.hk-src p b{color:var(--glacier);font-weight:600}
+.slide.active .hk-stream{animation:hkPour 1.4s linear infinite}
+@keyframes hkPour{0%,100%{opacity:.9}50%{opacity:.6}}
+.slide.active .hk-fill{animation:hkFill 5s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes hkFill{0%{transform:translateY(40px)}80%,100%{transform:translateY(-24px)}}
+.slide.active .hk-aq{animation:hkDrain 6s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes hkDrain{0%{transform:translateY(0)}75%,100%{transform:translateY(22px)}}
+.hk-bars{display:flex;flex-direction:column;gap:14px}
+.hk-row{display:grid;grid-template-columns:70px 1fr 120px;align-items:center;gap:16px}
+.hk-yr{font-family:var(--mono);font-size:22px;color:var(--mist)}
+.hk-pct{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--glacier);text-align:right;white-space:nowrap}
+.hk-track{position:relative;height:30px;border-radius:8px;background:rgba(255,255,255,.06)}
+.hk-track i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.hk-now{background:linear-gradient(90deg,#B8381F,#FF6B4A)}
+.hk-lo{background:linear-gradient(90deg,#B8381F,#FF6B4A);z-index:1}
+.hk-hi{background:repeating-linear-gradient(135deg,rgba(255,107,74,.55) 0 8px,rgba(255,107,74,.22) 8px 16px)}
+.hk-card.e.shown .hk-now{width:31.4%;transition-delay:.35s}
+.hk-card.e.shown .hk-lo{width:47.9%;transition-delay:.6s}
+.hk-card.e.shown .hk-hi{width:85.7%;transition-delay:.9s}
+.hk-12{display:flex;align-items:center;gap:22px;margin-top:6px;padding-top:16px;border-top:1.5px solid rgba(255,180,160,.2)}
+.hk-big{font-family:var(--serif);font-weight:700;font-size:96px;line-height:.9;letter-spacing:-.03em;color:var(--ember);white-space:nowrap}
+.hk-12t{font-size:24px;line-height:1.36;color:#E6D9D6}
+.hk-12t b{color:var(--glacier);font-weight:600}
+.hk-drops{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hk-dl{font-family:var(--mono);font-size:18px;color:var(--mist)}
+.hk-drops i,.hk-dd i{display:inline-block;width:20px;height:26px;background:var(--aqua);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 26'%3E%3Cpath d='M10 0C10 0 0 12 0 17a10 9 0 0 0 20 0C20 12 10 0 10 0Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 26'%3E%3Cpath d='M10 0C10 0 0 12 0 17a10 9 0 0 0 20 0C20 12 10 0 10 0Z'/%3E%3C/svg%3E") center/contain no-repeat}
+.hk-drops i.me{margin-right:18px}
+.hk-dd{display:flex;gap:5px}
+.hk-dd i{background:var(--ember);opacity:0;transform:translateY(-14px) scale(.6);transition:opacity .3s ease,transform .5s cubic-bezier(.3,1.5,.5,1)}
+.hk-card.e.shown .hk-dd i{opacity:1;transform:none;transition-delay:calc(var(--k) * 70ms + 1.3s)}
+.hk-take{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.15;letter-spacing:-.01em;color:var(--glacier)}
+@media print{.hk-track i{transition:none!important}.hk-now{width:31.4%!important}.hk-lo{width:47.9%!important}.hk-hi{width:85.7%!important}.hk-dd i{opacity:1!important;transform:none!important}}
+
 /* real problem */
 .panel{flex:1;display:flex;flex-direction:column;gap:14px}
 .panel .vis{height:210px;display:flex;align-items:center}
@@ -701,7 +748,7 @@ So the question isn’t how much. It’s where and when. A gallon in rainy Seatt
 </section>
 
 <!-- ============ 5 · THE AI MYTH ============ -->
-<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="2" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
+<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="1" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
   <canvas class="ascii" id="ascii" width="1920" height="1080" aria-hidden="true"></canvas>
   <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI and water: how bad is it, really?</h2></header>
   <div class="row" style="gap:64px;align-items:center;margin-top:-10px">
@@ -727,22 +774,15 @@ So the question isn’t how much. It’s where and when. A gallon in rainy Seatt
         <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
         <p style="font-size:28px;line-height:1.3;margin-left:10px">Add the power plants that run them<br><b style="color:var(--aqua)">≈ 3 days.</b> Still small, nationally.</p>
       </div>
-      <div data-step="2" class="row" style="gap:20px">
-        <div class="pc"><span class="pill ember">Real downsides</span><ul><li>Clustered in dry towns</li><li>Power-plant water ≈ 12×</li><li>Could grow 2–4× by 2028</li></ul></div>
-        <div class="pc"><span class="pill">Real upsides</span><ul><li>Closed-loop cooling: ~0 water</li><li>Efficiency rising fast</li><li>Tax revenue for towns</li></ul></div>
-      </div>
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(1:15) Point: AI’s water use is small nationally but can hurt locally.
+  <template class="notes">(0:50) Point: Nationally, AI’s water use is small.
 
 The answer is C: about six hours.
 All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.
 [Click: the three rings appear.]
 Even if you add the water used by the power plants that run them, it’s about three days.
-[Click: downsides and upsides appear.]
-That doesn’t mean data centers don’t matter. They cluster in a few towns, often dry ones in places like Arizona and Texas. The water at the power plants behind them is about 12 times their direct use, and their water use could double or quadruple by 2028.
-But there’s good news too: new closed-loop designs use almost no cooling water, efficiency is improving fast, and host towns get tax revenue.
 Q: Did anyone come in thinking AI was the biggest water problem?
 If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.</template>
 </section>
@@ -896,6 +936,74 @@ At ChatGPT’s rate, filling one pool would take about three days.
 Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.
 [Glance at the pools-filled count, then move on.]
 If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.</template>
+</section>
+
+<!-- ============ 5d · NOT OFF THE HOOK ============ -->
+<section class="slide dark" id="hook" data-title="Not off the hook" data-chapter="2" data-steps="1" data-enter="push">
+  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>Not the water villain. Not off the hook.</h2></header>
+  <div class="hk-cols">
+    <div class="hk-card rv" style="--d:1">
+      <span class="pill">Same use, different water</span>
+      <p class="hk-lead">Both evaporate their water, so it leaves the area. But they drink from different places.</p>
+      <div class="hk-pair">
+        <div class="hk-src a">
+          <svg viewBox="0 0 160 150" aria-hidden="true">
+            <defs><clipPath id="hkGlass"><path d="M48 62 L112 62 L104 140 L56 140 Z"/></clipPath>
+              <linearGradient id="hkTap" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#E6F4F3"/><stop offset="1" stop-color="#8FB2BA"/></linearGradient></defs>
+            <path d="M30 18 H92 a10 10 0 0 1 10 10 V40 H88 V32 H30 Z" fill="url(#hkTap)"/><rect x="22" y="12" width="12" height="26" rx="3" fill="#A9C6CC"/>
+            <rect x="86" y="40" width="18" height="6" rx="2" fill="#A9C6CC"/>
+            <rect class="hk-stream" x="92" y="46" width="6" height="70" rx="3" fill="#BFF3EC"/>
+            <g clip-path="url(#hkGlass)"><rect class="hk-fill" x="40" y="96" width="90" height="60" fill="#7FE0D6" opacity=".85"/></g>
+            <path d="M48 62 L112 62 L104 140 L56 140 Z" fill="none" stroke="#EEF5F3" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M58 72 L62 128" stroke="rgba(255,255,255,.45)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <h3>Data centers</h3>
+          <p>Often <b>treated drinking water</b>, straight from the town’s taps</p>
+        </div>
+        <div class="hk-src b">
+          <svg viewBox="0 0 160 150" aria-hidden="true">
+            <defs><clipPath id="hkAq"><rect x="14" y="104" width="132" height="30" rx="4"/></clipPath>
+              <pattern id="hkDots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="rgba(255,255,255,.35)"/></pattern></defs>
+            <path d="M74 44 v-16" stroke="#7A5134" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="66" cy="22" r="13" fill="#2E8F6E"/><circle cx="84" cy="20" r="14" fill="#36A07B"/><circle cx="76" cy="10" r="11" fill="#43B088"/>
+            <rect x="14" y="46" width="132" height="22" rx="4" fill="#5B3E2B"/>
+            <rect x="14" y="70" width="132" height="32" rx="4" fill="#3A3A40"/>
+            <rect x="14" y="104" width="132" height="30" rx="4" fill="#1A3440"/>
+            <g clip-path="url(#hkAq)"><rect class="hk-aq" x="14" y="104" width="132" height="30" fill="#2F9FC0"/><rect class="hk-aq" x="14" y="104" width="132" height="30" fill="url(#hkDots)"/></g>
+            <rect x="118" y="30" width="8" height="98" rx="2" fill="#A9C6CC"/><rect x="112" y="28" width="20" height="8" rx="2" fill="#EEF5F3"/>
+            <text x="20" y="128" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#DDF3F6">AQUIFER</text>
+          </svg>
+          <h3>Almonds</h3>
+          <p><b>River water</b>, plus <b>groundwater</b> that took thousands of years to collect</p>
+        </div>
+      </div>
+    </div>
+    <div class="hk-card e" data-step="1">
+      <span class="pill ember">The real AI problem: electricity</span>
+      <p class="hk-lead">Share of all US electricity used by data centers</p>
+      <div class="hk-bars">
+        <div class="hk-row"><span class="hk-yr">2023</span><div class="hk-track"><i class="hk-now"></i></div><span class="hk-pct"><span class="count" data-to="4.4" data-dec="1">4.4</span>%</span></div>
+        <div class="hk-row"><span class="hk-yr">2028</span><div class="hk-track"><i class="hk-lo"></i><i class="hk-hi"></i></div><span class="hk-pct">6.7–12%</span></div>
+      </div>
+      <div class="hk-12">
+        <p class="hk-big"><span class="count" data-to="12">12</span>×</p>
+        <p class="hk-12t">more water is used at the <b>power plants</b> behind data centers than inside the data centers themselves</p>
+      </div>
+      <div class="hk-drops" aria-hidden="true"><span class="hk-dl">Data center</span><i class="me"></i><span class="hk-dl">Its power plants</span><span class="hk-dd"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><i style="--k:5"></i><i style="--k:6"></i><i style="--k:7"></i><i style="--k:8"></i><i style="--k:9"></i><i style="--k:10"></i><i style="--k:11"></i></span></div>
+    </div>
+  </div>
+  <p class="hk-take" data-step="1">The fix isn’t less AI. It’s <em class="hl">clean power</em>, built in the <em class="hl">right places</em>.</p>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:40) Point: AI isn’t the water villain, but it isn’t off the hook either.
+
+So is AI off the hook? Not quite. Two things.
+First: it’s the same kind of use, but different water. Data centers and almond trees both evaporate their water, so it leaves the area.
+But data centers often use treated drinking water, straight from the town’s taps. Almonds use river water, plus groundwater that took thousands of years to collect.
+[Click: the electricity side appears.]
+Second, and this is the bigger one: electricity. Data centers used about 4.4% of all US electricity in 2023, and that could reach 12% by 2028.
+And the power plants behind them use about 12 times more water than the data centers themselves.
+So the fix isn’t less AI. It’s clean power, built in the right places.
+If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And how much almond water is groundwater depends on the year: more in droughts.</template>
 </section>
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
@@ -1786,7 +1894,7 @@ void main(){
         B.timers.push(setTimeout(finish, 1160));
       } else {
         // Chapter title card: the water covers the screen, holds on the chapter's name, then washes away.
-        const DUR = 2000, lead = 90;
+        const DUR = 2600, lead = 110;   // 30% slower than before, so the chapter name can be read
         const hold = vert ? ['translateY(-205px)', 'translateY(-312px)'] : ['translateX(-268px)', 'translateX(-412px)'];
         const kf = [{ transform: fr[0], offset: 0, easing: 'cubic-bezier(.62,0,.32,1)' }, { transform: hold[0], offset: .34, easing: 'linear' },
           { transform: hold[1], offset: .66, easing: 'cubic-bezier(.62,0,.32,1)' }, { transform: fr[1], offset: 1 }];
