@@ -89,7 +89,7 @@ SLIDES = [
         "71% of all the fresh water people take goes to farming. That’s way more than cities, factories or data centers.",
         "And a lot of it gets wasted. Most farms still flood their fields. With flooding, about 40% of the water never reaches the plant’s roots. It runs off or evaporates. Drip irrigation gets about 90% of it there.",
         "But in Asia, which has most of the world’s irrigated farmland, only about 7% of it uses drip.",
-        "So the biggest fix is simple: get the water to the roots, not the whole field.",
+        "So the fix is to switch farms to drip irrigation.",
         "Q: Why do you guys think more farms don’t switch to drip?",
         "If asked: drip costs more to install, and a lot of small farmers can’t afford it. That’s what the companies on the next slide are working on.",
         "If asked: the 40% is the field-level number from the UN’s farm agency, the FAO. If you count water lost in canals on the way, flood irrigation is closer to half lost.",
