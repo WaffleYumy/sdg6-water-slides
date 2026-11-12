@@ -2705,7 +2705,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 })();
 </script>
 
-<!-- Title slide: one drop of water in 3D (glass-like, slowly turning, gently wobbling) -->
+<!-- Title slide: one drop of water in 3D. A custom shader does what real water does: it bends (and flips) what is
+     behind it, goes dark at the edges, catches sharp window highlights, and focuses light near the bottom. No glow. -->
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
 (() => {
@@ -2716,65 +2717,87 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
   const W = 820, H = 860;
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); renderer.setSize(W, H, false);
-  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  renderer.setPixelRatio(DPR); renderer.setSize(W, H, false);
   const scene = new THREE.Scene();
-  const cam = new THREE.PerspectiveCamera(28, W / H, .1, 100); cam.position.set(0, .15, 11); cam.lookAt(0, .1, 0);
+  const cam = new THREE.PerspectiveCamera(28, W / H, .1, 100); cam.position.set(0, .1, 11); cam.lookAt(0, .05, 0);
 
-  // studio light for the reflections: soft top box, teal and warm side strips
-  {
-    const env = new THREE.Scene();
-    env.add(new THREE.Mesh(new THREE.SphereGeometry(30, 32, 16), new THREE.MeshBasicMaterial({ color: '#06161e', side: THREE.BackSide })));
-    const panel = (w, h, c, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
-    panel(10, 3, '#ffffff', 5, 0, 12, 4); panel(3, 10, '#9ff0e6', 3.4, -12, 2, 4); panel(3, 10, '#ffb6a2', 2.4, 12, 0, -2); panel(14, 1, '#ffffff', 2.4, 0, -2, 12);
-    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, .02).texture; pm.dispose();
-  }
+  const water = new THREE.ShaderMaterial({
+    toneMapped: false,
+    uniforms: { t: { value: 0 }, res: { value: new THREE.Vector2(W * DPR, H * DPR) } },
+    vertexShader: `varying vec3 vN; varying vec3 vV;
+      void main(){ vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `uniform float t; uniform vec2 res; varying vec3 vN; varying vec3 vV;
+      float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+        return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y); }
+      // what is behind the drop: the slide's dark water, with soft moving lines of light
+      vec3 bg(vec2 uv){
+        vec3 deep = vec3(.012, .06, .085), mid = vec3(.045, .2, .245);
+        vec3 c = mix(mid, deep, smoothstep(.0, .75, length(uv - vec2(.48, .55))));
+        float w = uv.y * 6.5 + sin(uv.x * 4.5 + t * .35) * .55 + noise(uv * 2.6 + t * .07) * 1.3;
+        float l = abs(fract(w) - .5);
+        c += vec3(.35, .85, .8) * smoothstep(.07, .0, l) * .45;
+        return c;
+      }
+      void main(){
+        vec3 N = normalize(vN), V = normalize(vV);
+        float ndv = clamp(dot(N, V), 0., 1.);
+        vec2 suv = gl_FragCoord.xy / res;
+        // refraction: the view behind is magnified in the middle and flipped toward the edges
+        vec2 off = -N.xy * (.16 + .62 * pow(1. - ndv, 1.4));
+        vec3 refr = bg(suv + off) * vec3(.86, 1., .97);
+        refr *= mix(.05, 1., smoothstep(.04, .6, ndv));                    // dark rim, like real water
+        // reflection of a studio: a big window up and to the left, a thin strip to the right
+        vec3 R = reflect(-V, N);
+        float win = smoothstep(0., .05, R.y - .5) * smoothstep(0., .05, .88 - R.y) * smoothstep(0., .04, -.24 - R.x) * smoothstep(0., .04, R.x + .58);
+        float bar = smoothstep(0., .03, R.x - .6) * smoothstep(0., .03, .74 - R.x) * smoothstep(0., .05, R.y + .1) * smoothstep(0., .05, .55 - R.y);
+        vec3 refl = vec3(.02, .06, .08) + vec3(1.) * win * 16. + vec3(.85, 1., 1.) * bar * 8.;
+        float F = .025 + .975 * pow(1. - ndv, 5.);
+        vec3 col = mix(refr, refl, clamp(F, 0., 1.));
+        col += vec3(1.) * win * .55 * smoothstep(.3, .8, ndv);                // the window also shows head-on, crisp
+        // tiny hard highlight
+        vec3 H = normalize(normalize(vec3(-.45, .65, .6)) + V);
+        col += vec3(1.) * pow(max(dot(N, H), 0.), 600.) * 3.;
+        // light focused through the drop, on the far side from the light (lower right)
+        float ca = pow(max(dot(N, normalize(vec3(.32, -.82, .48))), 0.), 6.) * smoothstep(.2, .7, ndv);
+        col += vec3(.55, 1., .92) * ca * .7;
+        gl_FragColor = vec4(min(col, vec3(1.)), 1.);
+      }`
+  });
 
-  // the drop: a teardrop turned on a lathe, made of water-like glass
+  // the drop: rounder than a cartoon teardrop, with only a soft point at the top
   const prof = [];
-  for (let k = 0; k <= 96; k++) {
-    const t = k / 96 * Math.PI;                                // classic teardrop curve: tip at the top, round at the bottom
-    const r = 1.55 * Math.sin(t) * Math.pow(Math.sin(t / 2), 1.55);
-    prof.push(new THREE.Vector2(Math.max(r, .0001), 1.65 * Math.cos(t) - .1));
+  for (let k = 0; k <= 120; k++) {
+    const t = k / 120 * Math.PI;
+    const r = 1.42 * Math.sin(t) * Math.pow(Math.sin(t / 2), 1.05);
+    prof.push(new THREE.Vector2(Math.max(r, .0001), 1.62 * Math.cos(t) - .05));
   }
-  const geo = new THREE.LatheGeometry(prof, 128);
+  prof.reverse();                                  // bottom to top, so the surface faces outward
+  const geo = new THREE.LatheGeometry(prof, 160);
   const base = Float32Array.from(geo.attributes.position.array);
-  const mat = new THREE.MeshPhysicalMaterial({ color: '#2fb3ab', metalness: 0, roughness: .03, transparent: true, opacity: .72,
-    clearcoat: 1, clearcoatRoughness: .02, envMapIntensity: 2.4, emissive: '#0b5c5c', emissiveIntensity: .6, iridescence: .3, iridescenceIOR: 1.3 });
-  const drop = new THREE.Mesh(geo, mat); scene.add(drop);
-  // a soft aqua rim, brightest where the surface turns away from you, like light caught in water
-  const rimMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    vertexShader: 'varying float vF; void main(){ vec3 n = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position,1.); vF = 1. - abs(dot(n, normalize(-mv.xyz))); gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'varying float vF; void main(){ float a = pow(vF, 2.4); gl_FragColor = vec4(vec3(.55,.95,.9) * a * 1.4, a); }' });
-  const rimMesh = new THREE.Mesh(geo, rimMat); rimMesh.scale.setScalar(1.015); drop.add(rimMesh);
-  // a glow behind it
-  const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
-    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, 'rgba(127,224,214,.55)'); g.addColorStop(1, 'rgba(127,224,214,0)'); x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-    const t = new THREE.CanvasTexture(c); return t; })();
-  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55 }));
-  glow.scale.set(4.6, 4.6, 1); glow.position.set(0, -.25, -2); scene.add(glow);
+  const drop = new THREE.Mesh(geo, water); scene.add(drop);
 
-  // a few small droplets in orbit
-  const mini = []; const mg = new THREE.SphereGeometry(1, 32, 24);
-  for (let k = 0; k < 5; k++) { const m = new THREE.Mesh(mg, mat); m.scale.setScalar(.09 + Math.random() * .1); scene.add(m); mini.push({ m, r: 2.2 + Math.random() * .7, s: .25 + Math.random() * .25, a: Math.random() * 6.28, y: -1 + Math.random() * 2.2 }); }
-
-  scene.add(new THREE.HemisphereLight('#8fd8d0', '#06161e', .5));
-  const rim = new THREE.PointLight('#7fe0d6', 18, 14, 1.6); rim.position.set(-3.5, 2.5, 2); scene.add(rim);
-  const warm = new THREE.PointLight('#ff8a68', 10, 14, 1.6); warm.position.set(3.6, -1.5, 2.5); scene.add(warm);
+  // a few small droplets nearby, same water
+  const mini = []; const mg = new THREE.SphereGeometry(1, 48, 32);
+  [[-2.15, .9, .16], [2.05, 1.35, .1], [1.85, -1.25, .2], [-1.9, -1.05, .12]].forEach(([x, y, s], k) => {
+    const m = new THREE.Mesh(mg, water); m.scale.setScalar(s); m.position.set(x, y, .4); scene.add(m); mini.push({ m, x, y, ph: k * 1.7 });
+  });
 
   let active = false, raf = 0, t0 = performance.now(), ready = false;
   const pos = geo.attributes.position;
   const draw = () => {
     const t = (performance.now() - t0) / 1000;
-    // liquid wobble: small waves running over the surface
+    water.uniforms.t.value = t;
+    // a slow liquid wobble
     for (let i = 0; i < pos.count; i++) {
-      const x = base[i * 3], y = base[i * 3 + 1], z = base[i * 3 + 2], a = Math.atan2(z, x), r = Math.hypot(x, z);
-      const w = 1 + .028 * Math.sin(t * 1.9 + y * 2.6 + a * 3) + .018 * Math.sin(t * 2.7 - y * 3.4 + a * 2);
-      pos.setXYZ(i, x * w, y + .02 * Math.sin(t * 1.3 + a * 2) * r, z * w);
+      const x = base[i * 3], y = base[i * 3 + 1], z = base[i * 3 + 2], a = Math.atan2(z, x);
+      const w = 1 + .02 * Math.sin(t * 1.6 + y * 2.4 + a * 3) + .012 * Math.sin(t * 2.3 - y * 3.1 + a * 2);
+      pos.setXYZ(i, x * w, y * (1 - .01 * Math.sin(t * 1.6)), z * w);
     }
     pos.needsUpdate = true; geo.computeVertexNormals();
-    drop.rotation.y = t * .25; drop.position.y = Math.sin(t * .8) * .08; drop.rotation.z = Math.sin(t * .5) * .04;
-    for (const d of mini) { const a = d.a + t * d.s; d.m.position.set(Math.cos(a) * d.r, d.y + Math.sin(t * .7 + d.a) * .15, Math.sin(a) * d.r * .55); }
+    drop.rotation.y = t * .18; drop.position.y = Math.sin(t * .7) * .07;
+    for (const d of mini) d.m.position.set(d.x + Math.sin(t * .5 + d.ph) * .08, d.y + Math.sin(t * .8 + d.ph) * .1, .4);
     renderer.render(scene, cam);
     if (!ready) { ready = true; slide.classList.add('drop-gl'); }
   };
