@@ -38,7 +38,7 @@ SLIDES = [
         "At today’s pace, the world won’t make it. Progress on drinking water would have to be about six times faster. 2030 is only a few years away, so this is the world we’ll be working in.",
         "If asked: “safely managed” means water that’s at home, available when you need it, and not contaminated. Some people have a water source that doesn’t meet all three.",
     ]),
-    ("terms", "Key terms + poll", "0:40", "Four words, then a guess from the class.", [
+    ("terms", "Key terms + poll", "0:55", "Four words, then a guess from the class.", [
         "[Wait for the chapter card to pass.]",
         "A few words you need for the rest of this.",
         "Withdrawal is water we take from a river, a lake or underground. A lot of it goes back.",
@@ -48,7 +48,10 @@ SLIDES = [
         "Q: Okay, what do you guys think? Take every data center in the US, running for a whole year. How long would it take US farms to use that much water? A, a week. B, a day. C, six hours. D, one hour.",
         "[Count hands. Tap each option once per hand.]",
         "[Click: the answer appears.]",
-        "It’s C, about six hours. I’ll show you why in a minute.",
+        "It’s C, about six hours.",
+        "US data centers used about 17 billion gallons of water in 2023. US farms use about 73 billion gallons in one day. So a whole year of data centers is about five and a half hours of farming.",
+        "Even if you count the water at the power plants that run them, it’s about three days.",
+        "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.",
     ]),
     ("equal", "Not all water use is equal", "0:50", "What matters is where and when, not just how much.", [
         "First, look at the units. Farms and power plants are per day. Data centers are per year.",
@@ -56,13 +59,6 @@ SLIDES = [
         "Farms use up about 62% of what they take.",
         "Data center cooling towers evaporate 70 to 80%, and it comes out of one town’s supply.",
         "Water doesn’t disappear. It evaporates and falls somewhere else. So what matters is where you take it from, and when. A gallon in Seattle isn’t the same as a gallon in Phoenix during a drought.",
-    ]),
-    ("ai", "AI and water", "0:40", "Nationally, data centers use very little water.", [
-        "So why six hours?",
-        "US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.",
-        "[Click: the three rings appear.]",
-        "Even if you count the water at the power plants that run them, it’s about three days.",
-        "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.",
     ]),
     ("versus", "ChatGPT vs. almonds", "0:45", "A comparison everyone can picture.", [
         "[Let the scale wobble. Don’t hint at the answer.]",

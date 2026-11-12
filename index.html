@@ -704,6 +704,7 @@ The lakes and rivers we actually use are the tiny dot with the ring. 35 miles. T
 
 <!-- ============ 2b · THE GOAL ============ -->
 <section class="slide dark" id="goal" data-title="The goal" data-chapter="0" data-steps="1" data-enter="push">
+  <canvas class="ascii" id="ascii" width="1920" height="1080" aria-hidden="true"></canvas>
   <header class="hd"><p class="chap rv"><i></i>UN SDG 6 · Clean water &amp; sanitation</p><h2 data-split>The goal: safe water and toilets for everyone by 2030</h2></header>
   <div class="gl-cols">
     <div class="gl-card rv" style="--d:1">
@@ -763,12 +764,12 @@ If asked: “safely managed” means water that’s at home, available when you 
         <button class="opt" data-opt="C"><span class="bar"></span><b>C</b><span class="lab">6 hours</span><span class="n">0</span><span class="ok">Answer</span></button>
         <button class="opt" data-opt="D"><span class="bar"></span><b>D</b><span class="lab">1 hour</span><span class="n">0</span></button>
       </div>
-      <p class="poll-ans" data-step="1">About <b>5.6 hours</b>. Here’s why in a minute.</p>
+      <p class="poll-ans" data-step="1">About <b>5.6 hours</b>. A year of US data centers: 17B gallons. US farms: 73B gallons a day.</p>
       <p class="hint" style="position:relative"><span>Tap = +1 vote · Shift-tap = −1</span><button id="pollreset">reset</button></p>
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:40) Point: Four words, then a guess from the class.
+  <template class="notes">(0:55) Point: Four words, then a guess from the class.
 
 [Wait for the chapter card to pass.]
 A few words you need for the rest of this.
@@ -779,7 +780,10 @@ A water footprint is all the water behind something you buy. One cotton T-shirt 
 Okay, what do you guys think? Take every data center in the US, running for a whole year. How long would it take US farms to use that much water? A, a week. B, a day. C, six hours. D, one hour.
 [Count hands. Tap each option once per hand.]
 [Click: the answer appears.]
-It’s C, about six hours. I’ll show you why in a minute.</template>
+It’s C, about six hours.
+US data centers used about 17 billion gallons of water in 2023. US farms use about 73 billion gallons in one day. So a whole year of data centers is about five and a half hours of farming.
+Even if you count the water at the power plants that run them, it’s about three days.
+If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.</template>
 </section>
 
 <!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
@@ -825,47 +829,8 @@ Data center cooling towers evaporate 70 to 80%, and it comes out of one town’s
 Water doesn’t disappear. It evaporates and falls somewhere else. So what matters is where you take it from, and when. A gallon in Seattle isn’t the same as a gallon in Phoenix during a drought.</template>
 </section>
 
-<!-- ============ 5 · THE AI MYTH ============ -->
-<section class="slide dark" id="ai" data-title="AI and water" data-chapter="2" data-steps="1" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
-  <canvas class="ascii" id="ascii" width="1920" height="1080" aria-hidden="true"></canvas>
-  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI and water: how bad is it, really?</h2></header>
-  <div class="row" style="gap:64px;align-items:center;margin-top:-10px">
-    <svg class="clock rv" style="--d:1;width:540px;height:540px" viewBox="0 0 680 680" role="img" aria-label="A 24-hour clock representing one day of US irrigation water. A wedge of about 5.6 hours equals a full year of US data-center water.">
-      <circle cx="340" cy="340" r="250" fill="#113447"/>
-      <circle class="wedge" cx="340" cy="340" r="125" fill="none" stroke="#FF6B4A" stroke-width="250" transform="rotate(-90 340 340)"/>
-      <g id="ticks" stroke="#A9C6CC"></g>
-      <g font-family="JetBrains Mono, monospace" font-size="22" fill="#A9C6CC" text-anchor="middle">
-        <text x="340" y="42">0h</text><text x="648" y="347">6h</text><text x="340" y="654">12h</text><text x="32" y="347">18h</text>
-      </g>
-      <line class="hand" x1="340" y1="340" x2="340" y2="92" stroke="#EEF5F3" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="340" cy="340" r="92" fill="#0B2A3C"/>
-      <text x="340" y="345" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="64" fill="#EEF5F3">5.6h</text>
-      <text x="340" y="384" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="20" fill="#A9C6CC">OF 24</text>
-    </svg>
-    <div class="col grow" style="gap:24px">
-      <div class="row rv" style="--d:2;gap:20px;align-items:center"><span class="pill">Poll answer: C</span><p class="guess" id="guessline"></p></div>
-      <p class="serif rv" style="--d:3;font-size:48px;font-weight:600;line-height:1.14">A full year of US data-center water ≈ <span style="color:var(--ember);white-space:nowrap">5.6 hours</span> of US farm irrigation.</p>
-      <p class="src rv" style="--d:4">17B gal/yr direct (LBNL, 2023) ÷ 73B gal/day consumed by irrigation (USGS, 2015)</p>
-      <div data-step="1" class="days">
-        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
-        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
-        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="none" stroke="#1A4559" stroke-width="8"/><circle class="f" cx="40" cy="40" r="35" fill="none" stroke="#7FE0D6" stroke-width="8" transform="rotate(-90 40 40)"/></svg>
-        <p style="font-size:28px;line-height:1.3;margin-left:10px">Add the power plants that run them<br><b style="color:var(--aqua)">≈ 3 days.</b> Still small, nationally.</p>
-      </div>
-    </div>
-  </div>
-  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:40) Point: Nationally, data centers use very little water.
-
-So why six hours?
-US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.
-[Click: the three rings appear.]
-Even if you count the water at the power plants that run them, it’s about three days.
-If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.</template>
-</section>
-
 <!-- ============ 5b · CHATGPT VS ALMONDS ============ -->
-<section class="slide dark" id="versus" data-title="ChatGPT vs. almonds" data-chapter="2" data-steps="2" data-enter="push">
+<section class="slide dark" id="versus" data-title="ChatGPT vs. almonds" data-chapter="2" data-steps="2" data-enter="iris" data-from="#equal .use:nth-child(3) .glass">
   <div class="vs-spot" aria-hidden="true"></div><div class="vs-spot b" aria-hidden="true"></div>
   <canvas id="vs3d" width="1920" height="1080" aria-hidden="true"></canvas>
   <canvas id="vsfx" width="1920" height="1080" aria-hidden="true"></canvas>
@@ -1326,15 +1291,6 @@ Thanks. Any questions?</template>
     walk(el);
   });
 
-  /* ---- clock ticks ---- */
-  const tk = $('#ticks');
-  for (let h = 0; h < 24; h++) {
-    const a = (h / 24) * Math.PI * 2, r1 = h % 6 ? 262 : 258, r2 = h % 6 ? 274 : 284;
-    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    l.setAttribute('x1', 340 + Math.sin(a) * r1); l.setAttribute('y1', 340 - Math.cos(a) * r1);
-    l.setAttribute('x2', 340 + Math.sin(a) * r2); l.setAttribute('y2', 340 - Math.cos(a) * r2);
-    l.setAttribute('stroke-width', h % 6 ? 2 : 4); tk.appendChild(l);
-  }
 
   /* ---- 1-in-4 dots ---- */
   const dots = $('#dots'), hits = new Set([2,7,11,15,19,23,28,31,36,40,44,49,53,57,60,66,69,72,77,81,84,88,93,96,99]);
@@ -1482,7 +1438,8 @@ void main(){
     };
   })();
 
-  /* ---- ASCII "digital water" behind the AI slide ---- */
+  /* ---- ASCII "digital water": a background shared by the dark, data-heavy slides ---- */
+  const ASCII_SLIDES = new Set(['goal', 'hook']);
   const asc = $('#ascii'), ac = asc.getContext('2d');
   const CELL = 24, COLS = 80, ROWS = 45, GLY = ' .·:-=+*01';
   let ascOn = false, ascRaf = 0, ascT = 0;
@@ -1889,12 +1846,13 @@ void main(){
     const wOK = water && !water.dead;
     if (wOK) water.set(i <= 1);
     setFlow((i <= 1 && !wOK) || sid === 'moves');
-    setAscii(sid === 'ai');
+    const ascOnSlide = ASCII_SLIDES.has(sid);
+    if (ascOnSlide && asc.parentNode !== slides[i]) slides[i].prepend(asc);
+    setAscii(ascOnSlide);
     setLeak(sid === 'real');
     setLive(sid === 'live');
     if (!reduce) { const cur = slides[i]; setTimeout(() => $$('.chap', cur).forEach(decode), 160); }
     slides[i].id === 'real' ? startTicker() : stopTicker();
-    if (slides[i].id === 'ai') $('#guessline').textContent = guessText();
     $('#count').textContent = String(i + 1).padStart(2, '0') + ' / ' + N;
     const tpl = $('template.notes', slides[i]); notesText.textContent = tpl ? tpl.content.textContent.trim() : '';
     drawChapters();
