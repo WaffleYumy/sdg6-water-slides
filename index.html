@@ -115,6 +115,8 @@ em.hl{font-style:italic;color:var(--aqua)}
 #open h1{font-size:168px;line-height:.92;font-weight:700;letter-spacing:-.035em}
 #open h1 em{font-style:italic;font-weight:400;color:var(--aqua)}
 #open .mark{width:110px;height:110px}
+#drop3d{position:absolute;left:1040px;top:40px;width:820px;height:860px;pointer-events:none;opacity:0;transform:translateY(30px) scale(.94);transition:opacity 1.4s ease .3s,transform 1.8s var(--ease) .3s}
+#open.active.drop-gl #drop3d,#open.drop-gl.active #drop3d{opacity:1;transform:none}
 .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 50%, rgba(6,26,36,.2) 0%, rgba(6,26,36,.85) 70%);pointer-events:none}
 #open .quote{font-family:var(--serif);font-style:italic;font-weight:500;font-size:92px;line-height:1.08;letter-spacing:-.02em;font-variation-settings:'opsz' 144}
 #open .quote b{font-style:normal;font-weight:700;color:var(--aqua)}
@@ -608,7 +610,7 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
   .dots svg.hit{fill:var(--ember)!important}
   .days circle.f{stroke-dasharray:220 220!important}
   .mark path{stroke-dashoffset:0!important}
-  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,#vs3d,#lv3d,.vs-spot{display:none!important}
+  #flow,#wipe,.grain,#ui,#hint,#chapters,#notes,#pv,#water,#globe-wrap,.ascii,#cur,#drop,.ring,.spl,#crowd,#earthrise,#vsfx,#vs3d,#lv3d,#drop3d,.vs-spot{display:none!important}
   #live .lv-tank{visibility:visible!important}
   #versus .scale{visibility:visible!important}
   #dots{display:grid!important}
@@ -639,7 +641,8 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
 <!-- ============ 1 · COLD OPEN ============ -->
 <section class="slide abyss" id="open" data-title="Title" data-chapter="0">
   <div class="vignette"></div>
-  <div class="col" style="gap:32px;position:relative;margin-top:-90px;width:1300px">
+  <canvas id="drop3d" width="820" height="860" aria-hidden="true"></canvas>
+  <div class="col" style="gap:32px;position:relative;margin-top:-90px;width:930px">
     <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="#7FE0D6" stroke-width="2"/><path class="wv" pathLength="1" d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2" stroke-linecap="round"/></svg>
     <p class="rv mono" style="--d:1;font-size:24px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua)">UN Sustainable Development Goal 6</p>
     <h1 data-split>Clean water<br>&amp; <em>sanitation</em></h1>
@@ -2699,6 +2702,93 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
   };
   document.addEventListener('ftw', sync); sync();
   requestAnimationFrame(frame);   // one frame up front, so the slide is ready before anyone gets there
+})();
+</script>
+
+<!-- Title slide: one drop of water in 3D (glass-like, slowly turning, gently wobbling) -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+(() => {
+  if (document.body.classList.contains('presenter')) return;
+  const slide = document.getElementById('open'), cv = document.getElementById('drop3d');
+  if (!slide || !cv) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const W = 820, H = 860;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); renderer.setSize(W, H, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(28, W / H, .1, 100); cam.position.set(0, .15, 11); cam.lookAt(0, .1, 0);
+
+  // studio light for the reflections: soft top box, teal and warm side strips
+  {
+    const env = new THREE.Scene();
+    env.add(new THREE.Mesh(new THREE.SphereGeometry(30, 32, 16), new THREE.MeshBasicMaterial({ color: '#06161e', side: THREE.BackSide })));
+    const panel = (w, h, c, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
+    panel(10, 3, '#ffffff', 5, 0, 12, 4); panel(3, 10, '#9ff0e6', 3.4, -12, 2, 4); panel(3, 10, '#ffb6a2', 2.4, 12, 0, -2); panel(14, 1, '#ffffff', 2.4, 0, -2, 12);
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, .02).texture; pm.dispose();
+  }
+
+  // the drop: a teardrop turned on a lathe, made of water-like glass
+  const prof = [];
+  for (let k = 0; k <= 96; k++) {
+    const t = k / 96 * Math.PI;                                // classic teardrop curve: tip at the top, round at the bottom
+    const r = 1.55 * Math.sin(t) * Math.pow(Math.sin(t / 2), 1.55);
+    prof.push(new THREE.Vector2(Math.max(r, .0001), 1.65 * Math.cos(t) - .1));
+  }
+  const geo = new THREE.LatheGeometry(prof, 128);
+  const base = Float32Array.from(geo.attributes.position.array);
+  const mat = new THREE.MeshPhysicalMaterial({ color: '#2fb3ab', metalness: 0, roughness: .03, transparent: true, opacity: .72,
+    clearcoat: 1, clearcoatRoughness: .02, envMapIntensity: 2.4, emissive: '#0b5c5c', emissiveIntensity: .6, iridescence: .3, iridescenceIOR: 1.3 });
+  const drop = new THREE.Mesh(geo, mat); scene.add(drop);
+  // a soft aqua rim, brightest where the surface turns away from you, like light caught in water
+  const rimMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: 'varying float vF; void main(){ vec3 n = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position,1.); vF = 1. - abs(dot(n, normalize(-mv.xyz))); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'varying float vF; void main(){ float a = pow(vF, 2.4); gl_FragColor = vec4(vec3(.55,.95,.9) * a * 1.4, a); }' });
+  const rimMesh = new THREE.Mesh(geo, rimMat); rimMesh.scale.setScalar(1.015); drop.add(rimMesh);
+  // a glow behind it
+  const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, 'rgba(127,224,214,.55)'); g.addColorStop(1, 'rgba(127,224,214,0)'); x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+    const t = new THREE.CanvasTexture(c); return t; })();
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55 }));
+  glow.scale.set(4.6, 4.6, 1); glow.position.set(0, -.25, -2); scene.add(glow);
+
+  // a few small droplets in orbit
+  const mini = []; const mg = new THREE.SphereGeometry(1, 32, 24);
+  for (let k = 0; k < 5; k++) { const m = new THREE.Mesh(mg, mat); m.scale.setScalar(.09 + Math.random() * .1); scene.add(m); mini.push({ m, r: 2.2 + Math.random() * .7, s: .25 + Math.random() * .25, a: Math.random() * 6.28, y: -1 + Math.random() * 2.2 }); }
+
+  scene.add(new THREE.HemisphereLight('#8fd8d0', '#06161e', .5));
+  const rim = new THREE.PointLight('#7fe0d6', 18, 14, 1.6); rim.position.set(-3.5, 2.5, 2); scene.add(rim);
+  const warm = new THREE.PointLight('#ff8a68', 10, 14, 1.6); warm.position.set(3.6, -1.5, 2.5); scene.add(warm);
+
+  let active = false, raf = 0, t0 = performance.now(), ready = false;
+  const pos = geo.attributes.position;
+  const draw = () => {
+    const t = (performance.now() - t0) / 1000;
+    // liquid wobble: small waves running over the surface
+    for (let i = 0; i < pos.count; i++) {
+      const x = base[i * 3], y = base[i * 3 + 1], z = base[i * 3 + 2], a = Math.atan2(z, x), r = Math.hypot(x, z);
+      const w = 1 + .028 * Math.sin(t * 1.9 + y * 2.6 + a * 3) + .018 * Math.sin(t * 2.7 - y * 3.4 + a * 2);
+      pos.setXYZ(i, x * w, y + .02 * Math.sin(t * 1.3 + a * 2) * r, z * w);
+    }
+    pos.needsUpdate = true; geo.computeVertexNormals();
+    drop.rotation.y = t * .25; drop.position.y = Math.sin(t * .8) * .08; drop.rotation.z = Math.sin(t * .5) * .04;
+    for (const d of mini) { const a = d.a + t * d.s; d.m.position.set(Math.cos(a) * d.r, d.y + Math.sin(t * .7 + d.a) * .15, Math.sin(a) * d.r * .55); }
+    renderer.render(scene, cam);
+    if (!ready) { ready = true; slide.classList.add('drop-gl'); }
+  };
+  const frame = () => { if (active && !reduce) raf = requestAnimationFrame(frame); try { draw(); } catch (e) { console.warn('title drop frame', e); } };
+  let lost = false;
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; active = false; cancelAnimationFrame(raf); cv.style.display = 'none'; });
+  const sync = () => {
+    if (lost) return;
+    const on = document.body.dataset.atSlide === 'open';
+    if (on && !active) { active = true; cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); }
+    if (!on && active) { active = false; cancelAnimationFrame(raf); }
+  };
+  document.addEventListener('ftw', sync); sync();
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
