@@ -427,6 +427,25 @@ em.hl{font-style:italic;color:var(--aqua)}
 .gl-take{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.18;letter-spacing:-.01em;color:var(--glacier)}
 @media print{.gl-bar i{transition:none!important}.gl-bar .was{width:var(--a)!important}.gl-bar .now{width:var(--b)!important}}
 
+/* real problem: flood vs drip, and how little land uses drip */
+.rp-bars{display:flex;flex-direction:column;gap:14px;width:100%}
+.rp-row{display:grid;grid-template-columns:110px 1fr 60px;align-items:center;gap:14px;font-family:var(--mono);font-size:19px;color:#DDF0EE}
+.rp-row b{font-weight:600;color:var(--paper)}
+.rp-track{display:flex;height:26px;border-radius:7px;overflow:hidden;background:rgba(255,255,255,.08)}
+.rp-track i{display:block;height:100%;width:0;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.rp-ok{background:linear-gradient(90deg,#7FE0D6,#F8FBFA)}
+.rp-lost{background:repeating-linear-gradient(135deg,rgba(255,107,74,.75) 0 7px,rgba(255,107,74,.35) 7px 14px)}
+.slide.active .rp-track i{width:var(--w)}
+.slide.active .rp-row:nth-child(1) .rp-ok{transition-delay:.6s}.slide.active .rp-row:nth-child(1) .rp-lost{transition-delay:1.6s}
+.slide.active .rp-row:nth-child(2) .rp-ok{transition-delay:.9s}.slide.active .rp-row:nth-child(2) .rp-lost{transition-delay:1.9s}
+.rp-key{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:16px;color:#BFE3E0}
+.rp-key i{display:inline-block;width:14px;height:14px;border-radius:3px}
+.rp-key i.ok{background:#BFF3EC}.rp-key i.lost{background:#FF6B4A;margin-left:12px}
+.rp-grid{display:grid;grid-template-columns:repeat(20,16px);gap:5px}
+.rp-grid i{width:16px;height:16px;border-radius:3px;background:rgba(223,240,238,.18);transition:background .5s ease,transform .6s var(--ease)}
+.slide.active .rp-grid i.hit{background:var(--aqua);transform:scale(1.15);transition-delay:calc(var(--k) * 90ms + 900ms)}
+@media print{.rp-track i{width:var(--w)!important;transition:none!important}.rp-grid i.hit{background:var(--aqua)!important}}
+
 /* real problem */
 .panel{flex:1;display:flex;flex-direction:column;gap:14px}
 .panel .vis{height:210px;display:flex;align-items:center}
@@ -464,6 +483,19 @@ em.hl{font-style:italic;color:var(--aqua)}
 .biz .met small{display:block;font-family:var(--mono);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--slate);margin-top:8px;text-transform:uppercase;white-space:normal}
 .biz .m p:last-child{flex:1}
 .biz p{font-size:25px;line-height:1.38;color:var(--slate)}
+
+/* who's fixing it: three farm cards and one tech strip */
+.bz-farms{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.biz.v{gap:14px;padding:26px 30px}
+.biz.v .h h3{font-size:34px}
+.biz.v .ppp{align-self:flex-start}
+.biz.v .met{flex:none;font-size:64px}
+.biz.v p:last-child{font-size:24px;line-height:1.4}
+.bz-tech{flex-direction:row!important;align-items:center;gap:26px!important;padding:20px 30px!important}
+.bz-tech .h{flex:none}
+.bz-tech .h h3{font-size:32px}
+.bz-tech .met{flex:none!important;font-size:48px!important}
+.bz-tech p:last-child{flex:1;font-size:23px}
 
 /* recommendations */
 .move{flex:1;background:var(--ink2);border-radius:28px;padding:36px 38px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
@@ -1028,7 +1060,7 @@ If asked: not every data center uses town water. Some, like some of Google’s, 
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
 <section class="slide tealbg" id="real" data-title="The real problem" data-chapter="3" data-enter="rise" data-card="03|The real problem">
-  <header class="hd"><p class="chap rv"><i></i>03 · The real problem</p><h2 data-split>Farms, pipes and people</h2></header>
+  <header class="hd"><p class="chap rv"><i></i>03 · The real problem</p><h2 data-split>Farms use most of our fresh water, and waste a lot of it</h2></header>
   <div class="row" style="gap:56px">
     <div class="panel rv" style="--d:1">
       <div class="vis" style="gap:28px">
@@ -1041,77 +1073,83 @@ If asked: not every data center uses town water. Some, like some of Google’s, 
         <div class="dleg"><span><i style="background:#F8FBFA"></i>Farms 71%</span><span><i style="background:#7FE0D6"></i>Industry 15%</span><span><i style="background:#FF6B4A"></i>Cities 13%</span></div>
       </div>
       <p class="big"><span class="count" data-to="71" data-suffix="%">71%</span></p>
-      <p class="cap">of the world’s freshwater withdrawals go to farming</p>
+      <p class="cap">of the world’s fresh water that people take goes to farming</p>
       <p class="src">FAO AQUASTAT, 2022 data</p>
     </div>
     <div class="panel rv" style="--d:2">
-      <div class="vis">
-        <canvas id="leak" width="420" height="210" style="width:420px;height:210px" aria-hidden="true"></canvas>
-      </div>
-      <p class="big"><span class="count" data-to="126" data-suffix="B m³">126B m³</span></p>
-      <p class="cap">of treated water lost to leaks every year. Since this slide opened:</p>
-      <p class="ticker"><span id="tick">0</span> L</p>
-      <p class="src">Liemberger &amp; Wyatt, 2019 · ≈ 4M liters per second, ~$39B a year</p>
+      <div class="vis"><div class="rp-bars">
+        <div class="rp-row"><span>Flooding</span><div class="rp-track"><i class="rp-ok" style="--w:60%"></i><i class="rp-lost" style="--w:40%"></i></div><b>60%</b></div>
+        <div class="rp-row"><span>Drip</span><div class="rp-track"><i class="rp-ok" style="--w:90%"></i><i class="rp-lost" style="--w:10%"></i></div><b>90%</b></div>
+        <p class="rp-key"><i class="ok"></i>reaches the roots <i class="lost"></i>lost</p>
+      </div></div>
+      <p class="big"><span class="count" data-to="40" data-suffix="%">40%</span></p>
+      <p class="cap">of the water in flood irrigation never reaches the crop’s roots</p>
+      <p class="src">FAO irrigation efficiency figures, field level</p>
     </div>
     <div class="panel rv" style="--d:3">
-      <div class="vis" role="img" aria-label="100 people, 25 highlighted: 1 in 4"><div class="dots" id="dots"></div></div>
-      <p class="big"><span class="count" data-to="2.1" data-dec="1" data-suffix="B">2.1B</span></p>
-      <p class="cap">people still lack safely managed drinking water: <b>1 in 4</b></p>
-      <p class="src">WHO/UNICEF JMP, 2025</p>
+      <div class="vis" role="img" aria-label="100 squares of irrigated land, 7 highlighted"><div class="rp-grid" id="rpgrid"></div></div>
+      <p class="big"><span class="count" data-to="7" data-suffix="%">7%</span></p>
+      <p class="cap">of irrigated land in Asia uses drip. Asia has 62% of the world’s irrigated land.</p>
+      <p class="src">Project Drawdown, farm irrigation efficiency</p>
     </div>
   </div>
   <div class="strip rv" style="--d:5;background:var(--ink)">
-    <p class="serif" style="font-size:42px;font-weight:600;line-height:1.15">By 2030, demand is projected to outstrip supply by <span style="color:var(--ember)">40%</span>.</p>
-    <p class="src" style="color:var(--mist);text-align:right">Global Commission on the<br>Economics of Water, 2023</p>
+    <p class="serif" style="font-size:42px;font-weight:600;line-height:1.15">The fix: get water to the <span style="color:var(--aqua)">roots</span>, not the whole field.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:55) Point: The real problem is farms, pipes and people.
+  <template class="notes">(0:50) Point: Farms use most of our fresh water, and waste a lot of it.
 
 [Wait for the chapter card to pass.]
-So where is the real problem? Three places.
-Farms. 71% of the fresh water people take goes to agriculture.
-Pipes. Cities lose 126 billion cubic meters of clean, treated water a year to leaks. That’s about four million liters a second. The counter started when this slide opened.
-People. 2.1 billion people, about one in four, don’t have safe drinking water at home. Each orange figure is one of them.
-And by 2030, demand for water is expected to be 40% higher than supply.
-If you could fix one of these, which one would you pick?</template>
+So where is the real problem? Farms.
+71% of all the fresh water people take goes to farming. That’s way more than cities, factories or data centers.
+And a lot of it gets wasted. Most farms still flood their fields. With flooding, about 40% of the water never reaches the plant’s roots. It runs off or evaporates. Drip irrigation gets about 90% of it there.
+But in Asia, which has most of the world’s irrigated farmland, only about 7% of it uses drip.
+So the biggest fix is simple: get the water to the roots, not the whole field.
+Why do you guys think more farms don’t switch to drip?
+If asked: drip costs more to install, and a lot of small farmers can’t afford it. That’s what the companies on the next slide are working on.
+If asked: the 40% is the field-level number from the UN’s farm agency, the FAO. If you count water lost in canals on the way, flood irrigation is closer to half lost.</template>
 </section>
 
 <!-- ============ 7 · WHO'S FIXING IT ============ -->
 <section class="slide paper" id="business" data-title="Who’s fixing it" data-chapter="4" data-enter="wave" data-card="04|Who’s fixing it">
-  <header class="hd"><p class="chap rv"><i></i>04 · Who’s fixing it</p><h2 data-split>Business is moving, but on which problem?</h2></header>
-  <div class="row" style="gap:32px">
-    <div class="col grow" style="gap:18px">
-      <span class="pill rv" style="--d:1">Fixing data centers</span>
-      <div class="biz rv lift" style="--d:2">
-        <div class="h"><span class="mono-tile" style="background:#0B6F6A">M</span><h3>Microsoft</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
-        <div class="m"><p class="met"><span class="count" data-to="125" data-suffix="M L">125M L</span><small>saved / site / year</small></p><p>Closed-loop chip cooling in every new design since 2024</p></div>
+  <header class="hd"><p class="chap rv"><i></i>04 · Who’s fixing it</p><h2 data-split>Companies fixing farm water</h2></header>
+  <div class="bz-farms">
+      <div class="biz v rv lift" style="--d:1">
+        <div class="h"><span class="mono-tile" style="background:#0B6F6A">N</span><h3>Netafim</h3></div>
+        <span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span>
+        <p class="met">−25–30%<small>water on a California farm</small></p>
+        <p>Drip irrigation: tubes drip water right at each plant’s roots instead of flooding the field.</p>
       </div>
-      <div class="biz rv lift" style="--d:3">
-        <div class="h"><span class="mono-tile" style="background:#1A4559">A</span><h3>Amazon</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span>PLANET</span></span></div>
-        <div class="m"><p class="met"><span class="count" data-to="2.5" data-dec="1" data-suffix="B gal">2.5B gal</span><small>first disclosure, 2025</small></p><p>Says about two-thirds goes back to local communities</p></div>
+      <div class="biz v rv lift" style="--d:2">
+        <div class="h"><span class="mono-tile" style="background:#C2412D">D</span><h3>N-Drip</h3></div>
+        <span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span class="on">PLANET</span></span>
+        <p class="met"><span class="count" data-to="57" data-prefix="−" data-suffix="%">−57%</span><small>water in a rice trial (IRRI)</small></p>
+        <p>Cheap drip irrigation that runs on gravity, with no pump. Made for small farms.</p>
       </div>
-    </div>
-    <div class="col grow" style="gap:18px">
-      <span class="pill ember rv" style="--d:1">Fixing the real problem</span>
-      <div class="biz rv lift" style="--d:2">
-        <div class="h"><span class="mono-tile" style="background:#C2412D">N</span><h3>N-Drip</h3><span class="ppp"><span class="on">PEOPLE</span><span>PROFIT</span><span class="on">PLANET</span></span></div>
-        <div class="m"><p class="met"><span class="count" data-to="57" data-prefix="−" data-suffix="%">−57%</span><small>water, IRRI rice trial</small></p><p>Gravity-powered drip irrigation built for small farms</p></div>
+      <div class="biz v rv lift" style="--d:3">
+        <div class="h"><span class="mono-tile" style="background:#4A6170">C</span><h3>CropX</h3></div>
+        <span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span>
+        <p class="met"><span class="count" data-to="28" data-prefix="−" data-suffix="%">−28%</span><small>pumped water on an Indiana corn farm</small></p>
+        <p>Soil sensors and an app that tell farmers exactly when, and how much, to water.</p>
       </div>
-      <div class="biz rv lift" style="--d:3">
-        <div class="h"><span class="mono-tile" style="background:#8A3A2A">L</span><h3>Levi Strauss &amp; Co.</h3><span class="ppp"><span>PEOPLE</span><span class="on">PROFIT</span><span class="on">PLANET</span></span></div>
-        <div class="m"><p class="met"><span class="count" data-to="96" data-prefix="−" data-suffix="%">−96%</span><small>finishing water</small></p><p>Water&lt;Less process; 3B+ liters saved so far</p></div>
-      </div>
-    </div>
+  </div>
+  <div class="biz bz-tech rv lift" style="--d:4">
+    <span class="pill ghost" style="color:var(--slate)">And in tech</span>
+    <div class="h"><span class="mono-tile" style="background:#0B2A3C">M</span><h3>Microsoft</h3></div>
+    <p class="met"><span class="count" data-to="125" data-suffix="M L">125M L</span><small>saved per site, per year</small></p>
+    <p>New data centers cool their chips by reusing the same water in a closed loop.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:55) Point: What companies are doing about it.
+  <template class="notes">(0:55) Point: Companies helping farms water smarter, plus one in tech.
 
 [Wait for the chapter card to pass.]
-So what are companies actually doing?
-On the left, data centers. Since 2024, Microsoft’s new data center designs cool the chips in a closed loop. That saves about 125 million liters per site each year. Good for the planet, and it saves money.
-Amazon also reported its data center water use for the first time: 2.5 billion gallons in 2025. Being open about it helps with the towns they’re in.
-On the right, the bigger problem. N-Drip makes cheap drip irrigation for small farms that runs on gravity. In a rice trial it used 57% less water.
-And Levi’s cut the water used to finish jeans by up to 96%.
+So who’s actually fixing this? Mostly companies that help farms water smarter.
+Netafim makes drip irrigation. Instead of flooding a field, tubes drip water right at each plant’s roots. One California farm that switched cut its water use by 25 to 30%.
+N-Drip makes drip irrigation that runs on gravity, so there’s no pump. It’s cheap enough for small farms. In a rice trial it used 57% less water.
+CropX puts sensors in the soil that tell farmers exactly when and how much to water. On one Indiana corn farm it cut pumped water by about 28%.
+And in tech, Microsoft’s new data centers cool their chips by reusing the same water in a closed loop. That saves about 125 million liters per site each year.
+All of these save water, and they save money too, because water and pumping cost money.
+If asked: these are results from specific farms and trials. How much a farm saves depends on the crop and how it watered before.
 If asked: farmers sometimes use the water they save to plant more. So saving water only works if there are also limits on total use.</template>
 </section>
 
@@ -1137,7 +1175,7 @@ So what should businesses do? Three things.
 People: build where there’s enough water, and put money back into the local water system.
 Profit: treat water as a business risk. Droughts can shut down factories, and leaky pipes waste about 39 billion dollars a year.
 Planet: focus on farms, since they use 71% of the water. Help suppliers switch to drip irrigation, and reuse water.
-To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms and in leaky pipes.
+To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms.
 So what do you guys think, would you build a data center in Arizona? Why or why not?
 [Take two or three answers.]</template>
 </section>
@@ -1167,27 +1205,28 @@ I picked the topic and the outline, and I checked the numbers against the origin
 <section class="slide paper" id="sources" data-title="Works cited" data-chapter="5" data-enter="push">
   <header class="hd"><p class="chap rv"><i></i>Sources</p><h2 data-split>Works cited</h2></header>
   <div class="cites rv" style="--d:1">
-    <p><b>01</b>Almond Board of California. (n.d.). <a href="https://www.almonds.com/why-almonds/almond-living-magazine/latest-news-almonds-and-water">Almonds and water</a> (2.79 million acre-feet a year).</p>
-    <p><b>02</b>Altman, S. (2025, June 10). <a href="https://blog.samaltman.com/the-gentle-singularity">The gentle singularity</a>.</p>
-    <p><b>03</b>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
-    <p><b>04</b>California Water Impact Network. (2024, Sept. 23). <a href="https://www.c-win.org/cwin-water-blog/2024/9/23/california-almond-water-usage-updated">California almond water usage: Updated</a>.</p>
-    <p><b>05</b>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers</a>.</p>
-    <p><b>06</b>Guidi, G., et al. (2024). <a href="https://arxiv.org/abs/2411.09786">Environmental burden of United States data centers in the artificial intelligence era</a> [Preprint]. arXiv.</p>
-    <p><b>07</b>Latitude Media. (2026, June 11). <a href="https://latitudemedia.com/news/amazon-finally-reports-its-annual-water-use-at-data-centers/">Amazon finally reports its annual water use at data centers</a>.</p>
-    <p><b>08</b>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 US Data Center Energy Usage Report</i></a>.</p>
-    <p><b>09</b>Levi Strauss &amp; Co. (n.d.). <a href="https://www.levistrauss.com/sustainability/water-stewardship/">Water stewardship</a>.</p>
-    <p><b>10</b>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
-    <p><b>11</b>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
-    <p><b>12</b>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">What AQUASTAT 2025 reveals about agriculture</a>.</p>
-    <p><b>13</b>TechCrunch. (2025, July 21). <a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">ChatGPT users send 2.5 billion prompts a day</a>.</p>
-    <p><b>14</b>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
-    <p><b>15</b>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
-    <p><b>16</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
-    <p><b>17</b>U.S. Energy Information Administration. (2025). <a href="https://www.eia.gov/energyexplained/electricity/electricity-in-the-us.php">Electricity in the U.S.</a></p>
-    <p><b>18</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
-    <p><b>19</b>United Nations. (2025). <a href="https://sdgs.un.org/goals/goal6">Goal 6: Ensure availability and sustainable management of water and sanitation for all</a>.</p>
-    <p><b>20</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
-    <p><b>21</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
+    <p><b>01</b>Ag Proud. (n.d.). <a href="https://www.agproud.com/articles/36868-more-crop-per-drop-where-water-is-scarce">More crop per drop where water is scarce</a> (De Jager Farms with Netafim).</p>
+    <p><b>02</b>Almond Board of California. (n.d.). <a href="https://www.almonds.com/why-almonds/almond-living-magazine/latest-news-almonds-and-water">Almonds and water</a> (2.79 million acre-feet a year).</p>
+    <p><b>03</b>Altman, S. (2025, June 10). <a href="https://blog.samaltman.com/the-gentle-singularity">The gentle singularity</a>.</p>
+    <p><b>04</b>Anthropic. (2026). <i>Claude</i> [Large language model]. <a href="https://claude.ai">claude.ai</a></p>
+    <p><b>05</b>California Water Impact Network. (2024, Sept. 23). <a href="https://www.c-win.org/cwin-water-blog/2024/9/23/california-almond-water-usage-updated">California almond water usage: Updated</a>.</p>
+    <p><b>06</b>Data Center Knowledge. (2024). <a href="https://datacenterknowledge.com/build-design/microsoft-unveils-zero-water-data-centers-to-reduce-ai-climate-impact">Microsoft unveils zero-water data centers</a>.</p>
+    <p><b>07</b>DTN Progressive Farmer. (2022, Mar. 1). <a href="https://www.dtnpf.com/agriculture/web/ag/news/article/2022/03/01/precision-wins">Precision water management</a> (CropX trial).</p>
+    <p><b>08</b>FAO. (1989). <a href="https://www.fao.org/3/t7202e/t7202e08.htm"><i>Irrigation water management: Irrigation scheduling</i></a>, ch. 4 (irrigation efficiency).</p>
+    <p><b>09</b>Guidi, G., et al. (2024). <a href="https://arxiv.org/abs/2411.09786">Environmental burden of United States data centers in the artificial intelligence era</a> [Preprint]. arXiv.</p>
+    <p><b>10</b>Lawrence Berkeley National Laboratory. (2024). <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf"><i>2024 US Data Center Energy Usage Report</i></a>.</p>
+    <p><b>11</b>Liemberger, R., &amp; Wyatt, A. (2019). Quantifying the global non-revenue water problem. <i>Water Supply</i>.</p>
+    <p><b>12</b>Project Drawdown. (n.d.). <a href="https://drawdown.org/solutions/farm-irrigation-efficiency">Farm irrigation efficiency</a>.</p>
+    <p><b>13</b>Rice Today (IRRI). (n.d.). <a href="https://ricetoday.irri.org/?p=31709">N-Drip gravity drip irrigation trial in rice</a>.</p>
+    <p><b>14</b>Smart Water Magazine. (2025). <a href="https://smartwatermagazine.com/news/smart-water-magazine/global-water-under-pressure-what-aquastat-2025-reveals-about-agriculture">What AQUASTAT 2025 reveals about agriculture</a>.</p>
+    <p><b>15</b>TechCrunch. (2025, July 21). <a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">ChatGPT users send 2.5 billion prompts a day</a>.</p>
+    <p><b>16</b>The Conversation, via Civil Beat. (2025, Aug.). <a href="https://www.civilbeat.org/2025/08/data-centers-consume-massive-amounts-of-water-companies-rarely-say-exactly-how-much/">Data centers consume massive amounts of water</a>.</p>
+    <p><b>17</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
+    <p><b>18</b>U.S. Energy Information Administration. (2025). <a href="https://www.eia.gov/energyexplained/electricity/electricity-in-the-us.php">Electricity in the U.S.</a></p>
+    <p><b>19</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
+    <p><b>20</b>United Nations. (2025). <a href="https://sdgs.un.org/goals/goal6">Goal 6: Ensure availability and sustainable management of water and sanitation for all</a>.</p>
+    <p><b>21</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
+    <p><b>22</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
   <template class="notes">(0:05) Point: Finish and take questions.
@@ -1268,11 +1307,15 @@ Thanks. Any questions?</template>
   const dots = $('#dots'), hits = new Set([2,7,11,15,19,23,28,31,36,40,44,49,53,57,60,66,69,72,77,81,84,88,93,96,99]);
   // 100 people in a row-by-row grid; every fourth one lights up
   const PERSON = '<circle cx="8" cy="5" r="4"/><path d="M1 21c0-5.5 3.1-9 7-9s7 3.5 7 9z"/>';
-  for (let k = 0; k < 100; k++) {
+  for (let k = 0; dots && k < 100; k++) {
     const sv = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); sv.setAttribute('viewBox', '0 0 16 21'); sv.innerHTML = PERSON;
     if (hits.has(k)) { sv.classList.add('hit'); sv.style.setProperty('--k', [...hits].indexOf(k)); }
     dots.appendChild(sv);
   }
+
+  /* ---- irrigated land: 100 squares, 7 on drip ---- */
+  const rpg = $('#rpgrid'), rpHits = [3, 18, 37, 46, 61, 78, 92];
+  for (let k = 0; rpg && k < 100; k++) { const q = document.createElement('i'); const h = rpHits.indexOf(k); if (h >= 0) { q.className = 'hit'; q.style.setProperty('--k', h); } rpg.appendChild(q); }
 
   /* ---- count-ups ---- */
   const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
@@ -1290,7 +1333,7 @@ Thanks. Any questions?</template>
 
   /* ---- leak ticker (126B m³/yr ≈ 3.99M L/s) ---- */
   let tickT = null;
-  const startTicker = () => { const t0 = performance.now(), el = $('#tick'); clearInterval(tickT);
+  const startTicker = () => { const t0 = performance.now(), el = $('#tick'); clearInterval(tickT); if (!el) return;
     tickT = setInterval(() => { el.textContent = Math.floor((performance.now() - t0) / 1000 * 3.993e6).toLocaleString('en-US'); }, 60); };
   const stopTicker = () => { clearInterval(tickT); tickT = null; };
 
@@ -1491,7 +1534,7 @@ void main(){
   });
 
   /* ---- slide 6: a fine line-drawn pipe, dripping steadily into ripples ---- */
-  const lk = $('#leak'), lc = lk.getContext('2d'), DROPS = [], RIPS = [];
+  const lk = $('#leak') || document.createElement('canvas'), lc = lk.getContext('2d'), DROPS = [], RIPS = [];
   let leakOn = false, leakRaf = 0, nextDrop = 0;
   const FLOOR = 186, CX = 212;
   const leakFrame = now => {
@@ -1821,7 +1864,7 @@ void main(){
     const ascOnSlide = ASCII_SLIDES.has(sid);
     if (ascOnSlide && asc.parentNode !== slides[i]) slides[i].prepend(asc);
     setAscii(ascOnSlide);
-    setLeak(sid === 'real');
+    setLeak(sid === 'real' && lk.isConnected);
     setLive(sid === 'live');
     if (!reduce) { const cur = slides[i]; setTimeout(() => $$('.chap', cur).forEach(decode), 160); }
     slides[i].id === 'real' ? startTicker() : stopTicker();
