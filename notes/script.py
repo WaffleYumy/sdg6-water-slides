@@ -117,8 +117,8 @@ SLIDES = [
     ]),
     ("aiuse", "How I used AI", "0:20", "Required by the assignment. Be specific.", [
         "The assignment asks how I used AI. I used Claude, made by Anthropic.",
-        "It searched for sources, helped pick data points, drafted slide text and notes, built this website, and spell-checked.",
-        "I picked the topic and the outline, read the sources, pushed it to use better data, and gave feedback on what every slide should say. I also caught claims that were misleading and fixed the argument.",
+        "It helped me find sources, helped pick data points, drafted slides, built this website, and spell-checked.",
+        "I picked the topic and the outline, read the sources,Choose Sources and collected data and gave feedback on what every slide should say. I also caught claims that were misleading and fixed the argument.",
     ]),
     ("sources", "Works cited", "0:05", "Finish and take questions.", [
         "These are my sources. The links work on the website.",
