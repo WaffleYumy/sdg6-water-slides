@@ -115,7 +115,6 @@ SLIDES = [
         "The assignment asks how I used AI. I used Claude, made by Anthropic.",
         "It helped me find sources, pointed out where they disagreed, helped plan the timing, and built this website.",
         "I picked the topic and the outline, and I checked the numbers against the original sources.",
-        "One thing I learned: it sometimes gave different numbers for the same fact, so you have to check.",
     ]),
     ("sources", "Works cited", "0:05", "Finish and take questions.", [
         "These are my sources. The links work on the website.",
