@@ -1,8 +1,8 @@
 """Single source for the talk script.
 
 Run:  python notes/script.py
-It writes the notes into each slide of index.html (press N, or P for presenter view)
-and builds speaker-notes.html, a printable version of the same script.
+It writes the notes into each slide of index.html (press N, R for practice mode, or P for
+presenter view) and builds speaker-notes.html, a printable version of the same script.
 """
 import html
 import pathlib
@@ -12,121 +12,125 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 # Each slide: (id, title, time, point, [lines]).
 # Lines starting with "[" are stage directions; "Q:" lines are questions for the class;
-# "If asked:" lines are backup answers.
+# "If asked:" lines are backup answers. A "[Click" line starts the part said after that click.
 SLIDES = [
-    ("open", "Cold open", "0:20", "Hook them with a headline they’ve already seen.", [
-        "[Wait a beat before you speak. Don’t click yet.]",
-        "Raise your hand if you’ve seen a headline like this: ChatGPT “drinks” a bottle of water for every 20 to 50 questions.",
-        "That comes from a real 2023 study at UC Riverside.",
+    ("open", "Cold open", "0:20", "Start with a headline they have probably seen.", [
+        "[Don’t click yet.]",
+        "Has anyone seen a headline like this? ChatGPT “drinks” a bottle of water for every 20 to 50 questions.",
+        "That’s from a real study at UC Riverside in 2023.",
         "[Click: the question appears.]",
-        "So it’s real. But is AI actually THE water problem? Today I’m going to follow the water and show you where it really goes.",
-        "[Click: a drop falls into the water and the title appears.]",
+        "So it’s true. But is AI really the main water problem? That’s what I looked into.",
+        "[Click: the title appears.]",
     ]),
-    ("title", "Follow the water", "0:35", "Show how little usable water there actually is.", [
-        "I’m Anders, and my goal is SDG 6: clean water and sanitation for everyone.",
+    ("title", "Follow the water", "0:30", "There is very little water we can actually use.", [
+        "I’m Anders, and my topic is UN Goal 6: clean water and sanitation.",
         "[Click: the water spheres come out of the Earth.]",
-        "First, some scale. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide.",
-        "All the liquid fresh water would be about 170 miles, and most of that is underground.",
-        "The lakes and rivers we actually pull from? 35 miles. That little dot with the ring around it. That’s what everyone is fighting over.",
-        "I’ll cover five things: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.",
+        "If you rolled all the water on Earth into one ball, it would be about 860 miles across. The Earth is almost 8,000.",
+        "All the fresh water that isn’t frozen would be about 170 miles, and most of that is underground.",
+        "The lakes and rivers we actually use are the tiny dot with the ring. 35 miles. That’s what everyone shares.",
     ]),
-    ("terms", "Key terms + poll", "0:45", "Give them the four words they need, then get them guessing.", [
-        "[A chapter title card washes across the screen. Let it pass, then start.]",
-        "Four words change this whole story.",
-        "Withdrawal: water we take from a river, lake or aquifer. A lot of it goes back.",
-        "Consumption: water that doesn’t come back. It evaporates or ends up inside a product.",
-        "Water stress: when a place is using close to all the water it has. It’s always local.",
-        "Water footprint: all the water behind something you buy, across its whole supply chain. One cotton T-shirt takes about 2,700 liters.",
-        "Q: All the data centers in the US, running for a whole year. How long does it take US farms to use up that same amount of water? A, a month? B, a week? C, six hours?",
+    ("goal", "The goal", "0:35", "What SDG 6 is, how far off we are, and why it’s our problem.", [
+        "Quick background on the goal itself. SDG 6 is the UN’s goal for clean water and sanitation for everyone by 2030. It has three main parts.",
+        "Safe drinking water. 2.1 billion people still don’t have it.",
+        "Safe toilets and handwashing. 3.4 billion people don’t have safe sanitation, and 354 million have no toilet at all.",
+        "And using water more efficiently, so places don’t run short. That’s the part my talk focuses on.",
+        "[Click: the bottom line appears.]",
+        "At today’s pace, the world won’t make it. Progress on drinking water would have to be about six times faster. 2030 is only a few years away, so this is the world we’ll be working in.",
+        "If asked: “safely managed” means water that’s at home, available when you need it, and not contaminated. Some people have a water source that doesn’t meet all three.",
+    ]),
+    ("terms", "Key terms + poll", "0:40", "Four words, then a guess from the class.", [
+        "[Wait for the chapter card to pass.]",
+        "A few words you need for the rest of this.",
+        "Withdrawal is water we take from a river, a lake or underground. A lot of it goes back.",
+        "Consumption is water that doesn’t come back. It evaporates or ends up in a product.",
+        "Water stress means a place is using almost all the water it has.",
+        "A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.",
+        "Q: All the data centers in the US, for a whole year. How long do US farms take to use that much water? A, a month. B, a week. C, six hours.",
         "[Count hands. Tap each option once per hand.]",
-        "Hold that thought.",
     ]),
-    ("equal", "Not all water use is equal", "1:00", "It’s not how much water. It’s where and when.", [
-        "Look at the units first. Farms and power plants are per DAY. Data centers are per YEAR.",
-        "Now look at what happens to the water. Power plants take the most, 133 billion gallons a day, but only about 3% is used up. The rest goes back to the river, just warmer.",
+    ("equal", "Not all water use is equal", "0:50", "What matters is where and when, not just how much.", [
+        "First, look at the units. Farms and power plants are per day. Data centers are per year.",
+        "Power plants take the most water, 133 billion gallons a day, but only about 3% gets used up. The rest goes back into the river, just warmer.",
         "Farms use up about 62% of what they take.",
-        "Data-center cooling towers evaporate 70 to 80%, and it all comes out of one town’s supply.",
-        "So the question isn’t how much. It’s where and when. A gallon in rainy Seattle isn’t the same as a gallon in Phoenix during a drought.",
+        "Data center cooling towers evaporate 70 to 80%, and it comes out of one town’s supply.",
+        "Water doesn’t disappear. It evaporates and falls somewhere else. So what matters is where you take it from, and when. A gallon in Seattle isn’t the same as a gallon in Phoenix during a drought.",
     ]),
-    ("ai", "AI and water", "0:50", "Nationally, AI’s water use is small.", [
-        "The answer is C: about six hours.",
-        "All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.",
+    ("ai", "AI and water", "0:40", "Nationally, data centers use very little water.", [
+        "The answer is C, about six hours.",
+        "US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.",
         "[Click: the three rings appear.]",
-        "Even if you add the water used by the power plants that run them, it’s about three days.",
-        "Q: Did anyone come in thinking AI was the biggest water problem?",
-        "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.",
+        "Even if you count the water at the power plants that run them, it’s about three days.",
+        "If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.",
     ]),
-    ("versus", "ChatGPT vs. almonds", "0:45", "Make it personal: the AI everyone uses vs. a snack nobody worries about.", [
-        "[Don’t give anything away. Let the scale wobble.]",
-        "Let’s make it personal. Quick bet.",
-        "A: every question the whole world asks ChatGPT, for an entire year. That’s about two and a half billion questions a day.",
-        "B: every almond orchard in California, for just one month.",
-        "Q: Hands up if you think A uses more. Now B. Think about it, this one’s closer than you’d expect.",
-        "[Count hands, then click. The scale slams down on the almonds.]",
-        "It’s not close at all. A whole year of ChatGPT: about 78 million gallons. One month of almonds: about 76 billion. The almonds win by about a thousand times.",
-        "[Click: the punchline takes over the screen. Let the bars finish filling.]",
-        "So let’s stretch it out. Run ChatGPT for 30 straight years, and it still uses less water than California’s almonds use in a single day.",
-        "If asked: the ChatGPT number is OpenAI’s own, 0.000085 gallons per question, and it only counts answering questions, not training or the power plants. Independent researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.",
-        "If asked: the almond number is the almond industry’s own estimate, the lowest one out there, and it’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much, so the real gap is probably even bigger.",
+    ("versus", "ChatGPT vs. almonds", "0:45", "A comparison everyone can picture.", [
+        "[Let the scale wobble. Don’t hint at the answer.]",
+        "Now a more specific comparison.",
+        "A is every question the whole world asks ChatGPT, for a full year. That’s about 2.5 billion questions a day.",
+        "B is every almond orchard in California, for one month.",
+        "Q: Hands up if you think A uses more water. Now B. Think about it, it might be close.",
+        "[Click when you’ve counted hands: the scale tips.]",
+        "It isn’t close. A year of ChatGPT is about 78 million gallons. A month of almonds is about 76 billion. Almonds use about a thousand times more.",
+        "[Click: the 30-year line.]",
+        "If you ran ChatGPT for 30 years straight, it would still use less water than California’s almonds use in one day.",
+        "If asked: the ChatGPT number is OpenAI’s own, and it only covers answering questions, not training the AI or the power plants. Researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.",
+        "If asked: the almond number is the almond industry’s own estimate, and it’s the lowest one. It’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much.",
     ]),
-    ("live", "Live: right now", "0:25", "Show the gap happening in real time.", [
-        "[The camera swoops down from straight overhead. Let it land, then point at the counters. They started the moment the slide opened.]",
-        "These counters started when this slide came up. They run at the same rates as the last slide.",
-        "ChatGPT, the whole world using it: about two and a half gallons a second. That’s the drip on the left.",
-        "California almonds: almost 29 thousand gallons a second. That’s a full Olympic swimming pool every 23 seconds.",
+    ("live", "Live: right now", "0:25", "The same gap, happening in real time.", [
+        "[Wait for the camera to land.]",
+        "These counters started when this slide opened. They use the same numbers.",
+        "ChatGPT uses about 2.5 gallons a second. That’s the drip on the left.",
+        "Almonds use almost 29,000 gallons a second. That fills an Olympic pool every 23 seconds. Each full pool lifts out and joins the row in front.",
         "At ChatGPT’s rate, filling one pool would take about three days.",
-        "Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.",
-        "[Glance at the pools-filled count, then move on.]",
-        "If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.",
+        "If asked: these are yearly averages. Almond orchards use more water in summer and less in winter.",
     ]),
-    ("hook", "Not off the hook", "0:40", "AI isn’t the water villain, but it isn’t off the hook either.", [
-        "So is AI off the hook? Not quite. Two things.",
-        "First: it’s the same kind of use, but different water. Data centers and almond trees both evaporate their water, so it leaves the area.",
-        "But data centers often use treated drinking water, straight from the town’s taps. Almonds use river water, plus groundwater that took thousands of years to collect.",
-        "[Click: the electricity side appears.]",
-        "Second, and this is the bigger one: electricity. Data centers used about 4.4% of all US electricity in 2023, and that could reach 12% by 2028.",
-        "And the power plants behind them use about 12 times more water than the data centers themselves.",
-        "So the fix isn’t less AI. It’s clean power, built in the right places.",
-        "If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And how much almond water is groundwater depends on the year: more in droughts.",
+    ("hook", "Not off the hook", "0:40", "AI isn’t the big water problem, but it still matters.", [
+        "That doesn’t mean AI has no water problem. Two things.",
+        "First, data centers and almonds use water the same way. Both evaporate it. But they use different water.",
+        "Data centers often use treated drinking water from the town. Almonds use river water and groundwater that took thousands of years to build up.",
+        "[Click: the electricity side.]",
+        "Second, the bigger issue is electricity. Data centers used about 4.4% of US electricity in 2023. By 2028 it could be as much as 12%.",
+        "And the power plants behind them use about 12 times more water than the data centers do.",
+        "So what would help most is clean power, and building data centers in places with enough water.",
+        "If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And almonds pump more groundwater in drought years.",
     ]),
-    ("real", "The real problem", "1:00", "The real problem is farms, pipes and people.", [
-        "[A chapter title card washes across the screen. Let it pass, then start.]",
-        "So where IS the real problem? Three places.",
-        "Farms: 71% of all the fresh water humans take goes to agriculture.",
-        "Pipes: cities lose 126 billion cubic meters of treated, already-paid-for water every year to leaks. That’s about four million liters every second. That counter has been running since this slide opened.",
-        "People: 2.1 billion people, one in four, still don’t have safe drinking water at home. Look at the crowd: every orange person is one of them.",
-        "And it’s getting tighter. By 2030, demand is expected to be 40% higher than supply.",
+    ("real", "The real problem", "0:55", "The real problem is farms, pipes and people.", [
+        "[Wait for the chapter card to pass.]",
+        "So where is the real problem? Three places.",
+        "Farms. 71% of the fresh water people take goes to agriculture.",
+        "Pipes. Cities lose 126 billion cubic meters of clean, treated water a year to leaks. That’s about four million liters a second. The counter started when this slide opened.",
+        "People. 2.1 billion people, about one in four, don’t have safe drinking water at home. Each orange figure is one of them.",
+        "And by 2030, demand for water is expected to be 40% higher than supply.",
         "Q: Which of these three would you fix first?",
     ]),
-    ("business", "Who’s fixing it", "1:15", "Tech is moving fastest, but farms need the most help.", [
-        "[A chapter title card washes across the screen. Let it pass, then start.]",
-        "Business is moving, but on which problem?",
-        "Left side, data centers. Since 2024, every new Microsoft data-center design cools the chips in a closed loop, saving about 125 million liters per site every year. That’s Planet, and also Profit, because water costs money.",
-        "Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025. It says about two-thirds goes back to local communities. Being open about it is a People move.",
-        "Right side, the real problem. N-Drip makes gravity-powered drip irrigation for small farms. In a rice trial it used 57% less water than flooding the field.",
+    ("business", "Who’s fixing it", "1:05", "Tech is moving fastest. Farms need the most help.", [
+        "[Wait for the chapter card to pass.]",
+        "So what are companies actually doing?",
+        "On the left, data centers. Since 2024, Microsoft’s new data center designs cool the chips in a closed loop. That saves about 125 million liters per site each year. Good for the planet, and it saves money.",
+        "Amazon also reported its data center water use for the first time: 2.5 billion gallons in 2025. Being open about it helps with the towns they’re in.",
+        "On the right, the bigger problem. N-Drip makes cheap drip irrigation for small farms that runs on gravity. In a rice trial it used 57% less water.",
         "And Levi’s cut the water used to finish jeans by up to 96%.",
-        "My take: tech has the worst headlines, but it’s moving fastest. Farms, the biggest user, need the most help.",
-        "If asked: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough. It has to come with limits on total use.",
+        "Tech companies get the bad headlines, but they’re moving fastest. Farms use the most water and need the most help.",
+        "If asked: farmers sometimes use the water they save to plant more. So saving water only works if there are also limits on total use.",
     ]),
-    ("moves", "Three moves", "0:50", "My recommendations, using People, Profit and Planet.", [
-        "[The Earth rises along the bottom of the slide. Let it land before you start.]",
-        "So what should any business do? Three moves.",
-        "People: build where water is plentiful, and invest back into the local water systems you draw from.",
-        "Profit: treat water as a business risk. Droughts shut down factories, and leaky pipes waste about 39 billion dollars a year.",
-        "Planet: go after the 71%. Help your farm suppliers switch to efficient irrigation, and reuse water wherever you can.",
-        "My conclusion: water is a local problem with global supply chains. The headlines are about AI, but the biggest wins are on farms and in pipes.",
-        "Q: Last question. Would you build your next data center in Arizona? Why or why not?",
-        "[Let two or three people answer.]",
+    ("moves", "Three moves", "0:45", "My recommendations, using People, Profit and Planet.", [
+        "[Wait for the Earth to rise.]",
+        "So what should businesses do? Three things.",
+        "People: build where there’s enough water, and put money back into the local water system.",
+        "Profit: treat water as a business risk. Droughts can shut down factories, and leaky pipes waste about 39 billion dollars a year.",
+        "Planet: focus on farms, since they use 71% of the water. Help suppliers switch to drip irrigation, and reuse water.",
+        "To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms and in leaky pipes.",
+        "Q: Would you build your next data center in Arizona? Why or why not?",
+        "[Take two or three answers.]",
     ]),
-    ("aiuse", "How I used AI", "0:20", "Required by the assignment: be specific and honest.", [
-        "As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic.",
-        "It searched news, UN and USGS sources, flagged where sources disagreed, helped plan the timing, and built this website.",
-        "I chose the angle, wrote the outline, and checked the numbers against their sources.",
-        "Biggest lesson: AI gave me different numbers for the same fact, so you still have to check the original source.",
+    ("aiuse", "How I used AI", "0:20", "Required by the assignment. Be specific.", [
+        "The assignment asks how I used AI. I used Claude, made by Anthropic.",
+        "It helped me find sources, pointed out where they disagreed, helped plan the timing, and built this website.",
+        "I picked the topic and the outline, and I checked the numbers against the original sources.",
+        "One thing I learned: it sometimes gave different numbers for the same fact, so you have to check.",
     ]),
-    ("sources", "Works cited", "0:05", "Close and take questions.", [
-        "All my sources are here, and the links work on the website.",
-        "Thank you. Any questions?",
+    ("sources", "Works cited", "0:05", "Finish and take questions.", [
+        "These are my sources. The links work on the website.",
+        "Thanks. Any questions?",
     ]),
 ]
 
@@ -197,9 +201,9 @@ h2{{font:650 24px/1.2 Fraunces,Georgia,serif;flex:1}}
 <p class="sub">SDG 6 · Clean Water &amp; Sanitation · Anders Imbrie · about {total // 60}:{total % 60:02d} plus class discussion</p>
 <ul class="tips">
 <li><b>Grey boxes</b> are clicks and stage directions. <b>Red lines</b> are questions to ask the class.</li>
-<li>Slides 1, 2 and 5 reveal extra parts on a click. The script marks each one.</li>
+<li>Some slides reveal extra parts on a click. The script marks each one.</li>
+<li><b>Practice mode:</b> open the website with <b>?practice</b> at the end of the address, or press <b>R</b>. The slides shrink and these notes sit underneath, with the part for each click highlighted.</li>
 <li>Present with <b>P</b> to get these notes, a timer and the next slide on your laptop while the slides are on the projector.</li>
-<li>Running long? Shorten slide 4 (skip the Seattle line) and slide 7 (skip Amazon).</li>
 </ul>
 {''.join(cards)}
 </main></body></html>

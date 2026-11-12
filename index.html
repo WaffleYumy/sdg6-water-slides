@@ -383,6 +383,33 @@ em.hl{font-style:italic;color:var(--aqua)}
 .hk-take{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.15;letter-spacing:-.01em;color:var(--glacier)}
 @media print{.hk-track i{transition:none!important}.hk-now{width:31.4%!important}.hk-lo{width:47.9%!important}.hk-hi{width:85.7%!important}.hk-dd i{opacity:1!important;transform:none!important}}
 
+/* the goal: SDG 6 targets and progress */
+#goal{gap:22px}
+.gl-num{white-space:nowrap}
+.gl-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px}
+.gl-card{position:relative;border-radius:26px;padding:26px 30px;display:flex;flex-direction:column;gap:10px;
+  background:linear-gradient(155deg,rgba(32,82,104,.55),rgba(11,42,60,.5) 60%,rgba(6,26,36,.55));border:1.5px solid rgba(127,224,214,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 30px 70px rgba(0,0,0,.3)}
+.gl-card.focus{border-color:rgba(127,224,214,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(127,224,214,.2),0 30px 90px rgba(23,163,152,.22)}
+.gl-tag{align-self:flex-start;font:600 16px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--aqua);border:1.5px solid rgba(127,224,214,.4);border-radius:999px;padding:6px 14px}
+.gl-card h3{font-size:36px}
+.gl-big{font-family:var(--serif);font-weight:700;font-size:72px;line-height:1;letter-spacing:-.03em;color:var(--glacier);display:flex;flex-direction:column;gap:6px}
+.gl-big small{font-family:var(--sans);font-weight:400;font-size:23px;letter-spacing:0;color:#C9DCDF}
+.gl-card.focus .gl-big{color:var(--aqua)}
+.gl-bar{position:relative;height:16px;border-radius:999px;background:rgba(255,255,255,.08);margin-top:6px}
+.gl-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:999px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.gl-bar .was{background:rgba(127,224,214,.35)}
+.gl-bar .now{background:linear-gradient(90deg,#17A398,#7FE0D6)}
+.gl-bar .goal{position:absolute;right:0;top:-6px;bottom:-6px;width:3px;border-radius:2px;background:var(--ember)}
+.slide.active .gl-bar .was{width:var(--a);transition-delay:.7s}
+.slide.active .gl-bar .now{width:var(--b);transition-delay:1.2s}
+.gl-cap{display:flex;justify-content:space-between;font:500 17px var(--mono);color:#9FC2C9}
+.gl-cap b{color:var(--glacier)}
+.gl-body{font-size:22px;line-height:1.38;color:#DCEAEC}
+.gl-pace{margin-top:auto;padding-top:10px;border-top:1.5px solid rgba(169,198,204,.18);font-size:23px;color:#DCEAEC}
+.gl-pace b{color:var(--ember);font-weight:600}
+.gl-take{font-family:var(--serif);font-weight:600;font-size:38px;line-height:1.18;letter-spacing:-.01em;color:var(--glacier)}
+@media print{.gl-bar i{transition:none!important}.gl-bar .was{width:var(--a)!important}.gl-bar .now{width:var(--b)!important}}
+
 /* real problem */
 .panel{flex:1;display:flex;flex-direction:column;gap:14px}
 .panel .vis{height:210px;display:flex;align-items:center}
@@ -624,14 +651,14 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
       </g>
     </svg>
   </div>
-  <template class="notes">(0:20) Point: Hook them with a headline they’ve already seen.
+  <template class="notes">(0:20) Point: Start with a headline they have probably seen.
 
-[Wait a beat before you speak. Don’t click yet.]
-Raise your hand if you’ve seen a headline like this: ChatGPT “drinks” a bottle of water for every 20 to 50 questions.
-That comes from a real 2023 study at UC Riverside.
+[Don’t click yet.]
+Has anyone seen a headline like this? ChatGPT “drinks” a bottle of water for every 20 to 50 questions.
+That’s from a real study at UC Riverside in 2023.
 [Click: the question appears.]
-So it’s real. But is AI actually THE water problem? Today I’m going to follow the water and show you where it really goes.
-[Click: a drop falls into the water and the title appears.]</template>
+So it’s true. But is AI really the main water problem? That’s what I looked into.
+[Click: the title appears.]</template>
 </section>
 
 <!-- ============ 2 · TITLE ============ -->
@@ -659,14 +686,55 @@ So it’s real. But is AI actually THE water problem? Today I’m going to follo
     <div><b>04</b><span>Who’s fixing it</span></div>
     <div><b>05</b><span>What to do</span></div>
   </div>
-  <template class="notes">(0:35) Point: Show how little usable water there actually is.
+  <template class="notes">(0:30) Point: There is very little water we can actually use.
 
-I’m Anders, and my goal is SDG 6: clean water and sanitation for everyone.
+I’m Anders, and my topic is UN Goal 6: clean water and sanitation.
 [Click: the water spheres come out of the Earth.]
-First, some scale. If you rolled every drop of water on Earth into one ball, it would be 860 miles wide, next to an Earth almost 8,000 miles wide.
-All the liquid fresh water would be about 170 miles, and most of that is underground.
-The lakes and rivers we actually pull from? 35 miles. That little dot with the ring around it. That’s what everyone is fighting over.
-I’ll cover five things: the basics, the AI myth, the real problem, who’s fixing it, and what businesses should do.</template>
+If you rolled all the water on Earth into one ball, it would be about 860 miles across. The Earth is almost 8,000.
+All the fresh water that isn’t frozen would be about 170 miles, and most of that is underground.
+The lakes and rivers we actually use are the tiny dot with the ring. 35 miles. That’s what everyone shares.</template>
+</section>
+
+<!-- ============ 2b · THE GOAL ============ -->
+<section class="slide dark" id="goal" data-title="The goal" data-chapter="0" data-steps="1" data-enter="push">
+  <header class="hd"><p class="chap rv"><i></i>UN SDG 6 · Clean water &amp; sanitation</p><h2 data-split>The goal: safe water and toilets for everyone by 2030</h2></header>
+  <div class="gl-cols">
+    <div class="gl-card rv" style="--d:1">
+      <span class="gl-tag">Target 6.1</span>
+      <h3>Safe drinking water</h3>
+      <p class="gl-big"><span class="gl-num"><span class="count" data-to="2.1" data-dec="1">2.1</span>B</span><small>people still don’t have it</small></p>
+      <div class="gl-bar" style="--a:68%;--b:74%"><i class="was"></i><i class="now"></i><span class="goal"></span></div>
+      <p class="gl-cap"><span>2015: 68%</span><span>2024: <b>74%</b></span><span>Goal: 100%</span></p>
+      <p class="gl-pace">Progress needs to be <b>6× faster</b></p>
+    </div>
+    <div class="gl-card rv" style="--d:2">
+      <span class="gl-tag">Target 6.2</span>
+      <h3>Safe toilets &amp; handwashing</h3>
+      <p class="gl-big"><span class="gl-num"><span class="count" data-to="3.4" data-dec="1">3.4</span>B</span><small>people lack safe sanitation</small></p>
+      <div class="gl-bar" style="--a:48%;--b:58%"><i class="was"></i><i class="now"></i><span class="goal"></span></div>
+      <p class="gl-cap"><span>2015: 48%</span><span>2024: <b>58%</b></span><span>Goal: 100%</span></p>
+      <p class="gl-pace"><b>354 million</b> have no toilet at all</p>
+    </div>
+    <div class="gl-card focus rv" style="--d:3">
+      <span class="gl-tag">Target 6.4 · this talk</span>
+      <h3>Use water efficiently</h3>
+      <p class="gl-big"><span class="gl-num">+<span class="count" data-to="40">40</span>%</span><small>demand over supply by 2030</small></p>
+      <p class="gl-body">Use less water across every industry, and cut the number of people running short.</p>
+      <p class="gl-pace">Who uses the most is where my talk goes next</p>
+    </div>
+  </div>
+  <p class="gl-take" data-step="1">At today’s pace, the world misses this goal. 2030 is only a few years away: <em class="hl">this is the world we’ll be working in.</em></p>
+  <p class="src gl-src rv" style="--d:4">UN SDG 6 targets and progress (2025) · WHO/UNICEF JMP (2025), data for 2024 · demand: The Guardian (2023)</p>
+  <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
+  <template class="notes">(0:35) Point: What SDG 6 is, how far off we are, and why it’s our problem.
+
+Quick background on the goal itself. SDG 6 is the UN’s goal for clean water and sanitation for everyone by 2030. It has three main parts.
+Safe drinking water. 2.1 billion people still don’t have it.
+Safe toilets and handwashing. 3.4 billion people don’t have safe sanitation, and 354 million have no toilet at all.
+And using water more efficiently, so places don’t run short. That’s the part my talk focuses on.
+[Click: the bottom line appears.]
+At today’s pace, the world won’t make it. Progress on drinking water would have to be about six times faster. 2030 is only a few years away, so this is the world we’ll be working in.
+If asked: “safely managed” means water that’s at home, available when you need it, and not contaminated. Some people have a water source that doesn’t meet all three.</template>
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
@@ -691,17 +759,16 @@ I’ll cover five things: the basics, the AI myth, the real problem, who’s fix
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:45) Point: Give them the four words they need, then get them guessing.
+  <template class="notes">(0:40) Point: Four words, then a guess from the class.
 
-[A chapter title card washes across the screen. Let it pass, then start.]
-Four words change this whole story.
-Withdrawal: water we take from a river, lake or aquifer. A lot of it goes back.
-Consumption: water that doesn’t come back. It evaporates or ends up inside a product.
-Water stress: when a place is using close to all the water it has. It’s always local.
-Water footprint: all the water behind something you buy, across its whole supply chain. One cotton T-shirt takes about 2,700 liters.
-Q: All the data centers in the US, running for a whole year. How long does it take US farms to use up that same amount of water? A, a month? B, a week? C, six hours?
-[Count hands. Tap each option once per hand.]
-Hold that thought.</template>
+[Wait for the chapter card to pass.]
+A few words you need for the rest of this.
+Withdrawal is water we take from a river, a lake or underground. A lot of it goes back.
+Consumption is water that doesn’t come back. It evaporates or ends up in a product.
+Water stress means a place is using almost all the water it has.
+A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.
+Q: All the data centers in the US, for a whole year. How long do US farms take to use that much water? A, a month. B, a week. C, six hours.
+[Count hands. Tap each option once per hand.]</template>
 </section>
 
 <!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
@@ -738,13 +805,13 @@ Hold that thought.</template>
     <div class="legend"><span><i style="background:#F4A08B"></i>Used up</span><span><i style="background:var(--current)"></i>Flows back</span></div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="src" style="letter-spacing:.02em;text-transform:none">USGS 2018 (2015 data) · LBNL 2024 (2023 data) · The Register 2025</span><span class="pg"></span></div>
-  <template class="notes">(1:00) Point: It’s not how much water. It’s where and when.
+  <template class="notes">(0:50) Point: What matters is where and when, not just how much.
 
-Look at the units first. Farms and power plants are per DAY. Data centers are per YEAR.
-Now look at what happens to the water. Power plants take the most, 133 billion gallons a day, but only about 3% is used up. The rest goes back to the river, just warmer.
+First, look at the units. Farms and power plants are per day. Data centers are per year.
+Power plants take the most water, 133 billion gallons a day, but only about 3% gets used up. The rest goes back into the river, just warmer.
 Farms use up about 62% of what they take.
-Data-center cooling towers evaporate 70 to 80%, and it all comes out of one town’s supply.
-So the question isn’t how much. It’s where and when. A gallon in rainy Seattle isn’t the same as a gallon in Phoenix during a drought.</template>
+Data center cooling towers evaporate 70 to 80%, and it comes out of one town’s supply.
+Water doesn’t disappear. It evaporates and falls somewhere else. So what matters is where you take it from, and when. A gallon in Seattle isn’t the same as a gallon in Phoenix during a drought.</template>
 </section>
 
 <!-- ============ 5 · THE AI MYTH ============ -->
@@ -777,14 +844,13 @@ So the question isn’t how much. It’s where and when. A gallon in rainy Seatt
     </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:50) Point: Nationally, AI’s water use is small.
+  <template class="notes">(0:40) Point: Nationally, data centers use very little water.
 
-The answer is C: about six hours.
-All US data centers used about 17 billion gallons directly in 2023. US farms use up about 73 billion gallons in a single day. So a whole year of data centers is about five and a half hours of farming.
+The answer is C, about six hours.
+US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.
 [Click: the three rings appear.]
-Even if you add the water used by the power plants that run them, it’s about three days.
-Q: Did anyone come in thinking AI was the biggest water problem?
-If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison, but the gap is huge either way.</template>
+Even if you count the water at the power plants that run them, it’s about three days.
+If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.</template>
 </section>
 
 <!-- ============ 5b · CHATGPT VS ALMONDS ============ -->
@@ -888,19 +954,19 @@ If asked: the two numbers are from different years, 2015 and 2023, so it’s a r
     <p class="src vs-src">ChatGPT: 0.000085 gal per question (OpenAI) × 2.5B a day. Almonds: 2.79M acre-feet a year (industry’s own, lowest estimate).<br>Independent researchers put AI’s water ~4× higher. Even then: 8 years of ChatGPT ≈ 1 day of almonds.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:45) Point: Make it personal: the AI everyone uses vs. a snack nobody worries about.
+  <template class="notes">(0:45) Point: A comparison everyone can picture.
 
-[Don’t give anything away. Let the scale wobble.]
-Let’s make it personal. Quick bet.
-A: every question the whole world asks ChatGPT, for an entire year. That’s about two and a half billion questions a day.
-B: every almond orchard in California, for just one month.
-Q: Hands up if you think A uses more. Now B. Think about it, this one’s closer than you’d expect.
-[Count hands, then click. The scale slams down on the almonds.]
-It’s not close at all. A whole year of ChatGPT: about 78 million gallons. One month of almonds: about 76 billion. The almonds win by about a thousand times.
-[Click: the punchline takes over the screen. Let the bars finish filling.]
-So let’s stretch it out. Run ChatGPT for 30 straight years, and it still uses less water than California’s almonds use in a single day.
-If asked: the ChatGPT number is OpenAI’s own, 0.000085 gallons per question, and it only counts answering questions, not training or the power plants. Independent researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.
-If asked: the almond number is the almond industry’s own estimate, the lowest one out there, and it’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much, so the real gap is probably even bigger.</template>
+[Let the scale wobble. Don’t hint at the answer.]
+Now a more specific comparison.
+A is every question the whole world asks ChatGPT, for a full year. That’s about 2.5 billion questions a day.
+B is every almond orchard in California, for one month.
+Q: Hands up if you think A uses more water. Now B. Think about it, it might be close.
+[Click when you’ve counted hands: the scale tips.]
+It isn’t close. A year of ChatGPT is about 78 million gallons. A month of almonds is about 76 billion. Almonds use about a thousand times more.
+[Click: the 30-year line.]
+If you ran ChatGPT for 30 years straight, it would still use less water than California’s almonds use in one day.
+If asked: the ChatGPT number is OpenAI’s own, and it only covers answering questions, not training the AI or the power plants. Researchers estimate about four times more. Even then it’s about 8 years of ChatGPT for one day of almonds.
+If asked: the almond number is the almond industry’s own estimate, and it’s the lowest one. It’s based on 2013, when there were fewer orchards. Other groups estimate almost twice as much.</template>
 </section>
 
 <!-- ============ 5c · LIVE: RIGHT NOW ============ -->
@@ -926,16 +992,14 @@ If asked: the almond number is the almond industry’s own estimate, the lowest 
   </div>
   <p class="src lv-src rv" style="--d:4">Same figures as the last slide: ChatGPT 0.000085 gal × 2.5B questions a day · almonds 2.79M acre-feet a year · pool ≈ 660,000 gal</p>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:25) Point: Show the gap happening in real time.
+  <template class="notes">(0:25) Point: The same gap, happening in real time.
 
-[The camera swoops down from straight overhead. Let it land, then point at the counters. They started the moment the slide opened.]
-These counters started when this slide came up. They run at the same rates as the last slide.
-ChatGPT, the whole world using it: about two and a half gallons a second. That’s the drip on the left.
-California almonds: almost 29 thousand gallons a second. That’s a full Olympic swimming pool every 23 seconds.
+[Wait for the camera to land.]
+These counters started when this slide opened. They use the same numbers.
+ChatGPT uses about 2.5 gallons a second. That’s the drip on the left.
+Almonds use almost 29,000 gallons a second. That fills an Olympic pool every 23 seconds. Each full pool lifts out and joins the row in front.
 At ChatGPT’s rate, filling one pool would take about three days.
-Every time the almond pool fills, that whole pool of water lifts out and lines up in front. Watch the row grow while I talk.
-[Glance at the pools-filled count, then move on.]
-If asked: these are yearly averages, the yearly totals divided by the seconds in a year. Almond orchards use more in summer and less in winter.</template>
+If asked: these are yearly averages. Almond orchards use more water in summer and less in winter.</template>
 </section>
 
 <!-- ============ 5d · NOT OFF THE HOOK ============ -->
@@ -994,16 +1058,16 @@ If asked: these are yearly averages, the yearly totals divided by the seconds in
   </div>
   <p class="hk-take" data-step="1">The fix isn’t less AI. It’s <em class="hl">clean power</em>, built in the <em class="hl">right places</em>.</p>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:40) Point: AI isn’t the water villain, but it isn’t off the hook either.
+  <template class="notes">(0:40) Point: AI isn’t the big water problem, but it still matters.
 
-So is AI off the hook? Not quite. Two things.
-First: it’s the same kind of use, but different water. Data centers and almond trees both evaporate their water, so it leaves the area.
-But data centers often use treated drinking water, straight from the town’s taps. Almonds use river water, plus groundwater that took thousands of years to collect.
-[Click: the electricity side appears.]
-Second, and this is the bigger one: electricity. Data centers used about 4.4% of all US electricity in 2023, and that could reach 12% by 2028.
-And the power plants behind them use about 12 times more water than the data centers themselves.
-So the fix isn’t less AI. It’s clean power, built in the right places.
-If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And how much almond water is groundwater depends on the year: more in droughts.</template>
+That doesn’t mean AI has no water problem. Two things.
+First, data centers and almonds use water the same way. Both evaporate it. But they use different water.
+Data centers often use treated drinking water from the town. Almonds use river water and groundwater that took thousands of years to build up.
+[Click: the electricity side.]
+Second, the bigger issue is electricity. Data centers used about 4.4% of US electricity in 2023. By 2028 it could be as much as 12%.
+And the power plants behind them use about 12 times more water than the data centers do.
+So what would help most is clean power, and building data centers in places with enough water.
+If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And almonds pump more groundwater in drought years.</template>
 </section>
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
@@ -1045,14 +1109,14 @@ If asked: not every data center uses drinking water. Some, like some of Google�
     <p class="src" style="color:var(--mist);text-align:right">Global Commission on the<br>Economics of Water, 2023</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(1:00) Point: The real problem is farms, pipes and people.
+  <template class="notes">(0:55) Point: The real problem is farms, pipes and people.
 
-[A chapter title card washes across the screen. Let it pass, then start.]
-So where IS the real problem? Three places.
-Farms: 71% of all the fresh water humans take goes to agriculture.
-Pipes: cities lose 126 billion cubic meters of treated, already-paid-for water every year to leaks. That’s about four million liters every second. That counter has been running since this slide opened.
-People: 2.1 billion people, one in four, still don’t have safe drinking water at home. Look at the crowd: every orange person is one of them.
-And it’s getting tighter. By 2030, demand is expected to be 40% higher than supply.
+[Wait for the chapter card to pass.]
+So where is the real problem? Three places.
+Farms. 71% of the fresh water people take goes to agriculture.
+Pipes. Cities lose 126 billion cubic meters of clean, treated water a year to leaks. That’s about four million liters a second. The counter started when this slide opened.
+People. 2.1 billion people, about one in four, don’t have safe drinking water at home. Each orange figure is one of them.
+And by 2030, demand for water is expected to be 40% higher than supply.
 Q: Which of these three would you fix first?</template>
 </section>
 
@@ -1088,16 +1152,16 @@ Q: Which of these three would you fix first?</template>
     <p class="serif grow" style="font-size:38px;font-weight:600;line-height:1.2">Tech has the worst headlines but moves fastest. <span style="color:var(--aqua)">Farms need the most help.</span></p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(1:15) Point: Tech is moving fastest, but farms need the most help.
+  <template class="notes">(1:05) Point: Tech is moving fastest. Farms need the most help.
 
-[A chapter title card washes across the screen. Let it pass, then start.]
-Business is moving, but on which problem?
-Left side, data centers. Since 2024, every new Microsoft data-center design cools the chips in a closed loop, saving about 125 million liters per site every year. That’s Planet, and also Profit, because water costs money.
-Amazon published its total data-center water use for the first time: 2.5 billion gallons in 2025. It says about two-thirds goes back to local communities. Being open about it is a People move.
-Right side, the real problem. N-Drip makes gravity-powered drip irrigation for small farms. In a rice trial it used 57% less water than flooding the field.
+[Wait for the chapter card to pass.]
+So what are companies actually doing?
+On the left, data centers. Since 2024, Microsoft’s new data center designs cool the chips in a closed loop. That saves about 125 million liters per site each year. Good for the planet, and it saves money.
+Amazon also reported its data center water use for the first time: 2.5 billion gallons in 2025. Being open about it helps with the towns they’re in.
+On the right, the bigger problem. N-Drip makes cheap drip irrigation for small farms that runs on gravity. In a rice trial it used 57% less water.
 And Levi’s cut the water used to finish jeans by up to 96%.
-My take: tech has the worst headlines, but it’s moving fastest. Farms, the biggest user, need the most help.
-If asked: farmers sometimes use saved water to plant more, so efficiency alone isn’t enough. It has to come with limits on total use.</template>
+Tech companies get the bad headlines, but they’re moving fastest. Farms use the most water and need the most help.
+If asked: farmers sometimes use the water they save to plant more. So saving water only works if there are also limits on total use.</template>
 </section>
 
 <!-- ============ 8 · WHAT TO DO ============ -->
@@ -1115,16 +1179,16 @@ If asked: farmers sometimes use saved water to plant more, so efficiency alone i
     <p style="font-size:30px">Would you build your next data center in Arizona? Why or why not?</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:50) Point: My recommendations, using People, Profit and Planet.
+  <template class="notes">(0:45) Point: My recommendations, using People, Profit and Planet.
 
-[The Earth rises along the bottom of the slide. Let it land before you start.]
-So what should any business do? Three moves.
-People: build where water is plentiful, and invest back into the local water systems you draw from.
-Profit: treat water as a business risk. Droughts shut down factories, and leaky pipes waste about 39 billion dollars a year.
-Planet: go after the 71%. Help your farm suppliers switch to efficient irrigation, and reuse water wherever you can.
-My conclusion: water is a local problem with global supply chains. The headlines are about AI, but the biggest wins are on farms and in pipes.
-Q: Last question. Would you build your next data center in Arizona? Why or why not?
-[Let two or three people answer.]</template>
+[Wait for the Earth to rise.]
+So what should businesses do? Three things.
+People: build where there’s enough water, and put money back into the local water system.
+Profit: treat water as a business risk. Droughts can shut down factories, and leaky pipes waste about 39 billion dollars a year.
+Planet: focus on farms, since they use 71% of the water. Help suppliers switch to drip irrigation, and reuse water.
+To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms and in leaky pipes.
+Q: Would you build your next data center in Arizona? Why or why not?
+[Take two or three answers.]</template>
 </section>
 
 <!-- ============ 9 · HOW I USED AI ============ -->
@@ -1144,12 +1208,12 @@ Q: Last question. Would you build your next data center in Arizona? Why or why n
     <p style="font-size:30px;line-height:1.4"><b style="color:var(--aqua)">Lesson:</b> AI turned up conflicting numbers for the same fact, so every figure here was checked against its source.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:20) Point: Required by the assignment: be specific and honest.
+  <template class="notes">(0:20) Point: Required by the assignment. Be specific.
 
-As the assignment asks, here’s how I used AI. I used Claude, made by Anthropic.
-It searched news, UN and USGS sources, flagged where sources disagreed, helped plan the timing, and built this website.
-I chose the angle, wrote the outline, and checked the numbers against their sources.
-Biggest lesson: AI gave me different numbers for the same fact, so you still have to check the original source.</template>
+The assignment asks how I used AI. I used Claude, made by Anthropic.
+It helped me find sources, pointed out where they disagreed, helped plan the timing, and built this website.
+I picked the topic and the outline, and I checked the numbers against the original sources.
+One thing I learned: it sometimes gave different numbers for the same fact, so you have to check.</template>
 </section>
 
 <!-- ============ 10 · WORKS CITED ============ -->
@@ -1173,14 +1237,15 @@ Biggest lesson: AI gave me different numbers for the same fact, so you still hav
     <p><b>15</b>The Guardian. (2023, Mar. 17). <a href="https://www.theguardian.com/environment/2023/mar/17/global-fresh-water-demand-outstrip-supply-by-2030">Global fresh water demand will outstrip supply by 40% by 2030</a>.</p>
     <p><b>16</b>The Register. (2025, Jan. 4). <a href="https://www.theregister.com/2025/01/04/how_datacenters_use_water/">How datacenters use water</a>.</p>
     <p><b>17</b>U.S. Geological Survey. (2018). <a href="https://pubs.usgs.gov/publication/cir1441"><i>Estimated use of water in the United States in 2015</i></a> (Circ. 1441).</p>
-    <p><b>18</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
-    <p><b>19</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
+    <p><b>18</b>United Nations. (2025). <a href="https://sdgs.un.org/goals/goal6">Goal 6: Ensure availability and sustainable management of water and sanitation for all</a>.</p>
+    <p><b>19</b>Water Footprint Network. (n.d.). <a href="https://www.waterfootprint.org/resources/interactive-tools/product-gallery/">Product gallery</a> (cotton T-shirt, 250 g: 2,700 L).</p>
+    <p><b>20</b>WHO &amp; UNICEF. (2025). <a href="https://data.unicef.org/resources/jmp-report-2025/"><i>Progress on household drinking water, sanitation and hygiene 2000–2024</i></a>.</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:05) Point: Close and take questions.
+  <template class="notes">(0:05) Point: Finish and take questions.
 
-All my sources are here, and the links work on the website.
-Thank you. Any questions?</template>
+These are my sources. The links work on the website.
+Thanks. Any questions?</template>
 </section>
 
 <div id="wipe" aria-hidden="true">
