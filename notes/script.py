@@ -205,6 +205,6 @@ h2{{font:650 24px/1.2 Fraunces,Georgia,serif;flex:1}}
 
 
 if __name__ == "__main__":
-    update_deck()
+    # The notes stay off the public site: only the local, unpublished page is built.
     t = build_page()
     print(f"notes updated for {len(SLIDES)} slides, total {t // 60}:{t % 60:02d}")
