@@ -523,6 +523,8 @@ body.presenter #pv{display:grid;grid-template-columns:1fr 340px;gap:20px;padding
 .spl{position:absolute;width:12px;height:16px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:var(--aqua);pointer-events:none;z-index:46}
 #globe-wrap{position:absolute;left:940px;top:60px;width:940px;height:800px;pointer-events:none;opacity:0;transition:opacity 1s ease .15s}
 .slide.active #globe-wrap{opacity:1}
+/* the part that appears on click fills the Earth area, so the caption is measured from the same box while it animates in (no jump) */
+#globe-wrap > [data-step]{position:absolute;inset:0}
 #globe{position:absolute;inset:0;width:940px;height:800px}
 .wlab{position:absolute;left:0;top:0;--r:30px}
 .wlab .t{position:absolute;left:calc(var(--r) + 34px);top:-26px;white-space:nowrap;display:flex;flex-direction:column;gap:4px}
@@ -647,7 +649,7 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
     <p class="rv mono" style="--d:1;font-size:24px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua)">UN Sustainable Development Goal 6</p>
     <h1 data-split>Clean water<br>&amp; <em>sanitation</em></h1>
     <p class="rv" style="--d:5;font-size:38px;line-height:1.3;color:var(--mist)">Today: how farms, AI and cities use water, and what businesses can do about it.</p>
-    <p class="rv mono" style="--d:6;font-size:22px;line-height:1.6;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; [Course] · [Date]</span></p>
+    <p class="rv mono" style="--d:6;font-size:22px;line-height:1.6;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; BUS-70 · 11/12/2026</span></p>
   </div>
   <div class="agenda rv" style="--d:8">
     <div><b>01</b><span>The basics</span></div>
