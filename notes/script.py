@@ -45,8 +45,10 @@ SLIDES = [
         "Consumption is water that doesn’t come back. It evaporates or ends up in a product.",
         "Water stress means a place is using almost all the water it has.",
         "A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.",
-        "Q: All the data centers in the US, for a whole year. How long do US farms take to use that much water? A, a month. B, a week. C, six hours.",
+        "Q: Okay, what do you guys think? Take every data center in the US, running for a whole year. How long would it take US farms to use that much water? A, a week. B, a day. C, six hours. D, one hour.",
         "[Count hands. Tap each option once per hand.]",
+        "[Click: the answer appears.]",
+        "It’s C, about six hours. I’ll show you why in a minute.",
     ]),
     ("equal", "Not all water use is equal", "0:50", "What matters is where and when, not just how much.", [
         "First, look at the units. Farms and power plants are per day. Data centers are per year.",
@@ -56,7 +58,7 @@ SLIDES = [
         "Water doesn’t disappear. It evaporates and falls somewhere else. So what matters is where you take it from, and when. A gallon in Seattle isn’t the same as a gallon in Phoenix during a drought.",
     ]),
     ("ai", "AI and water", "0:40", "Nationally, data centers use very little water.", [
-        "The answer is C, about six hours.",
+        "So why six hours?",
         "US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.",
         "[Click: the three rings appear.]",
         "Even if you count the water at the power plants that run them, it’s about three days.",
@@ -67,7 +69,7 @@ SLIDES = [
         "Now a more specific comparison.",
         "A is every question the whole world asks ChatGPT, for a full year. That’s about 2.5 billion questions a day.",
         "B is every almond orchard in California, for one month.",
-        "Q: Hands up if you think A uses more water. Now B. Think about it, it might be close.",
+        "Q: So what do you guys think, A or B? Hands up for A. Now B. It might be closer than you’d think.",
         "[Click when you’ve counted hands: the scale tips.]",
         "It isn’t close. A year of ChatGPT is about 78 million gallons. A month of almonds is about 76 billion. Almonds use about a thousand times more.",
         "[Click: the 30-year line.]",
@@ -100,7 +102,7 @@ SLIDES = [
         "Pipes. Cities lose 126 billion cubic meters of clean, treated water a year to leaks. That’s about four million liters a second. The counter started when this slide opened.",
         "People. 2.1 billion people, about one in four, don’t have safe drinking water at home. Each orange figure is one of them.",
         "And by 2030, demand for water is expected to be 40% higher than supply.",
-        "Q: Which of these three would you fix first?",
+        "Q: If you could fix one of these, which one would you pick?",
     ]),
     ("business", "Who’s fixing it", "1:05", "Tech is moving fastest. Farms need the most help.", [
         "[Wait for the chapter card to pass.]",
@@ -119,7 +121,7 @@ SLIDES = [
         "Profit: treat water as a business risk. Droughts can shut down factories, and leaky pipes waste about 39 billion dollars a year.",
         "Planet: focus on farms, since they use 71% of the water. Help suppliers switch to drip irrigation, and reuse water.",
         "To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms and in leaky pipes.",
-        "Q: Would you build your next data center in Arizona? Why or why not?",
+        "Q: So what do you guys think, would you build a data center in Arizona? Why or why not?",
         "[Take two or three answers.]",
     ]),
     ("aiuse", "How I used AI", "0:20", "Required by the assignment. Be specific.", [
@@ -143,7 +145,7 @@ def update_deck():
     path = ROOT / "index.html"
     src = path.read_text(encoding="utf-8")
     for sid, title, time, point, lines in SLIDES:
-        body = f"({time}) Point: {point}\n\n" + plain(lines)
+        body = f"({time}) Point: {point}\n\n" + plain([l[2:].lstrip() if l.startswith("Q:") else l for l in lines])
         pat = re.compile(r'(<section[^>]*\bid="%s"[\s\S]*?<template class="notes">)[\s\S]*?(</template>)' % re.escape(sid))
         src, n = pat.subn(lambda m: m.group(1) + html.escape(body, quote=False) + m.group(2), src, count=1)
         if n != 1:
@@ -156,7 +158,7 @@ def line_html(t):
     if t.startswith("["):
         return f'<p class="cue">{e}</p>'
     if t.startswith("Q:"):
-        return f'<p class="q"><b>Ask:</b>{e[2:]}</p>'
+        return f'<p class="q">{e[2:].lstrip()}</p>'
     if t.startswith("If asked:"):
         return f'<p class="ifq"><b>If asked:</b>{e[9:]}</p>'
     return f"<p>{e}</p>"
@@ -200,7 +202,7 @@ h2{{font:650 24px/1.2 Fraunces,Georgia,serif;flex:1}}
 <h1>Follow the Water: speaker notes</h1>
 <p class="sub">SDG 6 · Clean Water &amp; Sanitation · Anders Imbrie · about {total // 60}:{total % 60:02d} plus class discussion</p>
 <ul class="tips">
-<li><b>Grey boxes</b> are clicks and stage directions. <b>Red lines</b> are questions to ask the class.</li>
+<li><b>Grey boxes</b> are clicks and stage directions. Lines with a <b>red bar</b> are questions for the class.</li>
 <li>Some slides reveal extra parts on a click. The script marks each one.</li>
 <li><b>Practice mode:</b> open the website with <b>?practice</b> at the end of the address, or press <b>R</b>. The slides shrink and these notes sit underneath, with the part for each click highlighted.</li>
 <li>Present with <b>P</b> to get these notes, a timer and the next slide on your laptop while the slides are on the projector.</li>

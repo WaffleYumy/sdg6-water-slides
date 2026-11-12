@@ -141,17 +141,24 @@ em.hl{font-style:italic;color:var(--aqua)}
 .term .ic svg{width:36px;height:36px}
 .term h3{color:var(--ink)}
 .term p{font-size:27px;line-height:1.4;color:var(--slate)}
-.poll{width:600px;flex:none;background:var(--ink);color:var(--glacier);border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+.poll{width:600px;flex:none;background:var(--ink);color:var(--glacier);border-radius:28px;padding:32px 36px;display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden}
 .poll::after{content:"";position:absolute;right:-120px;top:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle, rgba(23,163,152,.35), transparent 70%)}
-.opt{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:18px;text-align:left;padding:14px 18px;border-radius:18px;border:1.5px solid #2B5468;overflow:hidden;transition:border-color .25s,transform .15s}
+.opt{position:relative;display:grid;grid-template-columns:50px 1fr auto auto;align-items:center;gap:16px;text-align:left;padding:10px 16px;border-radius:18px;border:1.5px solid #2B5468;overflow:hidden;transition:border-color .25s,transform .15s}
 .opt:hover{border-color:var(--aqua)}
 .opt:active{transform:scale(.985)}
 .opt .bar{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(127,224,214,.16);transition:width .6s var(--ease)}
-.opt b{position:relative;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--ink3);font-family:var(--mono);font-size:22px}
-.opt .lab{position:relative;font-size:30px}
+.opt b{position:relative;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--ink3);font-family:var(--mono);font-size:22px}
+.opt .lab{position:relative;font-size:28px}
 .opt .n{position:relative;font-family:var(--mono);font-size:24px;color:var(--aqua);min-width:44px;text-align:right}
 .opt.lead{border-color:var(--aqua)}
 .opt.lead b{background:var(--aqua);color:var(--ink)}
+.opt .ok{display:none;position:relative;font:600 14px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:var(--aqua);border-radius:999px;padding:5px 10px}
+.poll:has(.poll-ans.shown) .opt{opacity:.38;transition:opacity .5s ease,border-color .5s ease}
+.poll:has(.poll-ans.shown) .opt[data-opt="C"]{opacity:1;border-color:var(--aqua);box-shadow:0 0 0 1px var(--aqua),0 0 30px rgba(127,224,214,.35)}
+.poll:has(.poll-ans.shown) .opt[data-opt="C"] b{background:var(--aqua);color:var(--ink)}
+.poll:has(.poll-ans.shown) .opt[data-opt="C"] .ok{display:inline-block}
+.poll-ans{position:relative;font-size:24px;line-height:1.35;color:#DCEAEC}
+.poll-ans b{color:var(--aqua)}
 .hint{font-family:var(--mono);font-size:18px;color:var(--slate-l);letter-spacing:.04em;display:flex;justify-content:space-between}
 .hint button{color:var(--aqua);text-decoration:underline;text-underline-offset:3px}
 
@@ -738,7 +745,7 @@ If asked: “safely managed” means water that’s at home, available when you 
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
-<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1" data-enter="wave" data-card="01|The basics">
+<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1" data-steps="1" data-enter="wave" data-card="01|The basics">
   <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Four words that change the story</h2></header>
   <div class="row" style="gap:36px;align-items:stretch">
     <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
@@ -748,13 +755,15 @@ If asked: “safely managed” means water that’s at home, available when you 
       <div class="term rv lift" style="--d:4"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M8 4L3 7l2 4 2-1v10h10V10l2 1 2-4-5-3c-.6 1.5-2 2.5-4 2.5S8.6 5.5 8 4z"/></svg></div><h3>Water footprint</h3><p>All the water behind a product. One cotton T-shirt: about 2,700 liters.</p></div>
     </div>
     <div class="poll rv" style="--d:5">
-      <span class="pill ember">Ask the class</span>
-      <p style="font-size:30px;line-height:1.4;position:relative">All US data centers, running for a <b style="color:var(--aqua)">whole year</b>. US farms use up that much water in about…</p>
+      <span class="pill ember">Quick poll</span>
+      <p style="font-size:28px;line-height:1.38;position:relative">All US data centers, running for a <b style="color:var(--aqua)">whole year</b>. US farms use up that much water in about…</p>
       <div class="col" style="gap:12px;position:relative" role="group" aria-label="Poll: tap an option to add a vote">
-        <button class="opt" data-opt="A"><span class="bar"></span><b>A</b><span class="lab">a month</span><span class="n">0</span></button>
-        <button class="opt" data-opt="B"><span class="bar"></span><b>B</b><span class="lab">a week</span><span class="n">0</span></button>
-        <button class="opt" data-opt="C"><span class="bar"></span><b>C</b><span class="lab">6 hours</span><span class="n">0</span></button>
+        <button class="opt" data-opt="A"><span class="bar"></span><b>A</b><span class="lab">a week</span><span class="n">0</span></button>
+        <button class="opt" data-opt="B"><span class="bar"></span><b>B</b><span class="lab">a day</span><span class="n">0</span></button>
+        <button class="opt" data-opt="C"><span class="bar"></span><b>C</b><span class="lab">6 hours</span><span class="n">0</span><span class="ok">Answer</span></button>
+        <button class="opt" data-opt="D"><span class="bar"></span><b>D</b><span class="lab">1 hour</span><span class="n">0</span></button>
       </div>
+      <p class="poll-ans" data-step="1">About <b>5.6 hours</b>. Here’s why in a minute.</p>
       <p class="hint" style="position:relative"><span>Tap = +1 vote · Shift-tap = −1</span><button id="pollreset">reset</button></p>
     </div>
   </div>
@@ -767,8 +776,10 @@ Withdrawal is water we take from a river, a lake or underground. A lot of it goe
 Consumption is water that doesn’t come back. It evaporates or ends up in a product.
 Water stress means a place is using almost all the water it has.
 A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.
-Q: All the data centers in the US, for a whole year. How long do US farms take to use that much water? A, a month. B, a week. C, six hours.
-[Count hands. Tap each option once per hand.]</template>
+Okay, what do you guys think? Take every data center in the US, running for a whole year. How long would it take US farms to use that much water? A, a week. B, a day. C, six hours. D, one hour.
+[Count hands. Tap each option once per hand.]
+[Click: the answer appears.]
+It’s C, about six hours. I’ll show you why in a minute.</template>
 </section>
 
 <!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
@@ -846,7 +857,7 @@ Water doesn’t disappear. It evaporates and falls somewhere else. So what matte
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
   <template class="notes">(0:40) Point: Nationally, data centers use very little water.
 
-The answer is C, about six hours.
+So why six hours?
 US data centers used about 17 billion gallons in 2023. US farms use about 73 billion gallons in one day. So a full year of data centers is about five and a half hours of farming.
 [Click: the three rings appear.]
 Even if you count the water at the power plants that run them, it’s about three days.
@@ -960,7 +971,7 @@ If asked: the two numbers are from different years, 2015 and 2023, so it’s a r
 Now a more specific comparison.
 A is every question the whole world asks ChatGPT, for a full year. That’s about 2.5 billion questions a day.
 B is every almond orchard in California, for one month.
-Q: Hands up if you think A uses more water. Now B. Think about it, it might be close.
+So what do you guys think, A or B? Hands up for A. Now B. It might be closer than you’d think.
 [Click when you’ve counted hands: the scale tips.]
 It isn’t close. A year of ChatGPT is about 78 million gallons. A month of almonds is about 76 billion. Almonds use about a thousand times more.
 [Click: the 30-year line.]
@@ -1117,7 +1128,7 @@ Farms. 71% of the fresh water people take goes to agriculture.
 Pipes. Cities lose 126 billion cubic meters of clean, treated water a year to leaks. That’s about four million liters a second. The counter started when this slide opened.
 People. 2.1 billion people, about one in four, don’t have safe drinking water at home. Each orange figure is one of them.
 And by 2030, demand for water is expected to be 40% higher than supply.
-Q: Which of these three would you fix first?</template>
+If you could fix one of these, which one would you pick?</template>
 </section>
 
 <!-- ============ 7 · WHO'S FIXING IT ============ -->
@@ -1175,7 +1186,7 @@ If asked: farmers sometimes use the water they save to plant more. So saving wat
   </div>
   <p class="serif concl" data-split style="font-size:58px;font-weight:600;line-height:1.1;letter-spacing:-.02em">Water is a <em class="hl">local</em> problem with <em class="hl">global</em> supply chains.</p>
   <div class="row rv" style="--d:5;align-items:center;gap:24px">
-    <span class="pill ember">Ask the class</span>
+    <span class="pill ember">What do you think?</span>
     <p style="font-size:30px">Would you build your next data center in Arizona? Why or why not?</p>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
@@ -1187,7 +1198,7 @@ People: build where there’s enough water, and put money back into the local wa
 Profit: treat water as a business risk. Droughts can shut down factories, and leaky pipes waste about 39 billion dollars a year.
 Planet: focus on farms, since they use 71% of the water. Help suppliers switch to drip irrigation, and reuse water.
 To sum up: water problems are local, but supply chains are global. The headlines are about AI, but the biggest gains are on farms and in leaky pipes.
-Q: Would you build your next data center in Arizona? Why or why not?
+So what do you guys think, would you build a data center in Arizona? Why or why not?
 [Take two or three answers.]</template>
 </section>
 
@@ -1526,21 +1537,21 @@ void main(){
       { duration: 950 + Math.random() * 350, easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => s.remove(); } };
 
   /* ---- poll ---- */
-  const votes = { A: 0, B: 0, C: 0 };
+  const votes = { A: 0, B: 0, C: 0, D: 0 };
   const drawPoll = () => {
-    const tot = votes.A + votes.B + votes.C, max = Math.max(votes.A, votes.B, votes.C);
+    const vs = Object.values(votes), tot = vs.reduce((a, b) => a + b, 0), max = Math.max(...vs);
     $$('.opt').forEach(b => { const v = votes[b.dataset.opt];
       $('.n', b).textContent = v; $('.bar', b).style.width = tot ? (v / tot * 100) + '%' : '0';
       b.classList.toggle('lead', tot > 0 && v === max); });
   };
   $$('.opt').forEach(b => b.addEventListener('click', e => { e.stopPropagation();
     const k = b.dataset.opt; votes[k] = Math.max(0, votes[k] + (e.shiftKey ? -1 : 1)); drawPoll(); b.blur(); }));
-  $('#pollreset').addEventListener('click', e => { e.stopPropagation(); votes.A = votes.B = votes.C = 0; drawPoll(); });
+  $('#pollreset').addEventListener('click', e => { e.stopPropagation(); votes.A = votes.B = votes.C = votes.D = 0; drawPoll(); });
   const guessText = () => {
-    const tot = votes.A + votes.B + votes.C; if (!tot) return '';
-    const max = Math.max(votes.A, votes.B, votes.C), top = Object.keys(votes).filter(k => votes[k] === max);
+    const vs = Object.values(votes), tot = vs.reduce((a, b) => a + b, 0); if (!tot) return '';
+    const max = Math.max(...vs), top = Object.keys(votes).filter(k => votes[k] === max);
     if (top.length > 1) return `The class was split: ${top.join(' / ')}.`;
-    return top[0] === 'C' ? `Most of you said C. Spot on.` : `Most of you said ${top[0]}. The real answer is far smaller.`;
+    return top[0] === 'C' ? `Most of you said C. Spot on.` : top[0] === 'D' ? `Most of you said D. Close, it’s a bit more than that.` : `Most of you said ${top[0]}. The real answer is much smaller.`;
   };
 
   /* ---- slide 4: each glass gets a moving surface and bubbles ---- */
