@@ -14,16 +14,13 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Lines starting with "[" are stage directions; "Q:" lines are questions for the class;
 # "If asked:" lines are backup answers. A "[Click" line starts the part said after that click.
 SLIDES = [
-    ("open", "Cold open", "0:20", "Start with a headline they have probably seen.", [
-        "[Don’t click yet.]",
-        "Has anyone seen a headline like this? ChatGPT “drinks” a bottle of water for every 20 to 50 questions.",
-        "That’s from a real study at UC Riverside in 2023.",
-        "[Click: the question appears.]",
-        "So it’s true. But is AI really the main water problem? That’s what I looked into.",
-        "[Click: the title appears.]",
+    ("open", "Clean water & sanitation", "0:15", "Say who you are, the goal, and what you will cover.", [
+        "Hi, I’m Anders. My topic is UN Goal 6: clean water and sanitation.",
+        "Today I’m going to talk about how farms, AI and cities use water, and what businesses can do about it.",
+        "[Click: a drop falls into the water and the Earth appears.]",
     ]),
-    ("title", "Follow the water", "0:30", "There is very little water we can actually use.", [
-        "I’m Anders, and my topic is UN Goal 6: clean water and sanitation.",
+    ("title", "How much water is there?", "0:25", "There is very little water we can actually use.", [
+        "First, how much water is there actually?",
         "[Click: the water spheres come out of the Earth.]",
         "If you rolled all the water on Earth into one ball, it would be about 860 miles across. The Earth is almost 8,000.",
         "All the fresh water that isn’t frozen would be about 170 miles, and most of that is underground.",

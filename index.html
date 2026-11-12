@@ -112,6 +112,9 @@ em.hl{font-style:italic;color:var(--aqua)}
    ========================================================= */
 /* cold open */
 #open{justify-content:center}
+#open h1{font-size:168px;line-height:.92;font-weight:700;letter-spacing:-.035em}
+#open h1 em{font-style:italic;font-weight:400;color:var(--aqua)}
+#open .mark{width:110px;height:110px}
 .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 50%, rgba(6,26,36,.2) 0%, rgba(6,26,36,.85) 70%);pointer-events:none}
 #open .quote{font-family:var(--serif);font-style:italic;font-weight:500;font-size:92px;line-height:1.08;letter-spacing:-.02em;font-variation-settings:'opsz' 144}
 #open .quote b{font-style:normal;font-weight:700;color:var(--aqua)}
@@ -634,49 +637,36 @@ body.idle-ptr,body.idle-ptr *{cursor:none!important}
 <svg id="drop" viewBox="0 0 60 84" aria-hidden="true"><path d="M30 2C30 2 6 38 6 54a24 24 0 0 0 48 0C54 38 30 2 30 2Z" fill="#7FE0D6"/><path d="M19 52a11 11 0 0 0 9 13" stroke="#F8FBFA" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/></svg>
 
 <!-- ============ 1 · COLD OPEN ============ -->
-<section class="slide abyss" id="open" data-title="Cold open" data-chapter="0" data-steps="1">
+<section class="slide abyss" id="open" data-title="Title" data-chapter="0">
   <div class="vignette"></div>
-  <div class="row" style="align-items:center;gap:96px;position:relative">
-    <div class="col grow" style="gap:40px">
-      <p class="chap rv"><i></i>A headline you’ve probably seen</p>
-      <p class="quote" data-split>“ChatGPT drinks a <b>500&nbsp;ml</b> bottle of water for every 20–50&nbsp;questions.”</p>
-      <p class="src rv" style="--d:6">Euronews, 2023 · from a UC Riverside study (Ren et al.)</p>
-      <p data-step="1" class="serif" style="font-size:58px;font-weight:600;line-height:1.15;color:var(--glacier)">That’s real. But is AI <span style="color:var(--ember);font-style:italic">the</span> water problem?</p>
-    </div>
-    <svg class="bottle rv" style="--d:3" viewBox="0 0 300 620" aria-label="A water bottle slowly draining">
-      <defs><clipPath id="bclip"><path d="M115 20h70v58c0 18 45 40 45 92v390c0 22-16 40-40 40H110c-24 0-40-18-40-40V170c0-52 45-74 45-92z"/></clipPath></defs>
-      <g clip-path="url(#bclip)">
-        <g class="lvl"><rect x="0" y="150" width="300" height="520" fill="#17A398" opacity=".85"/><path d="M0 150 Q37 138 75 150 T150 150 T225 150 T300 150 V170 H0Z" fill="#7FE0D6" opacity=".7"/></g>
-      </g>
-      <path d="M115 20h70v58c0 18 45 40 45 92v390c0 22-16 40-40 40H110c-24 0-40-18-40-40V170c0-52 45-74 45-92z" fill="none" stroke="#A9C6CC" stroke-width="5"/>
-      <rect x="105" y="4" width="90" height="28" rx="8" fill="#A9C6CC"/>
-      <g font-family="JetBrains Mono, monospace" font-size="20" fill="#EEF5F3">
-        <text class="q" x="226" y="250" style="animation-delay:.2s">Q1</text>
-        <text class="q" x="226" y="330" style="animation-delay:1.1s">Q12</text>
-        <text class="q" x="226" y="410" style="animation-delay:2s">Q27</text>
-        <text class="q" x="226" y="490" style="animation-delay:2.9s">Q41</text>
-      </g>
-    </svg>
-  </div>
-  <template class="notes">(0:20) Point: Start with a headline they have probably seen.
-
-[Don’t click yet.]
-Has anyone seen a headline like this? ChatGPT “drinks” a bottle of water for every 20 to 50 questions.
-That’s from a real study at UC Riverside in 2023.
-[Click: the question appears.]
-So it’s true. But is AI really the main water problem? That’s what I looked into.
-[Click: the title appears.]</template>
-</section>
-
-<!-- ============ 2 · TITLE ============ -->
-<section class="slide abyss" id="title" data-title="Title" data-chapter="0" data-enter="splash" data-steps="1">
-  <div class="vignette" style="background:radial-gradient(ellipse at 30% 45%, rgba(6,26,36,.35) 0%, rgba(6,26,36,.9) 75%)"></div>
-  <div class="col" style="gap:32px;position:relative;margin-top:-70px;width:880px">
+  <div class="col" style="gap:32px;position:relative;margin-top:-90px;width:1300px">
     <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M24 5C24 5 11 20 11 29.5a13 13 0 0 0 26 0C37 20 24 5 24 5Z" fill="none" stroke="#7FE0D6" stroke-width="2"/><path class="wv" pathLength="1" d="M16 30c2.7 0 2.7-2.6 5.4-2.6s2.7 2.6 5.4 2.6 2.7-2.6 5.4-2.6" fill="none" stroke="#FF6B4A" stroke-width="2" stroke-linecap="round"/></svg>
     <p class="rv mono" style="--d:1;font-size:24px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua)">UN Sustainable Development Goal 6</p>
     <h1 data-split>Clean water<br>&amp; <em>sanitation</em></h1>
     <p class="rv" style="--d:5;font-size:38px;line-height:1.3;color:var(--mist)">Today: how farms, AI and cities use water, and what businesses can do about it.</p>
     <p class="rv mono" style="--d:6;font-size:22px;line-height:1.6;letter-spacing:.12em;text-transform:uppercase;color:var(--glacier)">Anders Imbrie <span style="color:var(--slate-l)">&nbsp;/&nbsp; [Course] · [Date]</span></p>
+  </div>
+  <div class="agenda rv" style="--d:8">
+    <div><b>01</b><span>The basics</span></div>
+    <div><b>02</b><span>The AI myth</span></div>
+    <div><b>03</b><span>The real problem</span></div>
+    <div><b>04</b><span>Who’s fixing it</span></div>
+    <div><b>05</b><span>What to do</span></div>
+  </div>
+  <template class="notes">(0:15) Point: Say who you are, the goal, and what you will cover.
+
+Hi, I’m Anders. My topic is UN Goal 6: clean water and sanitation.
+Today I’m going to talk about how farms, AI and cities use water, and what businesses can do about it.
+[Click: a drop falls into the water and the Earth appears.]</template>
+</section>
+
+<!-- ============ 2 · TITLE ============ -->
+<section class="slide abyss" id="title" data-title="How much water there is" data-chapter="0" data-enter="splash" data-steps="1">
+  <div class="vignette" style="background:radial-gradient(ellipse at 30% 45%, rgba(6,26,36,.35) 0%, rgba(6,26,36,.9) 75%)"></div>
+  <div class="col" style="gap:30px;position:relative;margin-top:-70px;width:820px">
+    <p class="chap rv"><i></i>How much water is there?</p>
+    <h2 data-split>Almost none of Earth’s water is water we can use</h2>
+    <p class="rv" style="--d:4;font-size:34px;line-height:1.35;color:var(--mist)">Most of it is salt water or ice. The lakes and rivers we drink from and farm with are a tiny fraction.</p>
   </div>
   <div id="globe-wrap" aria-hidden="true">
     <canvas id="globe" width="940" height="800"></canvas>
@@ -687,16 +677,9 @@ So it’s true. But is AI really the main water problem? That’s what I looked 
       <div class="wcap"><p class="serif">Every drop on Earth, rolled into one ball. The lakes and rivers we draw from are a <span style="color:var(--ember)">dot</span>.</p><p class="src">USGS Water Science School · Earth is 7,918 miles wide</p></div>
     </div>
   </div>
-  <div class="agenda rv" style="--d:8">
-    <div><b>01</b><span>The basics</span></div>
-    <div><b>02</b><span>The AI myth</span></div>
-    <div><b>03</b><span>The real problem</span></div>
-    <div><b>04</b><span>Who’s fixing it</span></div>
-    <div><b>05</b><span>What to do</span></div>
-  </div>
-  <template class="notes">(0:30) Point: There is very little water we can actually use.
+  <template class="notes">(0:25) Point: There is very little water we can actually use.
 
-I’m Anders, and my topic is UN Goal 6: clean water and sanitation.
+First, how much water is there actually?
 [Click: the water spheres come out of the Earth.]
 If you rolled all the water on Earth into one ball, it would be about 860 miles across. The Earth is almost 8,000.
 All the fresh water that isn’t frozen would be about 170 miles, and most of that is underground.
@@ -1914,7 +1897,7 @@ void main(){
         splashBurst(X, Y - 10);
         ring.style.left = X + 'px'; ring.style.top = Y + 'px';
         B.anims.push(ring.animate([{ width: '0px', height: '0px', opacity: 1 }, { width: '1500px', height: '1500px', opacity: 0 }], { duration: 1500, easing: 'cubic-bezier(.2,.8,.2,1)' }));
-        from.classList.remove('leaving'); commit(); liquify($('#title h1'));
+        from.classList.remove('leaving'); commit(); liquify($('#title h2'));
       }, 640));
       B.done = () => { from.classList.remove('leaving'); if (i !== n) commit(); };
       B.timers.push(setTimeout(finish, 2200));
