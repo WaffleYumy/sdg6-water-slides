@@ -2,19 +2,19 @@
 
 A web slideshow on UN Sustainable Development Goal 6 (Clean Water & Sanitation): where water really goes, the AI myth, the real water problem, and how business is fixing it. By Anders Imbrie.
 
-- **v13 (current):** https://waffleyumy.github.io/sdg6-water-slides/
-- **v12:** https://waffleyumy.github.io/sdg6-water-slides/v12/
-- **v11:** https://waffleyumy.github.io/sdg6-water-slides/v11/
-- **v10:** https://waffleyumy.github.io/sdg6-water-slides/v10/
-- **v9:** https://waffleyumy.github.io/sdg6-water-slides/v9/
-- **v8:** https://waffleyumy.github.io/sdg6-water-slides/v8/
-- **v7:** https://waffleyumy.github.io/sdg6-water-slides/v7/
-- **v6:** https://waffleyumy.github.io/sdg6-water-slides/v6/
-- **v5:** https://waffleyumy.github.io/sdg6-water-slides/v5/
-- **v4:** https://waffleyumy.github.io/sdg6-water-slides/v4/
-- **v3:** https://waffleyumy.github.io/sdg6-water-slides/v3/
-- **v2:** https://waffleyumy.github.io/sdg6-water-slides/v2/
-- **v1:** https://waffleyumy.github.io/sdg6-water-slides/v1/
+- **v13 (current):** https://waterand-sanitation.github.io/
+- **v12:** https://waterand-sanitation.github.io/v12/
+- **v11:** https://waterand-sanitation.github.io/v11/
+- **v10:** https://waterand-sanitation.github.io/v10/
+- **v9:** https://waterand-sanitation.github.io/v9/
+- **v8:** https://waterand-sanitation.github.io/v8/
+- **v7:** https://waterand-sanitation.github.io/v7/
+- **v6:** https://waterand-sanitation.github.io/v6/
+- **v5:** https://waterand-sanitation.github.io/v5/
+- **v4:** https://waterand-sanitation.github.io/v4/
+- **v3:** https://waterand-sanitation.github.io/v3/
+- **v2:** https://waterand-sanitation.github.io/v2/
+- **v1:** https://waterand-sanitation.github.io/v1/
 
 The talk script lives in `notes/script.py`. Edit it there, then run `python notes/script.py` to update the deck's notes and the printable page together.
 
