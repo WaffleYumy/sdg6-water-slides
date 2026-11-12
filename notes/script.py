@@ -92,14 +92,13 @@ SLIDES = [
         "And by 2030, demand for water is expected to be 40% higher than supply.",
         "Q: If you could fix one of these, which one would you pick?",
     ]),
-    ("business", "Who’s fixing it", "1:05", "Tech is moving fastest. Farms need the most help.", [
+    ("business", "Who’s fixing it", "0:55", "What companies are doing about it.", [
         "[Wait for the chapter card to pass.]",
         "So what are companies actually doing?",
         "On the left, data centers. Since 2024, Microsoft’s new data center designs cool the chips in a closed loop. That saves about 125 million liters per site each year. Good for the planet, and it saves money.",
         "Amazon also reported its data center water use for the first time: 2.5 billion gallons in 2025. Being open about it helps with the towns they’re in.",
         "On the right, the bigger problem. N-Drip makes cheap drip irrigation for small farms that runs on gravity. In a rice trial it used 57% less water.",
         "And Levi’s cut the water used to finish jeans by up to 96%.",
-        "Tech companies get the bad headlines, but they’re moving fastest. Farms use the most water and need the most help.",
         "If asked: farmers sometimes use the water they save to plant more. So saving water only works if there are also limits on total use.",
     ]),
     ("moves", "Three moves", "0:45", "My recommendations, using People, Profit and Planet.", [
