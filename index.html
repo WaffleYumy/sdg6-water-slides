@@ -356,12 +356,15 @@ em.hl{font-style:italic;color:var(--aqua)}
 .hk-card.e{border-color:rgba(255,107,74,.45);background:linear-gradient(155deg,rgba(110,44,34,.42),rgba(30,30,42,.45) 60%,rgba(6,26,36,.55))}
 .hk-lead{font-size:26px;line-height:1.38;color:#DCEAEC}
 .hk-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:4px}
-.hk-src{display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px;border-radius:20px;background:rgba(6,26,36,.45);border:1px solid rgba(169,198,204,.14)}
-.hk-src svg{width:150px;height:140px;align-self:center}
-.hk-src h3{font-size:32px}
+.hk-src{display:flex;flex-direction:column;gap:6px;padding:14px 18px 16px;border-radius:20px;background:rgba(6,26,36,.45);border:1px solid rgba(169,198,204,.14)}
+.hk-src svg{width:104px;height:96px;align-self:center}
+.hk-facts{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.hk-facts p{font-size:23px;line-height:1.38;color:#DCEAEC;padding-left:16px;border-left:3px solid rgba(127,224,214,.5)}
+.hk-facts b{color:var(--glacier);font-weight:600}
+.hk-src h3{font-size:28px}
 .hk-src.a h3{color:var(--aqua)}
 .hk-src.b h3{color:var(--ember)}
-.hk-src p{font-size:23px;line-height:1.36;color:#C9DCDF}
+.hk-src p{font-size:21px;line-height:1.34;color:#C9DCDF}
 .hk-src p b{color:var(--glacier);font-weight:600}
 .slide.active .hk-stream{animation:hkPour 1.4s linear infinite}
 @keyframes hkPour{0%,100%{opacity:.9}50%{opacity:.6}}
@@ -419,7 +422,9 @@ em.hl{font-style:italic;color:var(--aqua)}
 .gl-body{font-size:22px;line-height:1.38;color:#DCEAEC}
 .gl-pace{margin-top:auto;padding-top:10px;border-top:1.5px solid rgba(169,198,204,.18);font-size:23px;color:#DCEAEC}
 .gl-pace b{color:var(--ember);font-weight:600}
-.gl-take{font-family:var(--serif);font-weight:600;font-size:38px;line-height:1.18;letter-spacing:-.01em;color:var(--glacier)}
+.gl-focus{font-size:26px;line-height:1.4;color:#C9DCDF;padding:16px 22px;border-left:4px solid var(--aqua);background:rgba(127,224,214,.06);border-radius:4px}
+.gl-focus b{color:var(--glacier);font-weight:600}
+.gl-take{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1.18;letter-spacing:-.01em;color:var(--glacier)}
 @media print{.gl-bar i{transition:none!important}.gl-bar .was{width:var(--a)!important}.gl-bar .now{width:var(--b)!important}}
 
 /* real problem */
@@ -706,36 +711,39 @@ The lakes and rivers we actually use are the tiny dot with the ring. 35 miles. T
     </div>
     <div class="gl-card rv" style="--d:2">
       <span class="gl-tag">Target 6.2</span>
-      <h3>Safe toilets &amp; handwashing</h3>
-      <p class="gl-big"><span class="gl-num"><span class="count" data-to="3.4" data-dec="1">3.4</span>B</span><small>people lack safe sanitation</small></p>
+      <h3>Safe toilets</h3>
+      <p class="gl-big"><span class="gl-num"><span class="count" data-to="3.4" data-dec="1">3.4</span>B</span><small>people still don’t have it</small></p>
       <div class="gl-bar" style="--a:48%;--b:58%"><i class="was"></i><i class="now"></i><span class="goal"></span></div>
       <p class="gl-cap"><span>2015: 48%</span><span>2024: <b>58%</b></span><span>Goal: 100%</span></p>
-      <p class="gl-pace"><b>354 million</b> have no toilet at all</p>
+      <p class="gl-pace">Progress needs to be <b>5× faster</b></p>
     </div>
-    <div class="gl-card focus rv" style="--d:3">
-      <span class="gl-tag">Target 6.4 · this talk</span>
-      <h3>Use water efficiently</h3>
-      <p class="gl-big"><span class="gl-num">+<span class="count" data-to="40">40</span>%</span><small>demand over supply by 2030</small></p>
-      <p class="gl-body">Use less water across every industry, and cut the number of people running short.</p>
-      <p class="gl-pace">Who uses the most is where my talk goes next</p>
+    <div class="gl-card rv" style="--d:3">
+      <span class="gl-tag">Target 6.2</span>
+      <h3>Handwashing at home</h3>
+      <p class="gl-big"><span class="gl-num"><span class="count" data-to="1.7" data-dec="1">1.7</span>B</span><small>people still don’t have it</small></p>
+      <div class="gl-bar" style="--a:66%;--b:80%"><i class="was"></i><i class="now"></i><span class="goal"></span></div>
+      <p class="gl-cap"><span>2015: 66%</span><span>2024: <b>80%</b></span><span>Goal: 100%</span></p>
+      <p class="gl-pace">Progress needs to be <b>3× faster</b></p>
     </div>
   </div>
-  <p class="gl-take" data-step="1">At today’s pace, the world misses this goal. 2030 is only a few years away: <em class="hl">this is the world we’ll be working in.</em></p>
-  <p class="src gl-src rv" style="--d:4">UN SDG 6 targets and progress (2025) · WHO/UNICEF JMP (2025), data for 2024 · demand: The Guardian (2023)</p>
+  <p class="gl-focus rv" style="--d:4"><b>Target 6.4: use water efficiently, so places don’t run short.</b> That’s what the rest of this talk is about.</p>
+  <p class="gl-take" data-step="1">At today’s pace, we miss this goal.</p>
+  <p class="src gl-src rv" style="--d:4">UN SDG 6 progress (2025) · WHO/UNICEF JMP (2025), data for 2024</p>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:35) Point: What SDG 6 is, how far off we are, and why it’s our problem.
+  <template class="notes">(0:35) Point: What SDG 6 aims for, and how far off we are.
 
-Quick background on the goal itself. SDG 6 is the UN’s goal for clean water and sanitation for everyone by 2030. It has three main parts.
-Safe drinking water. 2.1 billion people still don’t have it.
-Safe toilets and handwashing. 3.4 billion people don’t have safe sanitation, and 354 million have no toilet at all.
-And using water more efficiently, so places don’t run short. That’s the part my talk focuses on.
+SDG 6 is the UN’s goal for clean water and sanitation for everyone by 2030. Three big parts.
+Safe drinking water. 2.1 billion people still don’t have it, and progress would need to be six times faster.
+Safe toilets. 3.4 billion people don’t have them. Progress needs to be five times faster.
+Handwashing at home. 1.7 billion people don’t have it. Three times faster.
+There’s also a target about using water efficiently, so places don’t run short. That’s what the rest of my talk is about.
 [Click: the bottom line appears.]
-At today’s pace, the world won’t make it. Progress on drinking water would have to be about six times faster. 2030 is only a few years away, so this is the world we’ll be working in.
-If asked: “safely managed” means water that’s at home, available when you need it, and not contaminated. Some people have a water source that doesn’t meet all three.</template>
+At today’s pace, we miss this goal.
+If asked: “safe” drinking water means water at home, available when you need it, and not contaminated. A lot of people have water that doesn’t meet all three.</template>
 </section>
 
 <!-- ============ 3 · KEY TERMS + POLL ============ -->
-<section class="slide light" id="terms" data-title="Key terms + poll" data-chapter="1" data-steps="1" data-enter="wave" data-card="01|The basics">
+<section class="slide light" id="terms" data-title="Key terms" data-chapter="1" data-enter="wave" data-card="01|The basics">
   <header class="hd"><p class="chap rv"><i></i>01 · The basics</p><h2 data-split>Four words that change the story</h2></header>
   <div class="row" style="gap:36px;align-items:stretch">
     <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
@@ -744,35 +752,16 @@ If asked: “safely managed” means water that’s at home, available when you 
       <div class="term rv lift" style="--d:3"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4.5-5.5"/><circle cx="12" cy="17" r="1.3"/></svg></div><h3>Water stress</h3><p>Demand close to a region’s renewable supply. Always local.</p></div>
       <div class="term rv lift" style="--d:4"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M8 4L3 7l2 4 2-1v10h10V10l2 1 2-4-5-3c-.6 1.5-2 2.5-4 2.5S8.6 5.5 8 4z"/></svg></div><h3>Water footprint</h3><p>All the water behind a product. One cotton T-shirt: about 2,700 liters.</p></div>
     </div>
-    <div class="poll rv" style="--d:5">
-      <span class="pill ember">Quick poll</span>
-      <p style="font-size:28px;line-height:1.38;position:relative">All US data centers, running for a <b style="color:var(--aqua)">whole year</b>. US farms use up that much water in about…</p>
-      <div class="col" style="gap:12px;position:relative" role="group" aria-label="Poll: tap an option to add a vote">
-        <button class="opt" data-opt="A"><span class="bar"></span><b>A</b><span class="lab">a week</span><span class="n">0</span></button>
-        <button class="opt" data-opt="B"><span class="bar"></span><b>B</b><span class="lab">a day</span><span class="n">0</span></button>
-        <button class="opt" data-opt="C"><span class="bar"></span><b>C</b><span class="lab">6 hours</span><span class="n">0</span><span class="ok">Answer</span></button>
-        <button class="opt" data-opt="D"><span class="bar"></span><b>D</b><span class="lab">1 hour</span><span class="n">0</span></button>
-      </div>
-      <p class="poll-ans" data-step="1">About <b>5.6 hours</b>. A year of US data centers: 17B gallons. US farms: 73B gallons a day.</p>
-      <p class="hint" style="position:relative"><span>Tap = +1 vote · Shift-tap = −1</span><button id="pollreset">reset</button></p>
-    </div>
   </div>
   <div class="foot"><span class="brand"><svg style="color:var(--teal)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:55) Point: Four words, then a guess from the class.
+  <template class="notes">(0:30) Point: Four words you need for the rest of the talk.
 
 [Wait for the chapter card to pass.]
 A few words you need for the rest of this.
 Withdrawal is water we take from a river, a lake or underground. A lot of it goes back.
 Consumption is water that doesn’t come back. It evaporates or ends up in a product.
 Water stress means a place is using almost all the water it has.
-A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.
-Okay, what do you guys think? Take every data center in the US, running for a whole year. How long would it take US farms to use that much water? A, a week. B, a day. C, six hours. D, one hour.
-[Count hands. Tap each option once per hand.]
-[Click: the answer appears.]
-It’s C, about six hours.
-US data centers used about 17 billion gallons of water in 2023. US farms use about 73 billion gallons in one day. So a whole year of data centers is about five and a half hours of farming.
-Even if you count the water at the power plants that run them, it’s about three days.
-If asked: the two numbers are from different years, 2015 and 2023, so it’s a rough comparison. The gap is still huge.</template>
+A water footprint is all the water behind something you buy. One cotton T-shirt takes about 2,700 liters.</template>
 </section>
 
 <!-- ============ 4 · NOT ALL WATER USE IS EQUAL ============ -->
@@ -968,12 +957,11 @@ If asked: these are yearly averages. Almond orchards use more water in summer an
 </section>
 
 <!-- ============ 5d · NOT OFF THE HOOK ============ -->
-<section class="slide dark" id="hook" data-title="Not off the hook" data-chapter="2" data-steps="1" data-enter="push">
-  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>Not the water villain. Not off the hook.</h2></header>
+<section class="slide dark" id="hook" data-title="AI’s real problem" data-chapter="2" data-steps="1" data-enter="push">
+  <header class="hd"><p class="chap rv"><i></i>02 · The AI myth</p><h2 data-split>AI’s water problem is local. Its power problem isn’t.</h2></header>
   <div class="hk-cols">
     <div class="hk-card rv" style="--d:1">
-      <span class="pill">Same use, different water</span>
-      <p class="hk-lead">Both evaporate their water, so it leaves the area. But they drink from different places.</p>
+      <span class="pill">Water: a local problem</span>
       <div class="hk-pair">
         <div class="hk-src a">
           <svg viewBox="0 0 160 150" aria-hidden="true">
@@ -987,7 +975,7 @@ If asked: these are yearly averages. Almond orchards use more water in summer an
             <path d="M58 72 L62 128" stroke="rgba(255,255,255,.45)" stroke-width="3" stroke-linecap="round"/>
           </svg>
           <h3>Data centers</h3>
-          <p>Often <b>treated drinking water</b>, straight from the town’s taps</p>
+          <p>Often <b>treated drinking water</b> from the town’s taps</p>
         </div>
         <div class="hk-src b">
           <svg viewBox="0 0 160 150" aria-hidden="true">
@@ -1003,12 +991,16 @@ If asked: these are yearly averages. Almond orchards use more water in summer an
             <text x="20" y="128" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#DDF3F6">AQUIFER</text>
           </svg>
           <h3>Almonds</h3>
-          <p><b>River water</b>, plus <b>groundwater</b> that took thousands of years to collect</p>
+          <p><b>River water</b> and <b>groundwater</b> that took thousands of years to collect</p>
         </div>
+      </div>
+      <div class="hk-facts">
+        <p><b>But farms still use far more.</b> A whole year of US data centers ≈ 6 hours of US farm water.</p>
+        <p><b>So it’s a local problem:</b> it hits a few towns, often in dry places like Arizona and Texas.</p>
       </div>
     </div>
     <div class="hk-card e" data-step="1">
-      <span class="pill ember">The real AI problem: electricity</span>
+      <span class="pill ember">The bigger problem: electricity</span>
       <p class="hk-lead">Share of all US electricity used by data centers</p>
       <div class="hk-bars">
         <div class="hk-row"><span class="hk-yr">2023</span><div class="hk-track"><i class="hk-now"></i></div><span class="hk-pct"><span class="count" data-to="4.4" data-dec="1">4.4</span>%</span></div>
@@ -1021,18 +1013,20 @@ If asked: these are yearly averages. Almond orchards use more water in summer an
       <div class="hk-drops" aria-hidden="true"><span class="hk-dl">Data center</span><i class="me"></i><span class="hk-dl">Its power plants</span><span class="hk-dd"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><i style="--k:5"></i><i style="--k:6"></i><i style="--k:7"></i><i style="--k:8"></i><i style="--k:9"></i><i style="--k:10"></i><i style="--k:11"></i></span></div>
     </div>
   </div>
-  <p class="hk-take" data-step="1">The fix isn’t less AI. It’s <em class="hl">clean power</em>, built in the <em class="hl">right places</em>.</p>
+  <p class="hk-take" data-step="1">If you want to criticize AI, start with the <em class="hl">electricity</em>.</p>
   <div class="foot"><span class="brand"><svg style="color:var(--aqua)"><use href="#mk"/></svg>Follow the water</span><span class="pg"></span></div>
-  <template class="notes">(0:40) Point: AI isn’t the big water problem, but it still matters.
+  <template class="notes">(0:45) Point: AI’s water problem is local. The bigger problem is electricity.
 
-That doesn’t mean AI has no water problem. Two things.
-First, data centers and almonds use water the same way. Both evaporate it. But they use different water.
-Data centers often use treated drinking water from the town. Almonds use river water and groundwater that took thousands of years to build up.
+So is AI off the hook? Not totally.
+Data centers and farms do use different water. Data centers often use treated drinking water from the town. Almonds use river water and groundwater that took thousands of years to build up.
+But farms still use far more fresh water. A whole year of US data centers is about six hours of US farm water.
+So data center water is a local problem. It hits a few towns, often in dry places like Arizona and Texas.
 [Click: the electricity side.]
-Second, the bigger issue is electricity. Data centers used about 4.4% of US electricity in 2023. By 2028 it could be as much as 12%.
-And the power plants behind them use about 12 times more water than the data centers do.
-So what would help most is clean power, and building data centers in places with enough water.
-If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater. And almonds pump more groundwater in drought years.</template>
+The bigger problem is electricity. Data centers used about 4.4% of US electricity in 2023, and that could be up to 12% by 2028.
+And the power plants behind them use about 12 times more water than the data centers themselves.
+So if you want to criticize AI, start with the electricity.
+If asked: the six-hours number compares about 17 billion gallons a year for data centers with about 73 billion gallons a day for farms. The two numbers are from different years, 2023 and 2015, so it’s rough, but the gap is huge.
+If asked: not every data center uses drinking water. Some, like some of Google’s, use recycled wastewater.</template>
 </section>
 
 <!-- ============ 6 · THE REAL PROBLEM ============ -->
@@ -1492,7 +1486,7 @@ void main(){
   };
   $$('.opt').forEach(b => b.addEventListener('click', e => { e.stopPropagation();
     const k = b.dataset.opt; votes[k] = Math.max(0, votes[k] + (e.shiftKey ? -1 : 1)); drawPoll(); b.blur(); }));
-  $('#pollreset').addEventListener('click', e => { e.stopPropagation(); votes.A = votes.B = votes.C = votes.D = 0; drawPoll(); });
+  $('#pollreset') && $('#pollreset').addEventListener('click', e => { e.stopPropagation(); votes.A = votes.B = votes.C = votes.D = 0; drawPoll(); });
   const guessText = () => {
     const vs = Object.values(votes), tot = vs.reduce((a, b) => a + b, 0); if (!tot) return '';
     const max = Math.max(...vs), top = Object.keys(votes).filter(k => votes[k] === max);
